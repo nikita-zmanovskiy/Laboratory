@@ -1,0 +1,68 @@
+.logs__overlay {
+
+background: var(--color-bg-teacher-panel);
+
+}
+
+.charts__top_students {
+
+background: linear-gradient(360deg, rgba(75, 144, 255, 0.144) -12.04%, rgba(0, 0, 0, 0.2) 55.69%), #000000;
+
+}
+.logs__overlay {
+    animation: fadeIn 0.4s ease-out;
+}
+
+.tableRow {
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.logs__overlay {
+    animation: fadeIn 0.4s ease-out;
+}
+
+.tableRow {
+    animation: slideUp 0.3s ease-out both;
+}
+
+/* Фиксированная высота контейнера таблицы чтобы не дергался */
+.tableWrapper {
+    min-height: 400px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}

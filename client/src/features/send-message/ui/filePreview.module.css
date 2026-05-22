@@ -1,0 +1,6 @@
+.filePreview__wrapper {
+    position: absolute;
+    left: 10px;
+    top: -90px;
+    z-index: 1;
+}

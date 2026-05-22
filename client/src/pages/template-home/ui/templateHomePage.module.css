@@ -1,0 +1,20 @@
+.template__header {
+    max-width: 1920px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    right: 0;
+    background-color: var(--color-bg-primary);
+    z-index: 1;
+    background: linear-gradient(180deg, var(--color-bg-primary) 0%, transparent 71.18%);
+}
+
+.header__info {
+    flex-direction: column;
+}
+
+.template__exit {
+    transition: .5s ease all;
+}
