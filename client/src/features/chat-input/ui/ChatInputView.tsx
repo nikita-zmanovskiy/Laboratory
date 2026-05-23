@@ -55,7 +55,7 @@ const AttachmentButton = ({
     if (!render) return null
 
     return (
-        <div className={`flex h-9 items-center justify-center transition-all duration-300 ${
+        <div className={`flex h-9 items-center justify-center transition-all duration-300 max-[576px]:w-full ${
             animate ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-2 scale-95"
         }`}>
             <input
@@ -68,11 +68,13 @@ const AttachmentButton = ({
                 id="image-upload-input"
             />
             {isImageLoading ? (
-                <span className="h-5 w-5 animate-spin rounded-full border-2 border-[var(--color-text-muted)] border-t-[var(--color-text-primary)]" />
+                <span className="h-5 w-5 animate-spin rounded-full border-2 border-gray-600 border-t-gray-200" />
             ) : (
                 <label
                     htmlFor="image-upload-input"
-                    className={`flex cursor-pointer items-center justify-center rounded-xl p-2 text-[var(--color-text-secondary)] transition-colors hover:bg-[var(--color-bg-hover)] hover:text-[var(--color-text-primary)] ${isLoading ? "pointer-events-none opacity-50" : ""}`}
+                    className={`flex cursor-pointer items-center justify-center rounded-xl p-2 text-gray-400 transition-colors hover:bg-message-ai hover:text-foreground max-[576px]:w-full max-[576px]:bg-backgroundpage/5 max-[576px]:border max-[576px]:border-backgroundpage/10 ${
+                        isLoading ? "pointer-events-none opacity-50" : ""
+                    }`}
                     title="Прикрепить изображение"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
@@ -123,8 +125,8 @@ export const ChatInputView = ({
                 </div>
             </div>
 
-            <div className="flex items-center justify-between pt-1">
-                <div className="flex items-center gap-4">
+            <div className="flex pt-1 max-[576px]:flex-col max-[576px]:gap-3 min-[577px]:items-center min-[577px]:justify-between w-full">
+                <div className="flex items-center gap-4 max-[576px]:flex-col max-[576px]:items-center max-[576px]:justify-center max-[576px]:w-full">
                     {modeToggleSlot}
 
                     <AttachmentButton
@@ -139,7 +141,7 @@ export const ChatInputView = ({
                     {displayError && <span className="text-xs font-medium text-[var(--color-text-error)]">{displayError}</span>}
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center max-[576px]:justify-center max-[576px]:w-full ">
                     <SendButton
                         isLoading={isLoading}
                         isDisabled={!inputValue.trim() || inputValue.length > CHAT_INPUT_MAX_LENGTH || isImageLoading || !isOnline}

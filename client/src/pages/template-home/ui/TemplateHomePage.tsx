@@ -151,7 +151,7 @@ export default function TemplateHomePage() {
                 <NotificationToast message={notificationMessage} onClose={dismissNotification} />
             )}
             <ScreenSizeWarning />
-            <header className={`${styles.template__header} page__animation-opacity p-10 mb-4 flex items-center justify-between`}>
+            <header className={`${styles.template__header} page__animation-opacity p-10 mb-4 flex items-center justify-between max-[768px]:mt-1 max-[576px]:mt-7`}>
                 <div className={`${styles.header__info} flex gap-4`}>
                     {sessionId && (
                         <span className="text-xs text-[var(--color-text-muted)] font-mono" title="ID вашей сессии">

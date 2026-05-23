@@ -112,11 +112,11 @@ export const TeacherPanel = ({
     notificationMessage, dismissNotification, showNotification,
     onResetFilters,
 }: TeacherPanelProps) => (
-    <div className={`${styles.logs__overlay} min-h-screen bg-[var(--color-bg-primary)] page__animation-opacity`}>
-        <div className="mx-auto max-w-6xl px-4 py-6">
+        <div className="w-full min-h-screen bg-[var(--color-bg-primary)] page__animation-opacity block overflow-x-hidden">
+            <div className="mx-auto max-w-6xl px-4 py-6">
             {showNotification && <NotificationToast message={notificationMessage} onClose={dismissNotification} />}
 
-            <div className="mb-6 flex items-center justify-between">
+            <div className="mb-6 flex items-center justify-between max-[576px]:flex-col max-[576px]:gap-3">
                 <div>
                     <div className="flex items-center gap-3">
                         <h1 className="text-xl font-bold text-[var(--color-text-primary)]">Класс: {code}</h1>
@@ -128,7 +128,7 @@ export const TeacherPanel = ({
                         </p>
                     )}
                 </div>
-                <div className="flex gap-3">
+                <div className="flex gap-3 max-[576px]:flex-col max-[576px]:w-full">
                     {expiresAt && <LessonTimer expiresAt={expiresAt} />}
                     {expiresAt && new Date(expiresAt).getTime() - Date.now() < 12 * 60 * 60 * 1000 && (
                         <button onClick={() => onExtend(15)} disabled={isExtending}
@@ -152,7 +152,7 @@ export const TeacherPanel = ({
             {actionError && <p className="mb-4 text-sm text-[var(--color-text-error)]">{actionError}</p>}
 
             {stats?.charts && (
-                <div className="mb-6 grid grid-cols-4 gap-4">
+                <div className="mb-6 grid grid-cols-4 gap-4 max-[576px]:flex max-[576px]:flex-col">
                     {[
                         { label: "Текстовых запросов", value: stats.text_requests },
                         { label: "Изображений", value: stats.image_requests },
@@ -186,7 +186,7 @@ export const TeacherPanel = ({
                 )}
             </div>
 
-            <div className="rounded-xl border border-[var(--color-border-primary)] bg-[var(--color-bg-hover)]">
+            <div className="rounded-xl border border-[var(--color-border-primary)] bg-[var(--color-bg-hover)] w-full">
                 <div className="p-4 flex flex-wrap items-center gap-3 border-b border-[var(--color-border-primary)]">
                     <input type="text" value={searchQuery} onChange={(e) => onSearchChange(e.target.value)}
                         placeholder="Поиск по ID сессии..."
@@ -198,7 +198,7 @@ export const TeacherPanel = ({
                     <div className={`flex items-center gap-3 transition-all duration-300 min-h-[36px] ${
                         hasActiveFilters 
                             ? "opacity-100 translate-y-0 max-w-md" 
-                            : "opacity-0 -translate-y-2 max-w-0 overflow-hidden"
+                            : "opacity-0 -translate-y-2 max-w-0"
                     }`}>
                         <button onClick={onRefreshFiltered} disabled={isRefreshing || isInitialLoading}
                             className="rounded-xl border border-[var(--color-accent)]/30 bg-[var(--color-accent-light)] px-4 py-2 text-sm text-[var(--color-accent)] hover:bg-[var(--color-accent)]/20 disabled:opacity-50 transition-colors whitespace-nowrap">
@@ -242,7 +242,7 @@ export const TeacherPanel = ({
                                         className="m-4 rounded-xl cursor-pointer border border-[var(--color-border-primary)] px-4 py-2 text-sm text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-hover)] disabled:opacity-50 transition-colors">
                                         {isExporting ? "Экспорт..." : "CSV"}
                                     </button>
-                                    <div className={styles.tableScroll}>
+                                    <div className={styles.tableScroll + "block max-w-full overflow-x-auto scrollbar-thin"}>
                                         <table className="w-full min-w-[960px] text-sm">
                                             <thead>
                                                 <tr className="border-b border-[var(--color-border-primary)]">

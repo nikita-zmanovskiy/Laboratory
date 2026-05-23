@@ -66,8 +66,8 @@ export const ChartsSection = ({ stats }: ChartsSectionProps) => {
                 )}
             </div>
 
-            <div className="grid grid-cols-2 gap-6">
-                <div className="rounded-xl border border-[var(--color-border-primary)] bg-[var(--color-bg-hover)] p-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="rounded-xl border border-[var(--color-border-primary)] bg-[var(--color-bg-hover)] p-4 w-full">
                     <h3 className="mb-4 text-sm font-semibold text-[var(--color-text-primary)]">Режимы запросов</h3>
                     {(charts.mode_distribution?.text > 0 || charts.mode_distribution?.image > 0) ? (
                         <>

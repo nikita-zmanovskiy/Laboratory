@@ -38,7 +38,7 @@ export const LessonTimer = ({ expiresAt }: LessonTimerProps) => {
         return () => clearInterval(interval)
     }, [expiresAt])
 
-    const isEnding = timeLeft.includes("м") && parseInt(timeLeft) < 5
+    const isEnding = (timeLeft.includes("м") && parseInt(timeLeft) < 5) || timeLeft.includes("с") && !timeLeft.includes("м")
     const isFinished = timeLeft === "Урок завершен"
 
     return (

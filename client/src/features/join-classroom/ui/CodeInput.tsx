@@ -52,7 +52,7 @@ export const CodeInput = ({
 
     return (
         <div className={`${styles.code__wrapper} page__animation-opacity flex h-screen items-center justify-center`}>
-            <div className="flex w-100 flex-col page__animation items-center gap-4 rounded-2xl p-8 relative">
+            <div className="flex w-100 flex-col page__animation items-center gap-4 rounded-2xl  relative">
                 {isLoading && (
                     <div className="absolute inset-0 rounded-2xl z-10 bg-transparent flex items-center justify-center">
                         <div className="flex flex-col items-center gap-3">
@@ -98,7 +98,7 @@ export const CodeInput = ({
                         autoComplete="off"
                         className="absolute opacity-0 w-0 h-0"
                     />
-                    <div className="flex gap-3">
+                    <div className="flex gap-3 max-[576px]:gap-1">
                         {[0, 1, 2, 3, 4, 5].map((i) => {
                             const isFilled = !!code[i]
                             const isNext = isFocused && code.length < 6 && i === code.length

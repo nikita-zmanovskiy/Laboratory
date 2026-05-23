@@ -71,7 +71,7 @@ export function CustomSelect<T extends string | number = string>({
                 type="button"
                 onClick={handleToggle}
                 disabled={disabled}
-                className={`${styles.trigger} w-full rounded-xl text-sm text-left disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-between gap-2 ${
+                className={`cursor-pointer ${styles.trigger} w-full rounded-xl text-sm text-left disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-between gap-2 ${
                     compact ? `${styles.triggerCompact} px-3 py-1.5` : "px-4 py-3 mt-1"
                 }`}
             >
