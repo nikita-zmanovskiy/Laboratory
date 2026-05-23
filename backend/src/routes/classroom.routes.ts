@@ -3,11 +3,11 @@ import { ClassroomRepository } from '../repositories/classroom.repository.js'
 import { ClassroomController } from '../controllers/classroom.controller.js'
 import { validate } from '../middlewares/validateRequest.middleware.js'
 import { createClassroomSchema } from '../schemas/classroom.schema.js'
-import {csrfService} from "./csrf.routes.js";
+import { csrfService } from './csrf.routes.js'
 
 const classroomRouter = Router(),
- classroomRepo = new ClassroomRepository(),
- classroomController = new ClassroomController(classroomRepo, csrfService)
+    classroomRepo = new ClassroomRepository(),
+    classroomController = new ClassroomController(classroomRepo, csrfService)
 
 classroomRouter.post('/', validate(createClassroomSchema), classroomController.create)
 classroomRouter.post('/:code/deactivate', classroomController.deactivate)

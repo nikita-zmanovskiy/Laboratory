@@ -15,21 +15,21 @@ import { GeneratePresenter } from '../presenters/generate.presenter.js'
 const generateRouter = Router()
 
 const classroomRepo = new ClassroomRepository(),
- logRepo = new LogRepository(),
- gigaChat = new GigaChatService(),
- classroomPolicy = new ClassroomPolicy(classroomRepo),
- promptBuilder = new PromptBuilder(),
- tokenUsageService = new TokenUsageService(),
- auditLogService = new AuditLogService(logRepo),
- generateUseCase = new GenerateUseCase(
-     classroomPolicy,
-     promptBuilder,
-     tokenUsageService,
-     auditLogService,
-     gigaChat
- ),
- generatePresenter = new GeneratePresenter(),
- generateController = new GenerateController(generateUseCase, generatePresenter, gigaChat)
+    logRepo = new LogRepository(),
+    gigaChat = new GigaChatService(),
+    classroomPolicy = new ClassroomPolicy(classroomRepo),
+    promptBuilder = new PromptBuilder(),
+    tokenUsageService = new TokenUsageService(),
+    auditLogService = new AuditLogService(logRepo),
+    generateUseCase = new GenerateUseCase(
+        classroomPolicy,
+        promptBuilder,
+        tokenUsageService,
+        auditLogService,
+        gigaChat
+    ),
+    generatePresenter = new GeneratePresenter(),
+    generateController = new GenerateController(generateUseCase, generatePresenter, gigaChat)
 
 generateRouter.post('/', validate(generateSchema), generateController.generate)
 generateRouter.get('/images/:imageId', generateController.getImage)

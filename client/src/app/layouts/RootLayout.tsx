@@ -1,8 +1,11 @@
 import type { Metadata } from "next"
 import { Roboto } from "next/font/google"
-import "./globals.css"
-import { AuthGuard } from "./AuthGuard"
+
 import { PageLoader } from "@/shared/ui/PageLoader"
+
+import { AuthGuard } from "./AuthGuard"
+
+import "./globals.css"
 
 const roboto = Roboto({
     subsets: ["latin", "cyrillic"],

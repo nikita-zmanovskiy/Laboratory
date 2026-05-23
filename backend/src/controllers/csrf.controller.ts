@@ -1,7 +1,12 @@
 import type { Request, Response } from 'express'
 import { CsrfService } from '../services/csrf.service.js'
 import { RateLimitService } from '../services/rateLimit.service.js'
-import { setStudentCookie, clearStudentCookie, getStudentTokenFromRequest, STUDENT_COOKIE_NAME } from '../utils/authCookie.js'
+import {
+    setStudentCookie,
+    clearStudentCookie,
+    getStudentTokenFromRequest,
+    STUDENT_COOKIE_NAME,
+} from '../utils/authCookie.js'
 
 export class CsrfController {
     constructor(
@@ -26,7 +31,7 @@ export class CsrfController {
             expires_at: expiresAt,
             message: isNew
                 ? 'Session cookie set. Token is stored in HTTPOnly cookie.'
-                : 'Using existing session cookie.'
+                : 'Using existing session cookie.',
         })
     }
 
@@ -52,7 +57,7 @@ export class CsrfController {
 
         res.json({
             session_id: sessionId,
-            message: 'Session cookie refreshed. Rate limit reset.'
+            message: 'Session cookie refreshed. Rate limit reset.',
         })
     }
 
@@ -68,22 +73,22 @@ export class CsrfController {
 
         res.json({
             message: 'Token revoked and session cookie cleared',
-            session_id: sessionId
+            session_id: sessionId,
         })
     }
 
     getStatus = (req: Request, res: Response) => {
         const token = (req.cookies?.[STUDENT_COOKIE_NAME] || req.headers['x-csrf-token']) as string,
-         ip = req.ip || req.socket.remoteAddress || 'unknown'
+            ip = req.ip || req.socket.remoteAddress || 'unknown'
 
         const key = token ? `token:${token.substring(0, 16)}` : `ip:${ip}`,
-         stats = this.rateLimitService.getStats(key)
+            stats = this.rateLimitService.getStats(key)
 
         if (!stats) {
             return res.json({
                 message: 'No rate limit data',
                 limit: 10,
-                window_seconds: 3
+                window_seconds: 3,
             })
         }
 
@@ -93,7 +98,7 @@ export class CsrfController {
             limit: 10,
             window_seconds: 3,
             window_remaining_ms: stats.windowRemaining,
-            blocked: stats.blocked
+            blocked: stats.blocked,
         })
     }
 }

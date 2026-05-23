@@ -4,23 +4,30 @@ function httpBaseToWsBase(httpUrl: string): string {
     return `${wsProtocol}//${url.host}`
 }
 
-export function getClassroomWebSocketUrl(classroomCode: string): string {
+function getWsBaseUrl(): string {
     const explicit = process.env.NEXT_PUBLIC_WS_URL?.trim()
     if (explicit) {
-        return `${explicit.replace(/\/$/, "")}/ws?classroom=${encodeURIComponent(classroomCode)}`
+        return explicit.replace(/\/$/, "")
     }
 
     const backendHttp = process.env.NEXT_PUBLIC_BACKEND_URL?.trim()
-    let base: string
-
     if (backendHttp) {
-        base = httpBaseToWsBase(backendHttp)
-    } else if (typeof window !== "undefined") {
-        const wsProtocol = window.location.protocol === "https:" ? "wss:" : "ws:"
-        base = `${wsProtocol}//${window.location.host}`
-    } else {
-        base = httpBaseToWsBase("http://localhost:3000")
+        return httpBaseToWsBase(backendHttp)
     }
 
-    return `${base}/ws?classroom=${encodeURIComponent(classroomCode)}`
+    if (typeof window !== "undefined") {
+        const wsProtocol = window.location.protocol === "https:" ? "wss:" : "ws:"
+        return `${wsProtocol}//${window.location.host}`
+    }
+
+    return httpBaseToWsBase("http://localhost:3000")
+}
+
+/** URL WebSocket: /ws?classroom=ABC123&token=<student-or-teacher-token> */
+export function getClassroomWebSocketUrl(classroomCode: string, token: string): string {
+    const params = new URLSearchParams({
+        classroom: classroomCode,
+        token,
+    })
+    return `${getWsBaseUrl()}/ws?${params.toString()}`
 }

@@ -3,11 +3,11 @@ import { addMinutes, isExpired } from '../../utils/moscowTime.js'
 describe('addMinutes', () => {
     test('adds minutes correctly', () => {
         const before = Date.now(),
-         result = addMinutes(5),
-         after = Date.now()
+            result = addMinutes(5),
+            after = Date.now()
 
         const expectedMin = before + 5 * 60 * 1000,
-         expectedMax = after + 5 * 60 * 1000
+            expectedMax = after + 5 * 60 * 1000
 
         expect(result.getTime()).toBeGreaterThanOrEqual(expectedMin - 1000)
         expect(result.getTime()).toBeLessThanOrEqual(expectedMax + 1000)

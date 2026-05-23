@@ -12,13 +12,13 @@ describe('hashPrompt', () => {
 
     test('same input = same hash', () => {
         const hash1 = hashPrompt('hello'),
-         hash2 = hashPrompt('hello')
+            hash2 = hashPrompt('hello')
         expect(hash1).toBe(hash2)
     })
 
     test('different input = different hash', () => {
         const hash1 = hashPrompt('hello'),
-         hash2 = hashPrompt('world')
+            hash2 = hashPrompt('world')
         expect(hash1).not.toBe(hash2)
     })
 })

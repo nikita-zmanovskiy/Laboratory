@@ -1,9 +1,11 @@
 "use client"
 
-import { useChatStore } from "@/entities/chat"
 import { ChatInputContainer } from "@/features/chat-input"
 import { ChatMessagesContainer } from "@/features/chat-messages"
 import { ChatModeToggleContainer } from "@/features/toggle-chat-mode"
+
+import { useChatStore } from "@/entities/chat"
+
 import { EmptyChatState } from "@/shared/ui/EmptyChatState"
 
 export const ChatRoomWidget = () => {

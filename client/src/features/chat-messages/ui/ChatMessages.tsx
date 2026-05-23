@@ -1,7 +1,9 @@
 "use client"
 
 import React from "react"
+
 import type { Message } from "@/entities/chat"
+
 import { ImageModal } from "./ImageModal"
 import { MessageList } from "./MessageList"
 
@@ -37,7 +39,7 @@ export const ChatMessages = React.memo(({
             <ImageModal src={activeImage} onClose={() => onImageClick(null)} />
         )}
 
-        <div ref={bottomRef} />
+        <div ref={bottomRef as React.Ref<HTMLDivElement>} />
     </div>
 ))
 

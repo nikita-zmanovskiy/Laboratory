@@ -6,7 +6,10 @@ dotenv.config({ path: path.resolve(process.cwd(), envFile) })
 
 const parseCsv = (value: string | undefined, fallback: string[]): string[] =>
     value
-        ? value.split(',').map(item => item.trim()).filter(Boolean)
+        ? value
+              .split(',')
+              .map((item) => item.trim())
+              .filter(Boolean)
         : fallback
 
 export const config = {
@@ -20,21 +23,36 @@ export const config = {
     pgSsl: process.env.PGSSL === 'true',
 
     cors: {
-        origins: parseCsv(process.env.CORS_ORIGINS, ['http://localhost:3001', 'http://localhost:3000']),
-        methods: parseCsv(process.env.CORS_METHODS, ['GET', 'POST', 'DELETE']),
-        allowedHeaders: parseCsv(process.env.CORS_ALLOWED_HEADERS, ['Content-Type', 'x-csrf-token', 'x-classroom-code']),
+        origins: parseCsv(process.env.CORS_ORIGINS, [
+            'http://localhost:3001',
+            'http://localhost:3000',
+        ]),
+        methods: parseCsv(process.env.CORS_METHODS, ['GET', 'POST', 'DELETE', 'OPTIONS']),
+        allowedHeaders: parseCsv(process.env.CORS_ALLOWED_HEADERS, [
+            'Content-Type',
+            'x-csrf-token',
+            'x-classroom-code',
+            'x-teacher-token',
+        ]),
+        credentials: process.env.CORS_CREDENTIALS ? process.env.CORS_CREDENTIALS === 'true' : true,
+        maxAge: parseInt(process.env.CORS_MAX_AGE || '86400'),
     },
 
     csp: {
         enabled: process.env.CSP_ENABLED
             ? process.env.CSP_ENABLED === 'true'
             : process.env.NODE_ENV === 'production',
+
+        upgradeInsecureRequests: process.env.CSP_UPGRADE_INSECURE_REQUESTS
+            ? process.env.CSP_UPGRADE_INSECURE_REQUESTS === 'true'
+            : process.env.NODE_ENV === 'production',
     },
 
     gigachat: {
         clientId: process.env.GIGACHAT_CLIENT_ID || '',
         clientSecret: process.env.GIGACHAT_CLIENT_SECRET || '',
-        authUrl: process.env.GIGACHAT_AUTH_URL || 'https://ngw.devices.sberbank.ru:9443/api/v2/oauth',
+        authUrl:
+            process.env.GIGACHAT_AUTH_URL || 'https://ngw.devices.sberbank.ru:9443/api/v2/oauth',
         apiUrl: process.env.GIGACHAT_API_URL || 'https://gigachat.devices.sberbank.ru/api/v1',
     },
 

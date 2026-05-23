@@ -1,35 +1,37 @@
 import { ClassroomRepository } from '../repositories/classroom.repository.js'
 import { pool } from '../db/pool.js'
-import {getMoscowTime} from "../utils/moscowTime.js";
-import {getWebSocketService} from "./websocket.service.js";
+import { getMoscowTime } from '../utils/moscowTime.js'
+import { getWebSocketService } from './websocket.service.js'
 import { logger } from '../utils/logger.js'
 
 export class ClassroomService {
     constructor(private classroomRepo: ClassroomRepository) {}
 
-
-    async getOrCreateClassroom(sessionId: string, title?: string): Promise<{
+    async getOrCreateClassroom(
+        sessionId: string,
+        title?: string
+    ): Promise<{
         code: string
         isNew: boolean
         title: string
         expiresAt: Date
     }> {
         const code = this.generateClassroomCode(),
-         now = new Date(),
-         expiresAt = new Date(now.getTime() + 24 * 60 * 60 * 1000) // 24 ч
+            now = new Date(),
+            expiresAt = new Date(now.getTime() + 24 * 60 * 60 * 1000) // 24 ч
 
         const classroom = await this.classroomRepo.create({
             id: crypto.randomUUID(),
             code,
             title: title || `Session ${sessionId.substring(0, 8)}`,
-            expiresAt
+            expiresAt,
         })
 
         return {
             code: classroom.code,
             isNew: true,
             title: classroom.title,
-            expiresAt: expiresAt
+            expiresAt: expiresAt,
         }
     }
 
@@ -59,7 +61,6 @@ export class ClassroomService {
 
             const rowCount = result.rowCount ?? 0
             if (rowCount > 0) {
-               
                 const wsService = getWebSocketService()
                 for (const row of result.rows) {
                     if (wsService) {

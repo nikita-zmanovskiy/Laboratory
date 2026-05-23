@@ -1,8 +1,12 @@
 import { useCallback, useState } from "react"
+
+import { useRoleStore } from "@/features/role-select"
+
 import { useChatStore } from "@/entities/chat"
 import { useSessionStore } from "@/entities/session"
-import { useRoleStore } from "@/features/role-select"
+
 import { generateImage, generateText } from "@/shared"
+
 import { mapSendMessageError } from "./errors"
 import { mapGenerateResponseToMessage } from "./mapper"
 import { addOptimisticMessages } from "./optimistic"

@@ -2,15 +2,16 @@ import { app } from './app.js'
 import { config } from './config/env.js'
 import { initDb } from './db/initDb.js'
 import { WebSocketService } from './services/websocket.service.js'
+import { csrfService } from './routes/csrf.routes.js'
+import { ClassroomRepository } from './repositories/classroom.repository.js'
 import { logger } from './utils/logger.js'
 import http from 'http'
 
-
 const start = async () => {
     await initDb()
-    const server = http.createServer(app),
-     wsService = new WebSocketService()
-
+    const server = http.createServer(app)
+    const classroomRepo = new ClassroomRepository()
+    const wsService = new WebSocketService(csrfService, classroomRepo)
 
     wsService.initialize(server)
 

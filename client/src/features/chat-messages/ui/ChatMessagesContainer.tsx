@@ -1,8 +1,10 @@
 "use client"
 
 import { Message } from "@/entities/chat"
-import { useImageActions } from "../model/useImageActions"
+
 import { useAutoScroll } from "../model/useAutoScroll"
+import { useImageActions } from "../model/useImageActions"
+
 import { ChatMessages } from "./ChatMessages"
 
 export interface ChatMessagesContainerProps {

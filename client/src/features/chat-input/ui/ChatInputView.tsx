@@ -1,8 +1,11 @@
 "use client"
 
 import { useEffect, useState } from "react"
+
 import { FilePreview, SendButton } from "@/features/send-message"
+
 import { CHAT_INPUT_MAX_LENGTH } from "@/shared/config/chat"
+
 import styles from "./chatInput.module.css"
 
 export interface ChatInputViewProps {
@@ -60,7 +63,7 @@ const AttachmentButton = ({
         }`}>
             <input
                 type="file"
-                ref={fileInputRef}
+                ref={fileInputRef as React.Ref<HTMLInputElement>}
                 onChange={onFileChange}
                 accept=".jpg,.jpeg,.png,.webp"
                 disabled={isLoading || isImageLoading || !isOnline}

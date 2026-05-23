@@ -1,6 +1,7 @@
 "use client"
 
 import { useChatInput } from "../model/useChatInput"
+
 import { ChatInputView } from "./ChatInputView"
 
 export interface ChatInputControlsState {

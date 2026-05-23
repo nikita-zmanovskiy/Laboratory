@@ -1,4 +1,5 @@
 import type { Message } from "@/entities/chat"
+
 import type { GenerateResponse } from "@/shared/api/generate"
 import { toProxiedImageUrl } from "@/shared/lib/imageUrl"
 

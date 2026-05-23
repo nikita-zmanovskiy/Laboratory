@@ -1,4 +1,6 @@
-import { useState, useEffect, useRef, useCallback } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
+
+import { getWebSocketAuthToken } from "@/shared/api/ws"
 import { closeWebSocket } from "@/shared/lib/closeWebSocket"
 import { getClassroomWebSocketUrl } from "@/shared/lib/wsUrl"
 
@@ -27,52 +29,65 @@ export const useWebSocketLogs = (classroomCode: string): UseWebSocketLogsReturn 
     const [isConnected, setIsConnected] = useState(false)
     const wsRef = useRef<WebSocket | null>(null)
     const callbackRef = useRef<(() => void) | null>(null)
+    const connectingRef = useRef(false)
 
     const onNewLog = useCallback((callback: () => void) => {
         callbackRef.current = callback
     }, [])
 
-    const connect = useCallback(() => {
-        if (wsRef.current?.readyState === WebSocket.OPEN) return
+    const connect = useCallback(async () => {
+        if (wsRef.current?.readyState === WebSocket.OPEN || connectingRef.current) return
 
-        const ws = new WebSocket(getClassroomWebSocketUrl(classroomCode))
+        connectingRef.current = true
+        setIsConnected(false)
 
-        ws.onopen = () => {
-            setIsConnected(true)
-        }
+        try {
+            const { token } = await getWebSocketAuthToken(classroomCode)
+            const ws = new WebSocket(getClassroomWebSocketUrl(classroomCode, token))
 
-        ws.onmessage = (event) => {
-            try {
-                const data = JSON.parse(event.data)
-                if (data.type === "new_log" && data.log) {
-                    setRealtimeLogs((prev) => {
-                        const exists = prev.some(l => l.id === data.log.id)
-                        if (exists) return prev
-                        return [data.log, ...prev].slice(0, 5)
-                    })
-                    callbackRef.current?.()
+            ws.onopen = () => {
+                setIsConnected(true)
+            }
+
+            ws.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data)
+                    if (data.type === "new_log" && data.log) {
+                        setRealtimeLogs((prev) => {
+                            const exists = prev.some((l) => l.id === data.log.id)
+                            if (exists) return prev
+                            return [data.log, ...prev].slice(0, 5)
+                        })
+                        callbackRef.current?.()
+                    }
+                } catch {
+                    // ignore malformed messages
                 }
-            } catch {
-           
             }
-        }
 
-        ws.onclose = (event) => {
+            ws.onclose = (event) => {
+                setIsConnected(false)
+                wsRef.current = null
+                if (event.code !== 1000) {
+                    setTimeout(() => void connect(), 5000)
+                }
+            }
+
+            ws.onerror = () => {
+                setIsConnected(false)
+            }
+
+            wsRef.current = ws
+        } catch {
             setIsConnected(false)
-            if (event.code !== 1000) {
-                setTimeout(connect, 5000)
-            }
+            setTimeout(() => void connect(), 5000)
+        } finally {
+            connectingRef.current = false
         }
-
-        ws.onerror = () => {
-            // onclose сработает сам
-        }
-
-        wsRef.current = ws
     }, [classroomCode])
 
     useEffect(() => {
-        connect()
+        void connect()
         return () => {
             if (wsRef.current) {
                 closeWebSocket(wsRef.current)

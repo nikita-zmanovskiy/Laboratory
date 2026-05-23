@@ -1,6 +1,7 @@
 "use client"
 
 import { useCopyCode } from "../model/useCopyCode"
+
 import { CopyCodeButton } from "./CopyCodeButton"
 
 export const CopyCodeContainer = ({ code }: { code: string }) => {

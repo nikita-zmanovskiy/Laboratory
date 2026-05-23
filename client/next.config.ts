@@ -8,12 +8,6 @@ const nextConfig: NextConfig = {
 			process.env.NEXT_PUBLIC_BACKEND_URL || backendUrl,
 	},
 	reactStrictMode: true,
-	eslint: {
-		ignoreDuringBuilds: true,
-	},
-	typescript: {
-		ignoreBuildErrors: true,
-	},
 	async rewrites() {
 		return [
 			{

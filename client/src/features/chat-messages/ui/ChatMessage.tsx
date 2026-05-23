@@ -1,8 +1,11 @@
 "use client"
 
 import { useEffect, useState } from "react"
+
 import type { Message } from "@/entities/chat"
+
 import { normalizeImageSrc } from "@/shared/lib/imageUrl"
+
 import { MessageImage } from "./MessageImage"
 import { MessageText } from "./MessageText"
 import { TokenUsage } from "./TokenUsage"

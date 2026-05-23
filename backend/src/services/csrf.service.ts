@@ -1,6 +1,5 @@
-
 import crypto from 'crypto'
-import {isExpired} from "../utils/moscowTime.js";
+import { isExpired } from '../utils/moscowTime.js'
 import { logger } from '../utils/logger.js'
 
 interface TokenData {
@@ -24,7 +23,7 @@ export class CsrfService {
     //создать токен с временем жизни класса
     createToken(sessionId: string, classroomCode: string, expiresAt: Date): string {
         const newToken = this.generateTokenValue(),
-         now = new Date()
+            now = new Date()
 
         // токен живет до истечения класса
         this.tokenStore.set(sessionId, {
@@ -33,10 +32,12 @@ export class CsrfService {
             classroomCode,
             createdAt: now,
             expiresAt: expiresAt,
-            lastUsedAt: now
+            lastUsedAt: now,
         })
 
-        logger.debug(`csrf - token created for ${classroomCode}, expires: ${expiresAt.toISOString()}`)
+        logger.debug(
+            `csrf - token created for ${classroomCode}, expires: ${expiresAt.toISOString()}`
+        )
         return newToken
     }
 
@@ -54,7 +55,7 @@ export class CsrfService {
         }
 
         const newToken = this.generateTokenValue(),
-         now = new Date()
+            now = new Date()
 
         this.tokenStore.set(effectiveSessionId, {
             token: newToken,
@@ -62,7 +63,7 @@ export class CsrfService {
             classroomCode: 'unknown',
             createdAt: now,
             expiresAt: new Date(now.getTime() + this.DEFAULT_TOKEN_LIFETIME_MS),
-            lastUsedAt: now
+            lastUsedAt: now,
         })
 
         return { token: newToken, isNew: true }
@@ -79,7 +80,9 @@ export class CsrfService {
             }
         }
 
-        logger.info(`csrf - extended ${extendedCount} tokens for classroom ${classroomCode} by ${additionalMinutes}min`)
+        logger.info(
+            `csrf - extended ${extendedCount} tokens for classroom ${classroomCode} by ${additionalMinutes}min`
+        )
     }
 
     syncTokensExpiryForClassroom(classroomCode: string, expiresAt: Date): void {
@@ -92,7 +95,9 @@ export class CsrfService {
             }
         }
 
-        logger.info(`csrf - synced ${syncedCount} tokens for classroom ${classroomCode} to ${expiresAt.toISOString()}`)
+        logger.info(
+            `csrf - synced ${syncedCount} tokens for classroom ${classroomCode} to ${expiresAt.toISOString()}`
+        )
     }
 
     validateToken(token: string, sessionId?: string): { valid: boolean; error?: string } {

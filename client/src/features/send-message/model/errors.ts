@@ -1,4 +1,5 @@
 import { AxiosError } from "axios"
+
 import { getApiErrorMessage } from "@/shared"
 
 export interface SendMessageErrorResult {

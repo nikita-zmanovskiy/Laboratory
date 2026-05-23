@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect,useState } from "react"
 
 export const PageLoader = () => {
     const [visible, setVisible] = useState(true)

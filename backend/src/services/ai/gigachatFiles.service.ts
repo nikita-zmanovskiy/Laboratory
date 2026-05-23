@@ -46,35 +46,30 @@ export class GigaChatFilesService {
 
         // конвертируем base64 в buffer
         const base64Data = base64Image.replace(/^data:image\/\w+;base64,/, ''),
-         buffer = Buffer.from(base64Data, 'base64')
+            buffer = Buffer.from(base64Data, 'base64')
 
         const form = new FormData()
         form.append('file', buffer, {
             filename: fileName,
-            contentType: 'image/png'
+            contentType: 'image/png',
         })
         form.append('purpose', 'general')
 
         try {
-            const response = await axios.post(
-                `${config.gigachat.apiUrl}/files`,
-                form,
-                {
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/json',
-                        ...form.getHeaders()
-                    },
-                    httpsAgent: this.httpsAgent,
-                    timeout: 30000,
-                    maxContentLength: 10 * 1024 * 1024, // 10мб TODO: изменить на 5 мб
-                    maxBodyLength: 10 * 1024 * 1024
-                }
-            )
+            const response = await axios.post(`${config.gigachat.apiUrl}/files`, form, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    Accept: 'application/json',
+                    ...form.getHeaders(),
+                },
+                httpsAgent: this.httpsAgent,
+                timeout: 30000,
+                maxContentLength: 10 * 1024 * 1024, // 10мб TODO: изменить на 5 мб
+                maxBodyLength: 10 * 1024 * 1024,
+            })
 
             const file: UploadedFile = response.data
             return file.id
-
         } catch (error: unknown) {
             const status = axios.isAxiosError(error) ? error.response?.status : undefined
             const message = error instanceof Error ? error.message : 'unknown upload error'
@@ -89,13 +84,16 @@ export class GigaChatFilesService {
         try {
             await axios.delete(`${config.gigachat.apiUrl}/files/${fileId}`, {
                 headers: {
-                    'Authorization': `Bearer ${token}`
+                    Authorization: `Bearer ${token}`,
                 },
                 httpsAgent: this.httpsAgent,
-                timeout: 10000
+                timeout: 10000,
             })
         } catch (error: unknown) {
-            logger.error('gigaChat files - delete error', error instanceof Error ? error.message : 'unknown delete error')
+            logger.error(
+                'gigaChat files - delete error',
+                error instanceof Error ? error.message : 'unknown delete error'
+            )
         }
     }
 }

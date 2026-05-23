@@ -1,10 +1,8 @@
 import type { Request, Response, NextFunction } from 'express'
 import { randomUUID } from 'crypto'
 import { ClassroomRepository } from '../repositories/classroom.repository.js'
-import { AppError } from '../utils/errors.js'
-import {addMinutes} from "../utils/moscowTime.js";
 import { CsrfService } from '../services/csrf.service.js'
-import {getWebSocketService} from "../services/websocket.service.js";
+import { getWebSocketService } from '../services/websocket.service.js'
 import {
     setTeacherCookie,
     setStudentCookie,
@@ -34,8 +32,8 @@ export class ClassroomController {
     join = async (req: Request, res: Response, next: NextFunction) => {
         try {
             const code = req.params.code as string
-            const studentId = req.query.student_id as string || `student-${Date.now()}`
-    
+            const studentId = (req.query.student_id as string) || `student-${Date.now()}`
+
             const classroom = await this.classroomRepo.findByCode(code)
             if (!classroom) {
                 return res.status(404).json({ error: 'Classroom not found' })
@@ -43,19 +41,20 @@ export class ClassroomController {
             if (!classroom.is_active) {
                 return res.status(410).json({ error: 'Classroom is not active' })
             }
-            if (classroom.expires_at && new Date() > new Date(classroom.expires_at)) {
+            if (!classroom.expires_at || new Date() > new Date(classroom.expires_at)) {
                 return res.status(410).json({ error: 'Classroom has expired' })
             }
-    
+
+            const expiresAt = new Date(classroom.expires_at)
             const sessionId = `student-${code}-${studentId}`
-            const token = this.csrfService.createToken(sessionId, code, new Date(classroom.expires_at))
-            setStudentCookie(res, token, new Date(classroom.expires_at))
-    
+            const token = this.csrfService.createToken(sessionId, code, expiresAt)
+            setStudentCookie(res, token, expiresAt)
+
             res.json({
                 classroom_code: code,
                 student_id: studentId,
-                expires_at: classroom.expires_at, 
-                message: 'Joined. Session stored in HTTPOnly cookie.'
+                expires_at: classroom.expires_at,
+                message: 'Joined. Session stored in HTTPOnly cookie.',
             })
         } catch (error) {
             next(error)
@@ -66,20 +65,20 @@ export class ClassroomController {
         try {
             const { title, expires_in_minutes, grade } = req.body as {
                 title: string
-                expires_in_minutes?: number,
+                expires_in_minutes?: number
                 grade?: number
             }
 
             const existing = await this.classroomRepo.findByTitle(title)
             if (existing) {
                 return res.status(409).json({
-                    error: `Classroom with title "${title}" already exists`
+                    error: `Classroom with title "${title}" already exists`,
                 })
             }
 
             const expiresInMinutes = expires_in_minutes || 1440,
-             expiresAt = new Date(Date.now() + expiresInMinutes * 60 * 1000),
-             classGrade = grade || 11
+                expiresAt = new Date(Date.now() + expiresInMinutes * 60 * 1000),
+                classGrade = grade || 11
 
             for (let attempt = 0; attempt < 8; attempt++) {
                 const code = makeRoomCode()
@@ -89,7 +88,7 @@ export class ClassroomController {
                         code,
                         title,
                         expiresAt,
-                        grade: classGrade
+                        grade: classGrade,
                     })
 
                     // только учительский токен при создании
@@ -112,7 +111,8 @@ export class ClassroomController {
                         expires_at: row.expires_at,
                         grade: classGrade,
                         expires_in_minutes: expiresInMinutes,
-                        message: 'Students join via GET /api/classrooms/' + code + '/join?student_id=1'
+                        message:
+                            'Students join via GET /api/classrooms/' + code + '/join?student_id=1',
                     })
                 } catch (e: unknown) {
                     const err = e as { code?: string }
@@ -134,7 +134,7 @@ export class ClassroomController {
 
             if (!additional_minutes || additional_minutes < 1 || additional_minutes > 120) {
                 return res.status(400).json({
-                    error: 'additional_minutes must be between 1 and 120'
+                    error: 'additional_minutes must be between 1 and 120',
                 })
             }
 
@@ -173,12 +173,12 @@ export class ClassroomController {
                 old_expires_at: classroom.expires_at,
                 new_expires_at: updated.expires_at,
                 added_minutes: additional_minutes,
-                message: `Classroom extended by ${additional_minutes} minutes. Tokens also extended.`
+                message: `Classroom extended by ${additional_minutes} minutes. Tokens also extended.`,
             })
             const wsService = getWebSocketService()
-                if (wsService) {
-                    wsService.broadcastClassroomExtended(code, updated.expires_at)
-                }
+            if (wsService && updated.expires_at) {
+                wsService.broadcastClassroomExtended(code, new Date(updated.expires_at))
+            }
         } catch (error) {
             next(error)
         }
@@ -195,7 +195,7 @@ export class ClassroomController {
             if (!classroom.is_active) {
                 return res.status(410).json({ error: 'Classroom is not active' })
             }
-            if (classroom.expires_at && new Date() > new Date(classroom.expires_at)) {
+            if (!classroom.expires_at || new Date() > new Date(classroom.expires_at)) {
                 return res.status(410).json({ error: 'Classroom has expired' })
             }
 
@@ -204,13 +204,10 @@ export class ClassroomController {
                 return res.status(teacherCheck.status).json({ error: teacherCheck.error })
             }
 
+            const expiresAt = new Date(classroom.expires_at)
             const sessionId = `teacher-preview-${code}`
-            const token = this.csrfService.createToken(
-                sessionId,
-                code,
-                new Date(classroom.expires_at)
-            )
-            setStudentCookie(res, token, new Date(classroom.expires_at))
+            const token = this.csrfService.createToken(sessionId, code, expiresAt)
+            setStudentCookie(res, token, expiresAt)
 
             res.json({
                 classroom_code: code,
@@ -240,7 +237,7 @@ export class ClassroomController {
             const teacherCheck = await verifyTeacherToken(req, this.classroomRepo, code)
             if (!teacherCheck.ok) {
                 return res.status(teacherCheck.status).json({
-                    error: 'Access denied. Only the teacher who created this classroom can deactivate it.'
+                    error: 'Access denied. Only the teacher who created this classroom can deactivate it.',
                 })
             }
 
@@ -255,12 +252,11 @@ export class ClassroomController {
             res.json({
                 message: 'Classroom deactivated',
                 code: code,
-                is_active: false
+                is_active: false,
             })
         } catch (error) {
             logger.error('deactivate error', error)
             next(error)
         }
     }
-
 }

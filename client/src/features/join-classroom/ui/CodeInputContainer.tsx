@@ -1,6 +1,7 @@
 "use client"
 
 import { useJoinClassroom } from "../model/useJoinClassroom"
+
 import { CodeInput } from "./CodeInput"
 
 export const CodeInputContainer = ({ onBack }: { onBack: () => void }) => {

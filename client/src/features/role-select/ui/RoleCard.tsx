@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react'
 import Image from 'next/image'
+
 import styles from './roleCard.module.css'
 
 interface RoleCardProps {
@@ -10,7 +11,7 @@ interface RoleCardProps {
     subTitle: string
     svgIcon: React.ReactNode
     gradient: 'red' | 'blue'
-    onClick: () => void
+    onClick: React.MouseEventHandler<HTMLButtonElement>
     animating?: boolean
 }
 
@@ -23,7 +24,7 @@ export const RoleCard = ({ title, animating, subTitle, description, defaultImage
         
         if (!animating) {
             el.style.animation = 'none'
-            el.offsetHeight
+            void el.offsetHeight // force reflow to restart CSS animation
             el.style.animation = ''
             el.style.transform = ''
             el.style.opacity = ''

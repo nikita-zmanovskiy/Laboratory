@@ -1,14 +1,16 @@
 import type { Request, Response, NextFunction } from 'express'
 import { ClassroomService } from '../services/classroom.service.js'
 import { pool } from '../db/pool.js'
-import {ClassroomRepository} from "../repositories/classroom.repository.js";
-import {csrfService} from "../routes/csrf.routes.js";
+import { ClassroomRepository } from '../repositories/classroom.repository.js'
+import { csrfService } from '../routes/csrf.routes.js'
 import { getStudentTokenFromRequest } from '../utils/authCookie.js'
 import { verifyTeacherToken } from '../utils/teacherAuth.js'
 
 export class StatsController {
-    constructor(private classroomService: ClassroomService,
-                private classroomRepo: ClassroomRepository) {}
+    constructor(
+        private classroomService: ClassroomService,
+        private classroomRepo: ClassroomRepository
+    ) {}
 
     getClassroomStats = async (req: Request, res: Response, next: NextFunction) => {
         try {
@@ -46,16 +48,16 @@ export class StatsController {
                             tokens_over_time: [],
                             requests_per_minute: [],
                             mode_distribution: { text: 0, image: 0 },
-                            avg_tokens_per_request: 0
-                        }
-                    }
+                            avg_tokens_per_request: 0,
+                        },
+                    },
                 })
             }
 
             res.json({
                 classroom_code: classroomCode,
                 stats: stats,
-                expires_at: stats.expires_at
+                expires_at: stats.expires_at,
             })
         } catch (error) {
             next(error)
@@ -67,7 +69,7 @@ export class StatsController {
             if (!csrfToken) {
                 return res.status(403).json({
                     error: 'CSRF token is required',
-                    hint: 'Get token from GET /api/csrf/token'
+                    hint: 'Get token from GET /api/csrf/token',
                 })
             }
 
@@ -76,7 +78,7 @@ export class StatsController {
             if (!validation.valid) {
                 return res.status(403).json({
                     error: validation.error || 'Invalid or expired CSRF token',
-                    hint: 'Get a new token from GET /api/csrf/token'
+                    hint: 'Get a new token from GET /api/csrf/token',
                 })
             }
 
@@ -95,8 +97,8 @@ export class StatsController {
                     total_classrooms: parseInt(rows[0].total_classrooms),
                     active_classrooms: parseInt(rows[0].active_classrooms),
                     total_requests: parseInt(rows[0].total_requests),
-                    total_sessions: parseInt(rows[0].total_sessions)
-                }
+                    total_sessions: parseInt(rows[0].total_sessions),
+                },
             })
         } catch (error) {
             next(error)

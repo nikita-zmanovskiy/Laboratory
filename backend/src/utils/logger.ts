@@ -11,8 +11,7 @@ const levelPriority: Record<LogLevel, number> = {
 
 const currentLevel = (config.logLevel in levelPriority ? config.logLevel : 'info') as LogLevel
 
-const shouldLog = (level: LogLevel): boolean =>
-    levelPriority[level] >= levelPriority[currentLevel]
+const shouldLog = (level: LogLevel): boolean => levelPriority[level] >= levelPriority[currentLevel]
 
 export const logger = {
     debug: (message: string, meta?: unknown) => {

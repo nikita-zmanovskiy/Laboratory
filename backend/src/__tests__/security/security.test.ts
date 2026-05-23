@@ -2,6 +2,7 @@ import request from 'supertest'
 import { app } from '../../app.js'
 import fs from 'fs'
 import path from 'path'
+import { getStudentTokenFromResponse } from '../helpers/auth.js'
 
 describe('Security Tests', () => {
     test('API keys not exposed to frontend', async () => {
@@ -21,7 +22,9 @@ describe('Security Tests', () => {
         for (const dir of uploadDirs) {
             const fullPath = path.join(process.cwd(), dir)
             if (fs.existsSync(fullPath)) {
-                const files = fs.readdirSync(fullPath).filter(f => f.match(/\.(jpg|png|webp|gif)$/i))
+                const files = fs
+                    .readdirSync(fullPath)
+                    .filter((f) => f.match(/\.(jpg|png|webp|gif)$/i))
                 expect(files.length).toBe(0)
             }
         }
@@ -51,7 +54,7 @@ describe('Security Tests', () => {
 
         const response = await request(app)
             .post('/api/generate')
-            .set('x-csrf-token', tokenRes.body.csrf_token)
+            .set('x-csrf-token', getStudentTokenFromResponse(tokenRes))
             .set('x-classroom-code', "'; DROP TABLE classrooms; --")
             .send({ mode: 'text', prompt: 'Test', session_id: 'security-sql-test' })
 

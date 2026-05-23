@@ -4,7 +4,7 @@ export const getMoscowTime = (): Date => {
 
 export const getMoscowISOString = (): string => {
     const now = new Date(),
-     moscowTime = new Date(now.getTime() + 3 * 60 * 60 * 1000)
+        moscowTime = new Date(now.getTime() + 3 * 60 * 60 * 1000)
     return moscowTime.toISOString().replace('Z', '+03:00')
 }
 

@@ -1,5 +1,6 @@
 import request from 'supertest'
 import { app } from '../../app.js'
+import { getStudentTokenFromResponse } from '../helpers/auth.js'
 
 describe('Classroom API', () => {
     let csrfToken: string
@@ -9,7 +10,7 @@ describe('Classroom API', () => {
         const res = await request(app)
             .get('/api/csrf/token')
             .query({ session_id: 'test-classroom-' + ts })
-        csrfToken = res.body.csrf_token
+        csrfToken = getStudentTokenFromResponse(res)
     })
 
     test('create classroom', async () => {
@@ -17,7 +18,7 @@ describe('Classroom API', () => {
             .post('/api/classrooms')
             .set('x-csrf-token', csrfToken)
             .send({ title: 'API Test Class ' + ts, expires_in_minutes: 10 })
-        
+
         expect(response.status).toBe(201)
         expect(response.body.code).toMatch(/^[A-Z0-9]{6}$/)
         expect(response.body.is_active).toBe(true)
@@ -28,7 +29,7 @@ describe('Classroom API', () => {
             .post('/api/classrooms')
             .set('x-csrf-token', csrfToken)
             .send({ title: 'API Test Class ' + ts, expires_in_minutes: 10 })
-        
+
         expect(response.status).toBe(409)
     })
 
@@ -37,7 +38,7 @@ describe('Classroom API', () => {
             .post('/api/classrooms')
             .set('x-csrf-token', csrfToken)
             .send({ title: '', expires_in_minutes: 10 })
-        
+
         expect(response.status).toBe(400)
     })
 
@@ -46,15 +47,15 @@ describe('Classroom API', () => {
             .post('/api/classrooms')
             .set('x-csrf-token', csrfToken)
             .send({ title: 'Join Test ' + ts, expires_in_minutes: 10 })
-        
+
         const code = classRes.body.code
-        
+
         const joinRes = await request(app)
             .get(`/api/classrooms/${code}/join`)
             .query({ student_id: '1' })
-        
+
         expect(joinRes.status).toBe(200)
-        expect(joinRes.body.token).toMatch(/^[a-f0-9]{64}$/)
         expect(joinRes.body.classroom_code).toBe(code)
+        expect(getStudentTokenFromResponse(joinRes)).toMatch(/^[a-f0-9]{64}$/)
     })
 })

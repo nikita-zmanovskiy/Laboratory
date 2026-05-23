@@ -1,13 +1,16 @@
+import type { ClassroomLog, ClassroomStats } from "@/shared/api/classroom"
+import { ClassroomClosedModal } from "@/shared/ui/ClassroomClosedModal"
+import { CustomSelect } from "@/shared/ui/CustomSelect"
 import { LessonTimer } from "@/shared/ui/LessonTimer"
+import { NotificationToast } from "@/shared/ui/NotificationToast"
+import { ConfirmModal } from "@/shared/ui/shared/ui/ConfirmModal"
+
 import { LogEntry } from "../model/useWebSocketLogs"
-import { RealtimeLogItem } from "./RealtimeLogItem"
+
 import { ChartsSection } from "./ChartsSection"
 import { CopyCodeContainer } from "./CopyCodeContainer"
-import { ConfirmModal } from "@/shared/ui/shared/ui/ConfirmModal"
-import { ClassroomClosedModal } from "@/shared/ui/ClassroomClosedModal"
-import { NotificationToast } from "@/shared/ui/NotificationToast"
-import { CustomSelect } from "@/shared/ui/CustomSelect"
-import type { ClassroomLog, ClassroomStats } from "@/shared/api/classroom"
+import { RealtimeLogItem } from "./RealtimeLogItem"
+
 import styles from './teacher.module.css'
 
 const MODE_FILTER_OPTIONS = [
@@ -156,7 +159,7 @@ export const TeacherPanel = ({
                     {[
                         { label: "Текстовых запросов", value: stats.text_requests },
                         { label: "Изображений", value: stats.image_requests },
-                        { label: "Среднее время ответа", value: `${stats?.avg_response_time || stats?.avg_response_time_ms || 0}ms` },
+                        { label: "Среднее время ответа", value: `${stats?.avg_response_time ?? 0}ms` },
                         { label: "Средние токены", value: stats.charts?.avg_tokens_per_request || 0 },
                     ].map((item) => (
                         <div key={item.label} className="rounded-xl border border-[var(--color-border-primary)] bg-[var(--color-bg-hover)] p-4">

@@ -2,19 +2,19 @@ import { BaseAiService } from './baseAiService.js'
 import { GigaChatAuthService } from './gigachatAuth.service.js'
 import { GigaChatFilesService } from './gigachatFiles.service.js'
 import { config } from '../../config/env.js'
-import {RequestQueueService} from "./requestQueue.service.js";
-import axios from "axios"
-import FormData from "form-data"
-import path from "path"       
-import https from "https"     
-import fs from "fs"
-import type { AiGenerateResult } from "../../types/ai.js"
-import { logger } from "../../utils/logger.js"
+import { RequestQueueService } from './requestQueue.service.js'
+import axios from 'axios'
+import FormData from 'form-data'
+import path from 'path'
+import https from 'https'
+import fs from 'fs'
+import type { AiGenerateResult } from '../../types/ai.js'
+import { logger } from '../../utils/logger.js'
 
 interface GigaChatMessage {
     role: 'system' | 'user' | 'assistant'
     content: string
-    attachments?: string[] 
+    attachments?: string[]
 }
 
 interface GigaChatResponse {
@@ -61,46 +61,54 @@ export class GigaChatService extends BaseAiService {
         this.filesService = new GigaChatFilesService()
         this.model = 'GigaChat'
     }
-    async analyzeImage(prompt: string, imageBase64: string, systemPrompt?: string): Promise<AiGenerateResult> {
+    async analyzeImage(
+        prompt: string,
+        imageBase64: string,
+        systemPrompt?: string
+    ): Promise<AiGenerateResult> {
         if (config.aiMock) return this.mockGenerate(prompt, imageBase64)
-    
+
         const fileId = await this.uploadImage(imageBase64)
-    
+
         const messages: GigaChatMessage[] = []
-        
+
         if (systemPrompt) {
-            messages.push({ role: "system", content: systemPrompt })
+            messages.push({ role: 'system', content: systemPrompt })
         }
-        
+
         messages.push({
-            role: "user",
+            role: 'user',
             content: prompt,
-            attachments: [fileId]
+            attachments: [fileId],
         })
-    
+
         return this.queue.enqueue(async () => {
             const token = await this.authService.getAccessToken()
             const response = await this.makeRequest<GigaChatResponse>({
-                method: "POST",
-                url: "/chat/completions",
+                method: 'POST',
+                url: '/chat/completions',
                 headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
                 },
                 data: {
-                    model: "GigaChat-Pro",
+                    model: 'GigaChat-Pro',
                     messages: messages,
-                    function_call: "auto",
+                    function_call: 'auto',
                     n: 1,
                     stream: false,
                     max_tokens: 2000,
-                }
+                },
             })
             return this.parseResponse(response)
         })
     }
-    async generate(prompt: string, image?: string, systemPrompt?: string): Promise<AiGenerateResult> {
+    async generate(
+        prompt: string,
+        image?: string,
+        systemPrompt?: string
+    ): Promise<AiGenerateResult> {
         if (config.aiMock) return this.mockGenerate(prompt, image)
 
         if (image && !this.isImagePrompt(prompt)) {
@@ -111,9 +119,9 @@ export class GigaChatService extends BaseAiService {
                 usage: {
                     prompt_tokens: Math.ceil(prompt.length / 4),
                     completion_tokens: 20,
-                    total_tokens: Math.ceil(prompt.length / 4) + 20
+                    total_tokens: Math.ceil(prompt.length / 4) + 20,
                 },
-                image_support: false
+                image_support: false,
             }
         }
 
@@ -124,12 +132,12 @@ export class GigaChatService extends BaseAiService {
         } else if (this.isImagePrompt(prompt)) {
             messages.push({
                 role: 'system',
-                content: 'Ты - художник-иллюстратор. Создавай изображения по запросу.'
+                content: 'Ты - художник-иллюстратор. Создавай изображения по запросу.',
             })
         } else if (systemPrompt) {
             messages.push({ role: 'system', content: systemPrompt })
         }
-        
+
         messages.push({ role: 'user', content: prompt })
 
         const requestData: GigaChatRequestData = {
@@ -139,7 +147,7 @@ export class GigaChatService extends BaseAiService {
             stream: false,
             max_tokens: 2000,
             repetition_penalty: 1,
-            temperature: 0.7
+            temperature: 0.7,
         }
 
         if (this.isImagePrompt(prompt) || (image && this.isImagePrompt(prompt))) {
@@ -153,95 +161,94 @@ export class GigaChatService extends BaseAiService {
                     method: 'POST',
                     url: '/chat/completions',
                     headers: {
-                        'Authorization': `Bearer ${token}`,
+                        Authorization: `Bearer ${token}`,
                         'Content-Type': 'application/json',
-                        'Accept': 'application/json'
+                        Accept: 'application/json',
                     },
-                    data: requestData
+                    data: requestData,
                 })
 
                 return this.parseResponse(response)
             })
         })
-
     }
-    async generateWithImage(prompt: string, imageBase64: string, systemPrompt?: string): Promise<AiGenerateResult> {
+    async generateWithImage(
+        prompt: string,
+        imageBase64: string,
+        systemPrompt?: string
+    ): Promise<AiGenerateResult> {
         if (config.aiMock) return this.mockGenerate(prompt, imageBase64)
-    
+
         const fileId = await this.uploadImage(imageBase64)
-    
+
         const messages: GigaChatMessage[] = []
-    
+
         if (systemPrompt) {
-            messages.push({ role: "system", content: systemPrompt })
+            messages.push({ role: 'system', content: systemPrompt })
         }
-    
+
         messages.push({
-            role: "user",
+            role: 'user',
             content: prompt,
-            attachments: [fileId]  
+            attachments: [fileId],
         })
-    
+
         const requestData: GigaChatRequestData = {
             model: this.imageModel,
             messages: messages,
-            function_call: "auto",
+            function_call: 'auto',
             n: 1,
             stream: false,
             max_tokens: 2000,
         }
-    
+
         return this.queue.enqueue(async () => {
             const token = await this.authService.getAccessToken()
             const response = await this.makeRequest<GigaChatResponse>({
-                method: "POST",
-                url: "/chat/completions",
+                method: 'POST',
+                url: '/chat/completions',
                 headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
                 },
-                data: requestData
+                data: requestData,
             })
             return this.parseResponse(response)
         })
     }
-    
+
     private async uploadImage(base64Image: string): Promise<string> {
         const token = await this.authService.getAccessToken()
-        const base64Data = base64Image.replace(/^data:image\/\w+;base64,/, "")
-        const buffer = Buffer.from(base64Data, "base64")
-    
+        const base64Data = base64Image.replace(/^data:image\/\w+;base64,/, '')
+        const buffer = Buffer.from(base64Data, 'base64')
+
         const form = new FormData()
-        form.append("file", buffer, {
-            filename: "image.png",
-            contentType: "image/png",
+        form.append('file', buffer, {
+            filename: 'image.png',
+            contentType: 'image/png',
         })
-        form.append("purpose", "general")  
-    
-        const certPath = path.join(process.cwd(), "russian_trusted_root_ca.cer")
+        form.append('purpose', 'general')
+
+        const certPath = path.join(process.cwd(), 'russian_trusted_root_ca.cer')
         const httpsAgent = new https.Agent({
             ca: fs.existsSync(certPath) ? fs.readFileSync(certPath) : undefined,
             rejectUnauthorized: !fs.existsSync(certPath),
         })
-    
+
         try {
-            const response = await axios.post(
-                `${config.gigachat.apiUrl}/files`,
-                form,
-                {
-                    headers: {
-                        "Authorization": `Bearer ${token}`,
-                        ...form.getHeaders(),
-                    },
-                    httpsAgent,
-                    timeout: 30000,
-                }
-            )
+            const response = await axios.post(`${config.gigachat.apiUrl}/files`, form, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    ...form.getHeaders(),
+                },
+                httpsAgent,
+                timeout: 30000,
+            })
             return response.data.id
         } catch (error: unknown) {
             if (axios.isAxiosError(error)) {
-                logger.error("[GigaChat Upload] Error", { status: error.response?.status })
+                logger.error('[GigaChat Upload] Error', { status: error.response?.status })
             }
             throw error
         }
@@ -259,7 +266,7 @@ export class GigaChatService extends BaseAiService {
                 text: 'Запрос отклонен по соображениям безопасности.',
                 blocked: true,
                 finish_reason: 'safety',
-                usage: response.usage || null
+                usage: response.usage || null,
             }
         }
 
@@ -276,7 +283,7 @@ export class GigaChatService extends BaseAiService {
                 finish_reason: choice.finish_reason,
                 model: response.model,
                 usage: response.usage || null,
-                is_image: true
+                is_image: true,
             }
         }
 
@@ -286,7 +293,7 @@ export class GigaChatService extends BaseAiService {
             finish_reason: choice.finish_reason,
             model: response.model,
             usage: response.usage || null,
-            is_image: false
+            is_image: false,
         }
     }
 
@@ -297,21 +304,25 @@ export class GigaChatService extends BaseAiService {
             method: 'GET',
             url: `/files/${imageId}/content`,
             headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'image/jpg'
+                Authorization: `Bearer ${token}`,
+                Accept: 'image/jpg',
             },
-            responseType: 'arraybuffer'
+            responseType: 'arraybuffer',
         })
 
         return Buffer.from(response)
     }
 
-    async generateWithSystem(prompt: string, systemPrompt: string, image?: string): Promise<AiGenerateResult> {
+    async generateWithSystem(
+        prompt: string,
+        systemPrompt: string,
+        image?: string
+    ): Promise<AiGenerateResult> {
         if (config.aiMock) return this.mockGenerate(prompt, image)
 
         const messages: GigaChatMessage[] = [
             { role: 'system', content: systemPrompt },
-            { role: 'user', content: prompt }
+            { role: 'user', content: prompt },
         ]
 
         const requestData: GigaChatRequestData = {
@@ -321,7 +332,7 @@ export class GigaChatService extends BaseAiService {
             stream: false,
             max_tokens: 2000,
             repetition_penalty: 1,
-            temperature: 0.7
+            temperature: 0.7,
         }
 
         if (this.isImagePrompt(prompt)) {
@@ -331,15 +342,15 @@ export class GigaChatService extends BaseAiService {
         return this.queue.enqueue(async () => {
             const token = await this.authService.getAccessToken()
             const response = await this.makeRequest<GigaChatResponse>({
-                method: "POST",
-                url: "/chat/completions",
+                method: 'POST',
+                url: '/chat/completions',
                 headers: {
-                    "Authorization": `Bearer ${token}`,
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
+                    Authorization: `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
                 },
                 data: requestData,
-                timeout: 120000  
+                timeout: 120000,
             })
             return this.parseResponse(response)
         })
@@ -347,12 +358,21 @@ export class GigaChatService extends BaseAiService {
 
     private isImagePrompt(prompt: string): boolean {
         const imageKeywords = [
-            'нарисуй', 'нарисуйте', 'изобрази', 'создай изображение',
-            'покажи', 'картинку', 'рисунок', 'draw', 'paint',
-            'image', 'picture', 'сгенерируй изображение'
+            'нарисуй',
+            'нарисуйте',
+            'изобрази',
+            'создай изображение',
+            'покажи',
+            'картинку',
+            'рисунок',
+            'draw',
+            'paint',
+            'image',
+            'picture',
+            'сгенерируй изображение',
         ]
         const lowerPrompt = prompt.toLowerCase()
-        return imageKeywords.some(keyword => lowerPrompt.includes(keyword))
+        return imageKeywords.some((keyword) => lowerPrompt.includes(keyword))
     }
 
     private mockGenerate(prompt: string, image?: string): AiGenerateResult {
@@ -369,9 +389,9 @@ export class GigaChatService extends BaseAiService {
                 usage: {
                     prompt_tokens: Math.ceil(prompt.length / 4),
                     completion_tokens: 20,
-                    total_tokens: Math.ceil(prompt.length / 4) + 20
+                    total_tokens: Math.ceil(prompt.length / 4) + 20,
                 },
-                is_image: true
+                is_image: true,
             }
         }
 
@@ -383,9 +403,9 @@ export class GigaChatService extends BaseAiService {
             usage: {
                 prompt_tokens: Math.ceil(prompt.length / 4),
                 completion_tokens: Math.ceil(preview.length / 4),
-                total_tokens: Math.ceil((prompt.length + preview.length) / 4)
+                total_tokens: Math.ceil((prompt.length + preview.length) / 4),
             },
-            is_image: false
+            is_image: false,
         }
     }
 }

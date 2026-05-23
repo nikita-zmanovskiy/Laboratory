@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
+
 import { RoleSelectPage } from "@/features/role-select"
+
 import { useChatStore } from "@/entities/chat"
 
 export const HomePage = () => {

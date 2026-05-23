@@ -20,11 +20,11 @@ export const errorMiddleware = (
     }
 
     const statusCode = err instanceof AppError ? err.statusCode : 500,
-     message = err instanceof AppError ? err.message : 'Internal server error'
+        message = err instanceof AppError ? err.message : 'Internal server error'
 
     res.status(statusCode).json({
         error: message,
         session_id: req.body?.session_id || null,
-        classroom_code: req.body?.classroom_code || req.headers?.['x-classroom-code'] || null
+        classroom_code: req.body?.classroom_code || req.headers?.['x-classroom-code'] || null,
     })
 }

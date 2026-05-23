@@ -35,8 +35,6 @@ export class PromptBuilder {
     }
 
     buildImagePrompt(prompt: string, hasImage: boolean): string {
-        return hasImage
-            ? `Измени это изображение: ${prompt}`
-            : `Нарисуй ${prompt}`
+        return hasImage ? `Измени это изображение: ${prompt}` : `Нарисуй ${prompt}`
     }
 }

@@ -1,15 +1,19 @@
 "use client"
 
+import { useCallback, useEffect, useMemo, useRef,useState } from "react"
 import { useRouter } from "next/navigation"
-import { useState, useEffect, useCallback, useMemo, useRef } from "react"
-import { useClassroomData } from "../model/useClassroomData"
-import { useClassroomActions } from "../model/useClassroomActions"
-import { useWebSocketLogs } from "../model/useWebSocketLogs"
-import { useConfirmDeactivate } from "../model/useConfirmDeactivate"
+
 import { useRoleStore } from "@/features/role-select"
-import { useLessonTimer } from "../model/useLessonTimer"
+
 import { useLessonNotification } from "@/shared/lib/useLessonNotification"
+
 import { buildLogFilters, hasActiveLogFilters } from "../model/logFilters"
+import { useClassroomActions } from "../model/useClassroomActions"
+import { useClassroomData } from "../model/useClassroomData"
+import { useConfirmDeactivate } from "../model/useConfirmDeactivate"
+import { useLessonTimer } from "../model/useLessonTimer"
+import { useWebSocketLogs } from "../model/useWebSocketLogs"
+
 import { TeacherPanel } from "./TeacherPanel"
 
 export const TeacherPanelContainer = ({ code }: { code: string }) => {

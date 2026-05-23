@@ -2,11 +2,16 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { useRoleStore } from "../model/useRoleStore"
-import { RoleCard } from "./RoleCard"
+
 import { CodeInputContainer } from "@/features/join-classroom"
-import styles from './roleCard.module.css'
+
 import { ThemeToggle } from "@/shared/ui/ThemeToggle"
+
+import { useRoleStore } from "../model/useRoleStore"
+
+import { RoleCard } from "./RoleCard"
+
+import styles from './roleCard.module.css'
 
 export const RoleSelectPage = () => {
     const [showStudentInput, setShowStudentInput] = useState(false)

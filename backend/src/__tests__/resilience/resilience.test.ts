@@ -1,15 +1,15 @@
 import request from 'supertest'
 import { app } from '../../app.js'
+import { getStudentTokenFromResponse } from '../helpers/auth.js'
 
 describe('Resilience Tests', () => {
-    let csrfToken: string,
-     classroomCode: string
+    let csrfToken: string, classroomCode: string
 
     beforeAll(async () => {
         const tokenRes = await request(app)
             .get('/api/csrf/token')
             .query({ session_id: 'resilience-test' })
-        csrfToken = tokenRes.body.csrf_token
+        csrfToken = getStudentTokenFromResponse(tokenRes)
 
         const classRes = await request(app)
             .post('/api/classrooms')
@@ -47,9 +47,7 @@ describe('Resilience Tests', () => {
     })
 
     test('server stays alive after invalid requests', async () => {
-        await request(app)
-            .post('/api/generate')
-            .send({ invalid: 'data' })
+        await request(app).post('/api/generate').send({ invalid: 'data' })
 
         await request(app)
             .post('/api/generate')
@@ -69,7 +67,7 @@ describe('Resilience Tests', () => {
             .send({
                 mode: 'text',
                 prompt: 'Quick test',
-                session_id: 'timeout-test'
+                session_id: 'timeout-test',
             })
             .timeout(5000) // тест сам прервется через 5 сек
 
@@ -78,7 +76,7 @@ describe('Resilience Tests', () => {
 
     test('retry logic exists in service', async () => {
         const fs = await import('fs'),
-         aiServicePath = 'src/services/ai/baseAiService.ts'
+            aiServicePath = 'src/services/ai/baseAiService.ts'
 
         if (fs.existsSync(aiServicePath)) {
             const content = fs.readFileSync(aiServicePath, 'utf-8')

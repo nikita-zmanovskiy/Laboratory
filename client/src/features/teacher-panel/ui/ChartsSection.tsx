@@ -1,5 +1,7 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from "recharts"
+import { Bar, BarChart, CartesianGrid, Cell,Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+
 import type { ClassroomStats } from "@/shared/api/classroom"
+
 import styles from './teacher.module.css'
 
 interface ChartsSectionProps {

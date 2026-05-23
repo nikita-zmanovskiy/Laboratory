@@ -27,7 +27,6 @@ export class KandinskyService extends BaseAiService {
     }
 
     async generate(prompt: string, image?: string | null) {
-
         //todo: УБРАТЬ/АДАПТИРОВАТЬ МЕТОД - пока не ипользуется
         return
         // if (config.aiMock) {
@@ -52,16 +51,23 @@ export class KandinskyService extends BaseAiService {
         // })
     }
 
-    private async makeRequestWithRetry(requestConfig: KandinskyRequestConfig, attempt = 0): Promise<KandinskyResult> {
+    private async makeRequestWithRetry(
+        requestConfig: KandinskyRequestConfig,
+        attempt = 0
+    ): Promise<KandinskyResult> {
         try {
             const response = await this.makeRequest<KandinskyResponse>(requestConfig)
             return {
                 image_url: response.url || response.image_url,
                 provider: 'kandinsky',
-                mode: requestConfig.data?.mode
+                mode: requestConfig.data?.mode,
             }
         } catch (error) {
-            if (attempt < AI_RETRY_ATTEMPTS && error instanceof AppError && error.statusCode === 503) {
+            if (
+                attempt < AI_RETRY_ATTEMPTS &&
+                error instanceof AppError &&
+                error.statusCode === 503
+            ) {
                 logger.info(`kandinsky - retry attempt ${attempt + 1}`)
                 await this.delay(Math.pow(2, attempt) * 1000)
                 return this.makeRequestWithRetry(requestConfig, attempt + 1)
@@ -71,7 +77,7 @@ export class KandinskyService extends BaseAiService {
     }
 
     private delay(ms: number): Promise<void> {
-        return new Promise(resolve => setTimeout(resolve, ms))
+        return new Promise((resolve) => setTimeout(resolve, ms))
     }
 
     private mock(prompt: string, image?: string | null) {
@@ -80,7 +86,7 @@ export class KandinskyService extends BaseAiService {
             provider: 'kandinsky-mock',
             mode: image ? 'image2image' : 'text2image',
             prompt_preview: prompt.slice(0, 120),
-            image_attached: Boolean(image)
+            image_attached: Boolean(image),
         }
     }
 }
