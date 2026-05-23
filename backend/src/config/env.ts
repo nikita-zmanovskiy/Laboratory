@@ -1,5 +1,7 @@
+import crypto from 'crypto'
 import dotenv from 'dotenv'
 import path from 'path'
+import os from 'os'
 
 const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env'
 dotenv.config({ path: path.resolve(process.cwd(), envFile) })
@@ -61,4 +63,13 @@ export const config = {
     csrfSecret: process.env.CSRF_SECRET || 'SECRET_KEY_DEFAULT_00023774323499914999445',
 
     logLevel: process.env.LOG_LEVEL || 'info',
+
+    instanceId:
+        process.env.INSTANCE_ID ||
+        `${os.hostname()}-${process.pid}-${crypto.randomBytes(4).toString('hex')}`,
+
+    redis: {
+        url: process.env.REDIS_URL?.trim() || '',
+        wsChannel: process.env.REDIS_WS_CHANNEL || 'lab:ws:broadcast',
+    },
 }

@@ -9,9 +9,9 @@ export const errorMiddleware = (
     next: NextFunction
 ) => {
     if (err instanceof AppError) {
-        logger.warn(`[${err.statusCode}] ${err.message}`)
+        logger.warn(err.message, { statusCode: err.statusCode })
     } else {
-        logger.error('[500]', err.message)
+        logger.error('unhandled error', err)
     }
 
     //не отправлен ли ответ

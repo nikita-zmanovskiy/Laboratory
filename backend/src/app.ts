@@ -11,6 +11,7 @@ import { classroomRouter } from './routes/classroom.routes.js'
 import { logsRouter } from './routes/logs.routes.js'
 import { csrfRouter } from './routes/csrf.routes.js'
 import { healthRouter } from './routes/health.routes.js'
+import { requestContextMiddleware } from './middlewares/requestContext.middleware.js'
 import { errorMiddleware } from './middlewares/error.middleware.js'
 import { csrfMiddleware } from './middlewares/csrf.middleware.js'
 import { classroomContextMiddleware } from './middlewares/classroomContext.middleware.js'
@@ -47,6 +48,7 @@ app.use(
 app.use(cors(corsOptions))
 app.use(cookieParser())
 app.use(express.json({ limit: config.jsonLimit }))
+app.use(requestContextMiddleware)
 
 app.use('/health', healthRouter)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))

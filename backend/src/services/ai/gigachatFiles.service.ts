@@ -92,7 +92,7 @@ export class GigaChatFilesService {
         } catch (error: unknown) {
             logger.error(
                 'gigaChat files - delete error',
-                error instanceof Error ? error.message : 'unknown delete error'
+                error instanceof Error ? error : { message: 'unknown delete error' }
             )
         }
     }

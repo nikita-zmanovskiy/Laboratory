@@ -3,7 +3,7 @@ import { ClassroomRepository } from '../repositories/classroom.repository.js'
 import { isExpired } from '../utils/moscowTime.js'
 import { getWebSocketService } from '../services/websocket.service.js'
 import { RateLimitService } from '../services/rateLimit.service.js'
-import { logger } from '../utils/logger.js'
+import { enrichRequestContext, logger } from '../utils/logger.js'
 
 const classroomRepo = new ClassroomRepository()
 const rateLimitService = new RateLimitService()
@@ -78,6 +78,11 @@ export const classroomContextMiddleware = async (
 
     req.body.classroom_code = classroomCode
     req.body.classroom_id = classroom.id
+
+    enrichRequestContext({
+        classroomCode,
+        sessionId: req.body?.session_id,
+    })
 
     next()
 }

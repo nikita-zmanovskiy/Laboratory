@@ -2,10 +2,13 @@ import { WebSocketServer, WebSocket } from 'ws'
 import { Server, IncomingMessage } from 'http'
 import type { Socket } from 'net'
 import type { RequestLog } from '../types/models.js'
+import type { WsBroadcastEvent } from '../types/wsBroadcast.js'
 import type { CsrfService } from './csrf.service.js'
 import type { ClassroomRepository } from '../repositories/classroom.repository.js'
+import { RedisWsPubSub } from './redisWsPubSub.service.js'
 import { validateWsAccess } from '../utils/wsAuth.js'
-import { logger } from '../utils/logger.js'
+import crypto from 'node:crypto'
+import { logger, runWithRequestContextAsync } from '../utils/logger.js'
 
 interface WSClient {
     ws: WebSocket
@@ -23,6 +26,7 @@ export const getWebSocketService = (): WebSocketService | null => {
 export class WebSocketService {
     private wss: WebSocketServer | null = null
     private clients: Map<string, WSClient> = new Map()
+    private readonly pubSub = new RedisWsPubSub()
 
     constructor(
         private csrfService: CsrfService,
@@ -35,7 +39,9 @@ export class WebSocketService {
         return wsInstance
     }
 
-    initialize(server: Server) {
+    async initialize(server: Server): Promise<void> {
+        await this.pubSub.connect((event) => this.handleBroadcastEvent(event))
+
         this.wss = new WebSocketServer({ noServer: true })
 
         server.on('upgrade', (request: IncomingMessage, socket: Socket, head: Buffer) => {
@@ -62,9 +68,7 @@ export class WebSocketService {
                 subscribedAt: new Date(),
             })
 
-            logger.debug(
-                `ws - client connected: ${clientId} (${role}, classroom: ${classroomCode})`
-            )
+            logger.debug('ws - client connected', { clientId, role, classroomCode })
 
             ws.send(
                 JSON.stringify({
@@ -78,11 +82,11 @@ export class WebSocketService {
 
             ws.on('close', () => {
                 this.clients.delete(clientId)
-                logger.debug(`ws - client disconnected: ${clientId}`)
+                logger.debug('ws - client disconnected', { clientId })
             })
 
             ws.on('error', (error) => {
-                logger.error(`ws client error: ${clientId}`, error)
+                logger.error('ws - client error', { clientId, err: error })
                 this.clients.delete(clientId)
             })
         })
@@ -94,6 +98,84 @@ export class WebSocketService {
         logger.info('ws - webSocket server initialized on /ws (token required)')
     }
 
+    async shutdown(): Promise<void> {
+        for (const [clientId, client] of this.clients.entries()) {
+            if (client.ws.readyState === WebSocket.OPEN) {
+                client.ws.close(1001, 'server shutting down')
+            }
+            this.clients.delete(clientId)
+        }
+        await this.pubSub.disconnect()
+        this.wss = null
+        wsInstance = null
+    }
+
+    private handleBroadcastEvent(event: WsBroadcastEvent): void {
+        switch (event.kind) {
+            case 'new_log':
+                this.deliverToClassroom(
+                    event.classroomCode,
+                    JSON.stringify({
+                        type: 'new_log',
+                        classroom_code: event.classroomCode.toUpperCase(),
+                        log: event.log,
+                        timestamp: new Date().toISOString(),
+                    })
+                )
+                break
+            case 'classroom_closed':
+                this.deliverToClassroom(
+                    event.classroomCode,
+                    JSON.stringify({
+                        type: 'classroom_closed',
+                        classroom_code: event.classroomCode.toUpperCase(),
+                        reason: event.reason,
+                        message:
+                            event.reason === 'deactivated'
+                                ? 'Учитель завершил урок'
+                                : 'Время урока истекло',
+                        timestamp: new Date().toISOString(),
+                    })
+                )
+                logger.info(
+                    `ws - classroom ${event.classroomCode.toUpperCase()} closed (${event.reason})`
+                )
+                break
+            case 'classroom_extended':
+                this.deliverToClassroom(
+                    event.classroomCode,
+                    JSON.stringify({
+                        type: 'classroom_extended',
+                        classroom_code: event.classroomCode.toUpperCase(),
+                        new_expires_at: event.newExpiresAt,
+                        message: 'Время урока продлено',
+                        timestamp: new Date().toISOString(),
+                    })
+                )
+                logger.info(`ws - classroom ${event.classroomCode.toUpperCase()} extended`)
+                break
+        }
+    }
+
+    private deliverToClassroom(classroomCode: string, message: string): void {
+        const normalizedCode = classroomCode.toUpperCase()
+        let sent = 0
+
+        this.clients.forEach((client) => {
+            if (
+                client.ws.readyState === WebSocket.OPEN &&
+                client.classroomCode === normalizedCode
+            ) {
+                client.ws.send(message)
+                sent++
+            }
+        })
+
+        if (sent > 0) {
+            logger.debug('ws - message delivered', { sent, classroomCode: normalizedCode })
+        }
+    }
+
     private async handleUpgrade(
         request: IncomingMessage,
         socket: Socket,
@@ -102,7 +184,28 @@ export class WebSocketService {
     ): Promise<void> {
         const classroomCode = url.searchParams.get('classroom') ?? ''
         const token = url.searchParams.get('token') ?? ''
+        const wsContext = {
+            requestId: crypto.randomUUID(),
+            method: 'GET',
+            path: url.pathname + url.search,
+            ip: request.socket.remoteAddress,
+            userAgent: request.headers['user-agent'],
+            classroomCode: classroomCode.toUpperCase() || undefined,
+        }
 
+        await runWithRequestContextAsync(wsContext, () =>
+            this.handleUpgradeWithContext(request, socket, head, url, classroomCode, token)
+        )
+    }
+
+    private async handleUpgradeWithContext(
+        request: IncomingMessage,
+        socket: Socket,
+        head: Buffer,
+        url: URL,
+        classroomCode: string,
+        token: string
+    ): Promise<void> {
         const auth = await validateWsAccess(
             classroomCode,
             token,
@@ -111,7 +214,7 @@ export class WebSocketService {
         )
 
         if (!auth.ok) {
-            logger.warn(`ws - connection rejected: ${auth.reason}`)
+            logger.warn('ws - connection rejected', { reason: auth.reason })
             socket.write('HTTP/1.1 403 Forbidden\r\n\r\n')
             socket.destroy()
             return
@@ -131,77 +234,32 @@ export class WebSocketService {
         })
     }
 
-    broadcastLog(classroomCode: string, logEntry: RequestLog) {
-        if (!this.wss) return
-
-        const normalizedCode = classroomCode.toUpperCase()
-        const message = JSON.stringify({
-            type: 'new_log',
-            classroom_code: normalizedCode,
+    broadcastLog(classroomCode: string, logEntry: RequestLog): void {
+        void this.pubSub.publish({
+            kind: 'new_log',
+            classroomCode,
             log: logEntry,
-            timestamp: new Date().toISOString(),
         })
-
-        let sent = 0
-        this.clients.forEach((client) => {
-            if (
-                client.ws.readyState === WebSocket.OPEN &&
-                client.classroomCode === normalizedCode
-            ) {
-                client.ws.send(message)
-                sent++
-            }
-        })
-
-        logger.debug(`[WS] Sent log to ${sent} clients for classroom ${normalizedCode}`)
     }
 
     broadcastClassroomClosed(classroomCode: string, reason: string = 'expired'): void {
-        if (!this.wss) return
-
-        const normalizedCode = classroomCode.toUpperCase()
-        const message = JSON.stringify({
-            type: 'classroom_closed',
-            classroom_code: normalizedCode,
+        void this.pubSub.publish({
+            kind: 'classroom_closed',
+            classroomCode,
             reason,
-            message: reason === 'deactivated' ? 'Учитель завершил урок' : 'Время урока истекло',
-            timestamp: new Date().toISOString(),
         })
-
-        this.clients.forEach((client) => {
-            if (
-                client.ws.readyState === WebSocket.OPEN &&
-                client.classroomCode === normalizedCode
-            ) {
-                client.ws.send(message)
-            }
-        })
-
-        logger.info(`ws - classroom ${normalizedCode} closed (${reason})`)
     }
 
     broadcastClassroomExtended(classroomCode: string, newExpiresAt: Date): void {
-        if (!this.wss) return
-
-        const normalizedCode = classroomCode.toUpperCase()
-        const message = JSON.stringify({
-            type: 'classroom_extended',
-            classroom_code: normalizedCode,
-            new_expires_at: newExpiresAt,
-            message: 'Время урока продлено',
-            timestamp: new Date().toISOString(),
+        void this.pubSub.publish({
+            kind: 'classroom_extended',
+            classroomCode,
+            newExpiresAt: newExpiresAt.toISOString(),
         })
+    }
 
-        this.clients.forEach((client) => {
-            if (
-                client.ws.readyState === WebSocket.OPEN &&
-                client.classroomCode === normalizedCode
-            ) {
-                client.ws.send(message)
-            }
-        })
-
-        logger.info(`ws - classroom ${normalizedCode} extended`)
+    getLocalClientCount(): number {
+        return this.clients.size
     }
 
     private generateClientId(): string {
