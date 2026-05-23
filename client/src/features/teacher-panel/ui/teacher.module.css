@@ -1,0 +1,68 @@
+.logs__overlay {
+    background: var(--color-bg-teacher-panel);
+    animation: fadeIn 0.4s ease-out;
+}
+
+.charts__top_students {
+    background: var(--color-chart-top);
+}
+
+.tableRow {
+    animation: slideUp 0.35s ease-out both;
+}
+
+.realtimeRow {
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.realtimeRowVisible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.tableWrapper {
+    position: relative;
+    min-height: 420px;
+}
+
+.tableScroll {
+    overflow-x: auto;
+}
+
+.tableContent {
+    transition: opacity 0.25s ease;
+}
+
+.tableRefreshing {
+    opacity: 0.55;
+    pointer-events: none;
+}
+
+.tableOverlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.15);
+    border-radius: inherit;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

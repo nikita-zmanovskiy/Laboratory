@@ -1,0 +1,19 @@
+# Nixpacks configuration
+# This configuration uses pnpm with no-frozen-lockfile
+
+[phases.setup]
+nixPkgs = ["...", "nodejs_18", "pnpm"]
+
+[phases.install]
+dependsOn = ["setup"]
+cmds = ["pnpm install --no-frozen-lockfile"]
+
+[phases.build]
+dependsOn = ["install"]
+cmds = ["pnpm run build"]
+
+[start]
+cmd = "pnpm run start"
+
+[variables]
+NODE_ENV = "production"

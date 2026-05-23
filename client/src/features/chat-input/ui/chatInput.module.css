@@ -1,0 +1,75 @@
+.glass-gradient-wrapper {
+  position: relative;
+  border-radius: 20px;
+  padding: 2px;
+  z-index: 1;
+}
+
+.input__limit {
+  transition: .5s ease color;
+}
+
+.input__overlay {
+  position: absolute;
+  left: -20px;
+  bottom: -10px;
+  top: -10px;
+  backdrop-filter: blur(10px);
+  right: -20px;
+  background-color: var(--color-bg-primary);
+  border-radius: 20px;
+}
+
+.glow-blur-layer {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: -1;
+  filter: blur(50px);
+  opacity: 0.4;
+}
+
+.glow-blur-layer::before,
+.glow-blur-layer::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.glow-blur-layer::before {
+  top: -5%;
+  left: -30%;
+  background: radial-gradient(circle, #9a2e49 0%, rgba(255, 75, 40, 0) 70%);
+  animation: orange-glow 6s ease-in-out infinite;
+}
+
+.glow-blur-layer::after {
+  bottom: -5%;
+  right: -30%;
+  background: radial-gradient(circle, #2158b0 0%, rgba(30, 80, 255, 0) 70%);
+  animation: blue-glow 6s ease-in-out infinite;
+}
+
+.glass-inner {
+  background: var(--color-bg-secondary);
+  border-radius: calc(20px - 2px);
+  width: 100%;
+  height: 100%;
+  position: relative;
+  z-index: 2;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+      inset 0 1px 1px rgba(255, 255, 255, 0.05),
+      0 4px 20px rgba(0, 0, 0, 0.6);
+}
+
+.chatInput__wrappec {
+  position: fixed;
+  left: 50%;
+  bottom: 30px;
+  transform: translateX(-50%);
+  max-width: 1000px;
+}

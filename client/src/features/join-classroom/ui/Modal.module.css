@@ -1,0 +1,30 @@
+.code__wrapper {
+    background: var(--color-bg-join-classroom);
+}
+
+.code__background_title {
+    font-size: 130px;
+    font-weight: 900;
+    position: absolute;
+    left: 50%;
+    max-width: 880px;
+    width: 100%;
+    transform: translateX(-50%);
+    top: 200px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.089) -15.48%, rgba(0, 0, 0, 0.4) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.code__input {
+    outline: none;
+    background-color: #000000;
+    color: var(--color-text-primary);
+}
+
+.code__input::placeholder {
+    font-size: 12px;
+    text-transform: initial;
+    color: var(--color-text-muted);
+}

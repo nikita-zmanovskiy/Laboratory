@@ -1,0 +1,54 @@
+import { AxiosError } from "axios";
+
+const HTTP_ERROR_MAP: Record<number, string> = {
+	400: "Некорректный запрос. Проверьте введённые данные.",
+	403: "Запрос отклонён по соображениям безопасности",
+	408: "Сервис временно недоступен. Попробуйте позже.",
+	429: "Слишком много запросов. Подождите минуту.",
+	500: "Внутренняя ошибка сервиса. Попробуйте позже.",
+	504: "Сервис временно недоступен. Попробуйте позже.",
+};
+
+interface ApiErrorResponse {
+	code?: string;
+	error?: string;
+	message?: string;
+}
+
+export const getApiErrorMessage = (
+	error: unknown,
+): string => {
+	if (!(error instanceof AxiosError)) {
+		return "Произошла непредвиденная ошибка. Попробуйте позже.";
+	}
+	if (
+		error.code === "ERR_NETWORK" ||
+		!error.response
+	) {
+		return "Нет подключения к сети. Проверьте интернет.";
+	}
+	if (
+		error.code === "ECONNABORTED" ||
+		error.message.includes("timeout")
+	) {
+		return "Сервис временно недоступен. Попробуйте позже.";
+	}
+
+	const status = error.response.status;
+	const responseData = error.response.data as
+		| ApiErrorResponse
+		| undefined
+	if (
+		status === 400 &&
+		(responseData?.code ===
+			"SAFETY_VIOLATION" ||
+			responseData?.error === "security")
+	) {
+		return "Запрос отклонён по соображениям безопасности";
+	}
+	if (HTTP_ERROR_MAP[status]) {
+		return HTTP_ERROR_MAP[status];
+	}
+
+	return "Внутренняя ошибка сервиса. Попробуйте позже.";
+};
