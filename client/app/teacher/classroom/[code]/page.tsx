@@ -7,5 +7,11 @@ export default function ClassroomPage() {
     const params = useParams()
     const code = params.code as string
 
-    return <TeacherPanelContainer key={code} code={code} />
+    return  (
+        <>
+            <title>Промт-инженер | Лаборатория ИИ</title>
+            <TeacherPanelContainer key={code} code={code} />
+        </>
+    )
+    
 }

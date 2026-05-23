@@ -25,7 +25,7 @@ export const ChartsSection = ({ stats }: ChartsSectionProps) => {
 
     return (
         <div className="space-y-6 mt-6">
-            <div className="rounded-xl border border-[var(--color-border-primary)] bg-[var(--color-bg-hover)] p-4">
+            <div className="rounded-xl border border-[var(--color-border-primary)] p-4">
                 <h3 className="mb-4 text-sm font-semibold text-[var(--color-text-primary)]">Запросы по минутам</h3>
                 {charts.requests_per_minute?.length > 0 ? (
                     <ResponsiveContainer width="100%" height={200}>

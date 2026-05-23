@@ -15,5 +15,6 @@ export const HomePage = () => {
         setPageKey(prev => prev + 1)
     }, [pathname, clearMessages])
 
-    return <RoleSelectPage key={pageKey} />
+    return 
+    <RoleSelectPage key={pageKey} />
 }

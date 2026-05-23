@@ -61,7 +61,7 @@ export const ChatMessage = ({ message, onImageClick, onDownload }: ChatMessagePr
 
     return (
         <div
-            className={`flex page__animation max-w-[75%] flex-col gap-1.5 transition-all duration-400 ${
+            className={`flex page__animation min-[577]:max-w-[75%] flex-col gap-1.5 transition-all duration-400 ${
                 visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
             } ${isUser ? "ml-auto items-end" : "mr-auto items-start"}`}
         >

@@ -28,6 +28,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
         <html lang="ru">
+            <title>Промт-инженер | Лаборатория ИИ</title>
             <body className={`${roboto.className} antialiased min-h-screen`}>
               <PageLoader />
                 <AuthGuard>{children}</AuthGuard>
