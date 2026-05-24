@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import type { MouseEventHandler, ReactNode } from "react"
 import Image from "next/image"
+import type { MouseEventHandler, ReactNode } from "react"
 
 import styles from "./roleCard.module.css"
 

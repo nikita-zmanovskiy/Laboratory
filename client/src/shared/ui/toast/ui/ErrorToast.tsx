@@ -1,6 +1,6 @@
 "use client";
 
-import { useToastAutoClose } from "@/shared/ui/toast/model/useToastAutoClose";
+import { useToastAutoClose } from "../model/useToastAutoClose";
 
 interface ErrorToastProps {
   message: string | null;

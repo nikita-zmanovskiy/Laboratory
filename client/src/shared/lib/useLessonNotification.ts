@@ -1,42 +1,107 @@
-import { useCallback,useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface UseLessonNotificationReturn {
-    showNotification: boolean
-    notificationMessage: string
-    dismissNotification: () => void
+	showNotification: boolean;
+	notificationMessage: string;
+	dismissNotification: () => void;
 }
 
-export const useLessonNotification = (expiresAt: string | null): UseLessonNotificationReturn => {
-    const [showNotification, setShowNotification] = useState(false),
-     [notificationMessage, setNotificationMessage] = useState(""),
-     [dismissed, setDismissed] = useState(false)
+type LessonWarningId = "5m" | "1m";
 
-    const checkTime = useCallback(() => {
-        if (!expiresAt || dismissed) return
+interface LessonWarning {
+	id: LessonWarningId;
+	thresholdMs: number;
+	message: string;
+}
 
-        const now = Date.now(),
-         end = new Date(expiresAt).getTime(),
-         diffMinutes = Math.floor((end - now) / 60000)
+const CHECK_INTERVAL_MS = 10_000;
 
-        if (diffMinutes === 5) {
-            setShowNotification(true)
-            setNotificationMessage("Осталось 5 минут до конца урока!")
-        } else if (diffMinutes === 1) {
-            setShowNotification(true)
-            setNotificationMessage("Осталась 1 минута до конца урока!")
-        }
-    }, [expiresAt, dismissed])
+const LESSON_WARNINGS: LessonWarning[] = [
+	{
+		id: "1m",
+		thresholdMs: 60_000,
+		message: "Осталась меньше 1 минуты до конца урока!",
+	},
+	{
+		id: "5m",
+		thresholdMs: 5 * 60_000,
+		message: "Осталось меньше 5 минут до конца урока!",
+	},
+];
 
-    useEffect(() => {
-        checkTime()
-        const interval = setInterval(checkTime, 30000) // проверка каждые 30 сек
-        return () => clearInterval(interval)
-    }, [checkTime])
+export const useLessonNotification = (
+	expiresAt: string | null,
+): UseLessonNotificationReturn => {
+	const [activeWarningId, setActiveWarningId] =
+		useState<LessonWarningId | null>(null);
+	const [notificationMessage, setNotificationMessage] = useState("");
 
-    const dismissNotification = useCallback(() => {
-        setShowNotification(false)
-        setDismissed(true)
-    }, [])
+	const shownWarningsRef = useRef<Set<LessonWarningId>>(new Set());
+	const previousExpiresAtRef = useRef<string | null>(null);
 
-    return { showNotification, notificationMessage, dismissNotification }
+	useEffect(() => {
+		if (previousExpiresAtRef.current === expiresAt) {
+			return;
+		}
+
+		previousExpiresAtRef.current = expiresAt;
+		shownWarningsRef.current.clear();
+		setActiveWarningId(null);
+		setNotificationMessage("");
+	}, [expiresAt]);
+
+	const checkTime = useCallback(() => {
+		if (!expiresAt) {
+			return;
+		}
+
+		const lessonEndTime = new Date(expiresAt).getTime();
+
+		if (Number.isNaN(lessonEndTime)) {
+			return;
+		}
+
+		const remainingMs = lessonEndTime - Date.now();
+
+		if (remainingMs <= 0) {
+			setActiveWarningId(null);
+			setNotificationMessage("");
+			return;
+		}
+
+		const nextWarning = LESSON_WARNINGS.find(
+			(warning) =>
+				remainingMs <= warning.thresholdMs &&
+				!shownWarningsRef.current.has(warning.id),
+		);
+
+		if (!nextWarning) {
+			return;
+		}
+
+		shownWarningsRef.current.add(nextWarning.id);
+		setActiveWarningId(nextWarning.id);
+		setNotificationMessage(nextWarning.message);
+	}, [expiresAt]);
+
+	useEffect(() => {
+		checkTime();
+
+		const intervalId = window.setInterval(checkTime, CHECK_INTERVAL_MS);
+
+		return () => {
+			window.clearInterval(intervalId);
+		};
+	}, [checkTime]);
+
+	const dismissNotification = useCallback(() => {
+		setActiveWarningId(null);
+		setNotificationMessage("");
+	}, [])
+
+	return {
+		showNotification: activeWarningId !== null,
+		notificationMessage,
+		dismissNotification,
+	}
 }

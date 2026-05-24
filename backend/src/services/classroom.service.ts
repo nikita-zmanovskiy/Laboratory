@@ -1,6 +1,5 @@
 import { ClassroomRepository } from '../repositories/classroom.repository.js'
 import { pool } from '../db/pool.js'
-import { getMoscowTime } from '../utils/moscowTime.js'
 import { getWebSocketService } from './websocket.service.js'
 import { logger } from '../utils/logger.js'
 

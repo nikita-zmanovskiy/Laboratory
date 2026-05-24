@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react"
 
 import type { Message } from "@/entities/chat"
+
 import { normalizeImageSrc } from "@/shared/lib/imageUrl"
 
 const GENERATING_TEXT = "Генерация...",

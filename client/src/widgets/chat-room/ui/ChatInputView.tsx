@@ -9,9 +9,11 @@ import type {
 } from "react"
 
 import { FilePreview, SendButton } from "@/features/send-message"
+
 import { CHAT_INPUT_MAX_LENGTH } from "@/shared/config/chat"
 
 import { AttachmentButton } from "./AttachmentButton"
+
 import styles from "./chatInput.module.css"
 
 export interface ChatInputViewProps {
@@ -55,7 +57,7 @@ export const ChatInputView = ({
 
   return (
     <div
-      className={`${styles["glass-gradient-wrapper"]} ${styles.chatInput__wrapper} page__animation-opacity relative w-full`}
+      className={`${styles["glass-gradient-wrapper"]} ${styles.chatInput__wrapper} page__animation-opacity relative w-full `}
     >
       <div className={styles["glow-blur-layer"]} />
       <div className={styles.input__overlay} />

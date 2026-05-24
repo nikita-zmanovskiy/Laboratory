@@ -56,12 +56,17 @@ export const useFileUpload = (isLoading: boolean): UseFileUploadReturn => {
 
     const convertToBase64 = useCallback(async (): Promise<string | null> => {
         if (!imageFile) return null
-        const base64Result = await toBase64(imageFile)
-        if (!isValidBase64Image(base64Result)) {
-            setError("Файл поврежден или имеет некорректный формат данных")
-            return null
-        }
-        return base64Result
+        setIsImageLoading(true)
+        try {
+            const base64Result = await toBase64(imageFile)
+            if (!isValidBase64Image(base64Result)) {
+                setError("Файл поврежден или имеет некорректный формат данных")
+                return null
+            }
+            return base64Result
+        } finally {
+            setIsImageLoading(false)
+        } 
     }, [imageFile])
 
     const clearFile = useCallback(() => {

@@ -27,7 +27,7 @@ interface RoleStore {
     logout: () => void
 }
 
-export const useRoleStore = create<RoleStore>((set, get) => ({
+export const useRoleStore = create<RoleStore>((set) => ({
     ...readRoleFromStorage(),
     setRole: (role) => {
         localStorage.setItem("role", role || "")

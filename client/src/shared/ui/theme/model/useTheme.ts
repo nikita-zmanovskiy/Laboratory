@@ -1,41 +1,83 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 type Theme = "dark" | "light";
 
+const THEME_STORAGE_KEY = "theme";
+const THEME_TRANSITION_CLASS = "theme-transition";
+const THEME_TRANSITION_DURATION_MS = 300;
+
+const isTheme = (value: string | null): value is Theme => {
+	return value === "light" || value === "dark";
+};
+
+const shouldReduceMotion = (): boolean => {
+	return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+};
+
+const enableThemeTransition = (): (() => void) => {
+	if (shouldReduceMotion()) {
+		return () => {};
+	}
+
+	const root = document.documentElement;
+
+	root.classList.add(THEME_TRANSITION_CLASS);
+
+	const timeoutId = window.setTimeout(() => {
+		root.classList.remove(THEME_TRANSITION_CLASS);
+	}, THEME_TRANSITION_DURATION_MS);
+
+	return () => {
+		window.clearTimeout(timeoutId);
+		root.classList.remove(THEME_TRANSITION_CLASS);
+	};
+};
+
 export const useTheme = () => {
-  const [theme, setTheme] = useState<Theme>("dark"),
-   [mounted, setMounted] = useState(false)
+	const [theme, setTheme] = useState<Theme>("dark");
+	const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    const savedTheme = localStorage.getItem("theme")
+	const cleanupTransitionRef = useRef<(() => void) | null>(null);
 
-    if (savedTheme === "light" || savedTheme === "dark") {
-      setTheme(savedTheme)
-    }
+	useEffect(() => {
+		const savedTheme = localStorage.getItem(THEME_STORAGE_KEY);
 
-    setMounted(true)
-  }, [])
+		if (isTheme(savedTheme)) {
+			setTheme(savedTheme);
+		}
 
-  useEffect(() => {
-    if (!mounted) {
-      return
-    }
+		setMounted(true);
+	}, []);
 
-    document.documentElement.classList.toggle("light", theme === "light")
-    localStorage.setItem("theme", theme)
-  }, [theme, mounted])
+	useEffect(() => {
+		if (!mounted) {
+			return;
+		}
 
-  const toggleTheme = () => {
-    setTheme((currentTheme) =>
-      currentTheme === "dark" ? "light" : "dark",
-    )
-  }
+		document.documentElement.classList.toggle("light", theme === "light");
+		localStorage.setItem(THEME_STORAGE_KEY, theme);
+	}, [theme, mounted]);
 
-  return {
-    theme,
-    mounted,
-    toggleTheme,
-  }
-}
+	useEffect(() => {
+		return () => {
+			cleanupTransitionRef.current?.();
+		};
+	}, []);
+
+	const toggleTheme = useCallback(() => {
+		cleanupTransitionRef.current?.();
+		cleanupTransitionRef.current = enableThemeTransition();
+
+		setTheme((currentTheme) =>
+			currentTheme === "dark" ? "light" : "dark",
+		);
+	}, []);
+
+	return {
+		theme,
+		mounted,
+		toggleTheme,
+	};
+};

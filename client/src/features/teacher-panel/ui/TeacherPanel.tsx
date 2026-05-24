@@ -1,13 +1,16 @@
-import { LessonTimer } from "@/shared/ui/lesson-timer/ui/LessonTimer"
-import { LogEntry } from "../model/useWebSocketLogs"
-import { RealtimeLogItem } from "./RealtimeLogItem"
-import { ChartsSection } from "./ChartsSection"
-import { CopyCodeContainer } from "./copy-button/CopyCodeContainer"
-import { ConfirmModal } from "@/shared/ui/ConfirmModal"
-import { ClassroomClosedModal } from "@/shared/ui/ClassroomClosedModal"
-import { NotificationToast } from "@/shared/ui/notification-toast/ui/NotificationToast"
-import { CustomSelect } from "@/shared/ui/custom-select/ui/CustomSelect"
 import type { ClassroomLog, ClassroomStats } from "@/shared/api/classroom"
+import { ClassroomClosedModal } from "@/shared/ui/ClassroomClosedModal"
+import { ConfirmModal } from "@/shared/ui/ConfirmModal"
+import { CustomSelect } from "@/shared/ui/custom-select/ui/CustomSelect"
+import { LessonTimer } from "@/shared/ui/lesson-timer/ui/LessonTimer"
+import { NotificationToast } from "@/shared/ui/notification-toast/ui/NotificationToast"
+
+import { LogEntry } from "../model/useWebSocketLogs"
+
+import { CopyCodeContainer } from "./copy-button/CopyCodeContainer"
+import { ChartsSection } from "./ChartsSection"
+import { RealtimeLogItem } from "./RealtimeLogItem"
+
 import styles from './teacher.module.css'
 
 const MODE_FILTER_OPTIONS = [
@@ -29,8 +32,8 @@ const SORT_OPTIONS = [
 
 const IMAGE_FILTER_OPTIONS = [
     { value: "all", label: "Все запросы" },
-    { value: "with_image", label: "С изображением" },
-    { value: "no_image", label: "Без изображения" },
+    { value: "with_image", label: "С изображением пользователя" },
+    { value: "no_image", label: "Без изображения пользователя" },
 ] as const
 
 const LOG_TABLE_HEADERS = [
@@ -103,8 +106,8 @@ interface TeacherPanelProps {
 }
 
 export const TeacherPanel = ({
-    code, logs, stats, logsPage, logsTotal, logsTotalPages, isInitialLoading, isRefreshing, error, actionError,
-    isExtending, isDeactivating, onLoadLogs, onRefreshFiltered, hasActiveFilters, onExtend, onDeactivate, onBack,
+    code, stats, logsPage, logsTotal, logsTotalPages, isInitialLoading, isRefreshing, actionError,
+    isExtending, isDeactivating, onLoadLogs, onRefreshFiltered, hasActiveFilters, onExtend, onBack,
     realtimeLogs, isWsConnected, searchQuery, onSearchChange, modeFilter, onModeFilterChange,
     statusFilter, onStatusFilterChange, filteredLogs, imageFilter, onImageFilterChange,
     sortOrder, onSortOrderChange, isExporting, onExport, expiresAt, onOpenConfirm,
@@ -132,13 +135,13 @@ export const TeacherPanel = ({
                     {expiresAt && <LessonTimer expiresAt={expiresAt} />}
                     {expiresAt && new Date(expiresAt).getTime() - Date.now() < 12 * 60 * 60 * 1000 && (
                         <button onClick={() => onExtend(15)} disabled={isExtending}
-                            className="rounded-xl max-[730px]:text-xs cursor-pointer bg-[var(--color-success)]/20 border border-[var(--color-success)]/20 px-4 py-2 text-sm font-medium text-[var(--color-text-success)] hover:bg-[var(--color-success)]/30 disabled:opacity-50 transition-colors">
+                            className="rounded-xl max-[730px]:text-xs cursor-pointer bg-[var(--color-success)]/10 border border-[var(--color-success)]/20 px-4 py-2 text-sm font-medium text-[var(--color-text-success)] hover:bg-[var(--color-success)]/30 disabled:opacity-50 transition-colors">
                             +15 мин
                         </button>
                     )}
                     {expiresAt && new Date(expiresAt).getTime() > Date.now() && (
                         <button onClick={onOpenConfirm} disabled={isDeactivating}
-                            className="rounded-xl max-[730px]:text-xs cursor-pointer bg-[var(--color-danger)]/20 border border-[var(--color-danger)]/20 px-4 py-2 text-sm font-medium text-[var(--color-text-error)] hover:bg-[var(--color-danger)]/30 disabled:opacity-50 transition-colors">
+                            className="rounded-xl max-[730px]:text-xs cursor-pointer bg-[var(--color-danger)]/10 border border-[var(--color-danger)]/20 px-4 py-2 text-sm font-medium text-[var(--color-text-error)] hover:bg-[var(--color-danger)]/30 disabled:opacity-50 transition-colors">
                             Завершить
                         </button>
                     )}
@@ -156,10 +159,10 @@ export const TeacherPanel = ({
                     {[
                         { label: "Текстовых запросов", value: stats.text_requests },
                         { label: "Изображений", value: stats.image_requests },
-                        { label: "Среднее время ответа", value: `${stats?.avg_response_time || stats?.avg_response_time_ms || 0}ms` },
+                        { label: "Среднее время ответа", value: `${stats?.avg_response_time ?? 0}ms` },
                         { label: "Средние токены", value: stats.charts?.avg_tokens_per_request || 0 },
                     ].map((item) => (
-                        <div key={item.label} className="rounded-xl border border-[var(--color-border-primary)] bg-[var(--color-bg-hover)] p-4">
+                        <div key={item.label} className="rounded-xl border border-[var(--color-border-primary)]  p-4">
                             <p className="text-xs text-[var(--color-text-muted)]">{item.label}</p>
                             <p className="text-2xl font-bold max-[730px]:text-[20px] text-[var(--color-text-primary)]">{item.value}</p>
                         </div>
@@ -186,7 +189,7 @@ export const TeacherPanel = ({
                 )}
             </div>
 
-            <div className="rounded-xl border border-[var(--color-border-primary)] bg-[var(--color-bg-hover)] w-full">
+            <div className="rounded-xl border border-[var(--color-border-primary)] w-full">
                 <div className="p-4 flex flex-wrap max-[750px]:!justify-center items-center gap-3 border-b border-[var(--color-border-primary)]">
                     <input type="text" value={searchQuery} onChange={(e) => onSearchChange(e.target.value)}
                         placeholder="Поиск по ID сессии..."
@@ -201,14 +204,14 @@ export const TeacherPanel = ({
                             : "opacity-0 -translate-y-2 max-w-0"
                     }`}>
                         <button onClick={onRefreshFiltered} disabled={isRefreshing || isInitialLoading}
-                            className="rounded-xl border border-[var(--color-accent)]/30 bg-[var(--color-accent-light)] px-4 py-2 text-sm text-[var(--color-accent)] hover:bg-[var(--color-accent)]/20 disabled:opacity-50 transition-colors whitespace-nowrap">
+                            className="rounded-xl cursor-pointer border border-[var(--color-accent)]/30 bg-[var(--color-accent-light)] px-4 py-2 text-sm text-[var(--color-accent)] hover:bg-[var(--color-accent)]/20 disabled:opacity-50 transition-colors whitespace-nowrap">
                             {isRefreshing ? "Загрузка..." : "Обновить таблицу"}
                         </button>
                         <span className="text-xs text-[var(--color-text-muted)] whitespace-nowrap">
                             Найдено: {filteredLogs.length} из {logsTotal}
                         </span>
                         <button onClick={onResetFilters}
-                            className="rounded-lg px-2 py-0.5 text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-hover)] transition-colors whitespace-nowrap">
+                            className="rounded-lg cursor-pointer px-2 py-0.5 text-xs text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-bg-hover)] transition-colors whitespace-nowrap">
                             Сбросить
                         </button>
                     </div>

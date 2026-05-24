@@ -82,7 +82,7 @@
 	--sidebar-border: oklch(0.922 0 0);
 	--sidebar-ring: oklch(0.708 0 0);
 
-
+	--color-bg-loader: #000;
 	--color-bg-primary: #08090c;
     --color-bg-secondary: #0d0e12;
     --color-bg-tertiary: rgba(26, 26, 26, .55);
@@ -118,7 +118,7 @@
     
     --color-accent: #3b82f6;
     --color-accent-hover: #2563eb;
-    --color-accent-light: rgba(59, 130, 246, 0.1);
+    --color-accent-light: rgba(59, 131, 246, 0.03);
     
     --color-danger: #ef4444;
     --color-danger-hover: #dc2626;
@@ -134,6 +134,8 @@
 	--color-bg-teacher:  linear-gradient(180deg, rgba(75, 144, 255, 0.2) -33.33%, rgba(0, 0, 0, 0.2) 44.31%), #000000;
 }
 .light {
+	--color-bg-loader: #fff;
+
 	--color-bg-join-classroom: radial-gradient(61.76% 61.76% at 50% -11.76%, rgba(255, 0, 64, 0.457) 0%, rgba(255, 255, 255, 0.2) 100%), #ffffff;
 	--color-bg-create-classroom: radial-gradient(52.96% 52.96% at 50% -11.76%, rgba(0, 98, 255, 0.639) 0%, rgba(255, 255, 255, 0.2) 100%), #ffffff;
 	--color-bg-teacher-panel: linear-gradient(180deg, rgba(195, 218, 255, 0.427) -61.99%, rgba(255, 255, 255, 0.2) 44.31%), radial-gradient(52.96% 52.96% at 50% -11.76%, rgba(0, 98, 255, 0.418) 0%, rgba(255, 255, 255, 0.2) 100%), #ffffff;
@@ -377,4 +379,30 @@ body {
 
 .animate-fadeIn {
     animation: fadeIn 0.35s ease-out;
+}
+
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+	transition-property:
+		background-color,
+		border-color,
+		color,
+		fill,
+		stroke,
+		box-shadow,
+		outline-color,
+		text-decoration-color;
+	transition-duration: 300ms;
+	transition-timing-function: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.theme-transition,
+	.theme-transition *,
+	.theme-transition *::before,
+	.theme-transition *::after {
+		transition: none !important;
+	}
 }

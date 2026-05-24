@@ -11,7 +11,7 @@ export const PageLoader = () => {
 
   return (
     <div
-      className={`fixed inset-0 z-[9999] flex items-center justify-center bg-[var(--color-bg-primary)] transition-opacity duration-500 ${
+      className={`fixed inset-0 z-[9999] flex items-center justify-center bg-[var(--color-bg-loader)] transition duration-500 ${
         fadeOut ? "opacity-0" : "opacity-100"
       }`}
       role="status"

@@ -48,10 +48,10 @@ interface Tokens {
     }
   
     return (
-      <div className="mt-2 flex flex-wrap items-center gap-2 border-t border-[var(--color-border-primary)] pt-2 text-[10px] text-[var(--color-text-muted)]">
+      <div className={`mt-2 flex flex-wrap items-center gap-2 ${hasGeneratedImage ? '' : 'border-t border-[var(--color-border-primary)]'} pt-2 text-[10px] text-[var(--color-text-muted)]`}>
         {hasGeneratedImage && (
           <span className="rounded-full bg-[var(--color-bg-hover)] px-2 py-0.5">
-            изображение
+            Изображение
           </span>
         )}
   

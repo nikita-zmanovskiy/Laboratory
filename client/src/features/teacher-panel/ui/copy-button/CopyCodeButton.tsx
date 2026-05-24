@@ -11,8 +11,8 @@ export const CopyCodeButton = ({ code, copied, onCopy }: CopyCodeButtonProps) =>
         onClick={onCopy}
         className={`flex items-center cursor-pointer gap-1.5 rounded-xl px-3 py-1.5 text-sm font-medium transition-all ${
             copied
-                ? "bg-green-100 text-green-700 border border-green-200"
-                : "bg-gray-100 text-gray-600 border border-gray-200 hover:bg-gray-500"
+                ? "bg-green-100 text-green-700"
+                : "bg-gray-100 text-gray-600 hover:bg-transparent"
         }`}
     >
         {copied ? (

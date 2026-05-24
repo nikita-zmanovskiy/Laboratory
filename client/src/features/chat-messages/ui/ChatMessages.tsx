@@ -5,7 +5,7 @@ import React from "react"
 import type { Message } from "@/entities/chat"
 
 import { ImageModal } from "./ImageModal"
-import { MessageList } from "./MessageList"
+import { MessageList } from "../../../widgets/chat-room/ui/MessageList"
 
 interface ChatMessagesProps {
     messages: Message[]

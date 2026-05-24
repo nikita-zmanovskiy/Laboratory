@@ -1,11 +1,11 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import type { MouseEvent } from "react"
 import { useRouter } from "next/navigation"
+import type { MouseEvent } from "react"
 
-import { useRoleStore } from "./useRoleStore"
 import { useParticles } from "./useParticles"
+import { useRoleStore } from "../../../entities/session/model/useRoleStore"
 
 const CARD_ANIMATION_DURATION_MS = 500
 

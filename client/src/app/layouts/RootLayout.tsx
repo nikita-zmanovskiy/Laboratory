@@ -2,11 +2,11 @@ import type { Metadata } from "next"
 import { Roboto } from "next/font/google"
 
 import { PageLoader } from "@/shared/ui/page-loader/ui/PageLoader"
+import { ThemeToggle } from "@/shared/ui/theme/ui/ThemeToggle"
 
 import { AuthGuard } from "./AuthGuard"
 
 import "./globals.css"
-import { ThemeToggle } from "@/shared/ui/theme/ui/ThemeToggle"
 
 
 const roboto = Roboto({

@@ -3,18 +3,22 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
-import { useChatStore } from "@/entities/chat"
-import { useSessionStore } from "@/entities/session"
+import { useClassroomSocket } from "@/widgets/chat-room"
+
 import { useRoleStore } from "@/features/role-select"
 import { useLessonTimer } from "@/features/teacher-panel/model/useLessonTimer"
+
+import { useChatStore } from "@/entities/chat"
+import { useSessionStore } from "@/entities/session"
+
 import { establishTeacherPreviewSession } from "@/shared/api/classroom"
 import { useLessonNotification } from "@/shared/lib/useLessonNotification"
-import { useClassroomSocket } from "@/widgets/chat-room"
 
 import {
   getCurrentClassFromStorage,
   isClassroomActive,
 } from "../lib/currentClassStorage"
+
 import { useBeforeUnloadWarning } from "./useBeforeUnloadWarning"
 
 export const useTemplateHomePage = () => {

@@ -1,22 +1,27 @@
 import type { AiGenerateResult } from '../../../types/ai.js'
-import { detectGigaChatMode } from '../gigachatPromptMode.js' 
+import { detectGigaChatMode } from '../gigachatPromptMode.js'
 
 export class GigaChatMockService {
-    generate(prompt: string): AiGenerateResult {
-        const isImage = detectGigaChatMode(prompt) === 'image'
+    generate(prompt: string, image?: string | null): AiGenerateResult {
+        const isImage = Boolean(image) || detectGigaChatMode(prompt) === 'image'
         const preview = prompt.length > 200 ? `${prompt.slice(0, 200)}…` : prompt
 
         if (isImage) {
+            const promptTokens = Math.ceil(prompt.length / 4)
+            const completionTokens = 20
+
             return {
                 text: `[MOCK] Генерирую изображение: ${preview}`,
                 image_id: `mock-image-${Date.now()}`,
-                image_url: `https://placehold.co/1024x1024/EEE/999?text=${encodeURIComponent(prompt.slice(0, 30))}`,
+                image_url: `https://placehold.co/1024x1024/EEE/999?text=${encodeURIComponent(
+                    prompt.slice(0, 30)
+                )}`,
                 finish_reason: 'stop',
                 model: 'GigaChat-mock',
                 usage: {
-                    prompt_tokens: Math.ceil(prompt.length / 4),
-                    completion_tokens: 20,
-                    total_tokens: Math.ceil(prompt.length / 4) + 20,
+                    prompt_tokens: promptTokens,
+                    completion_tokens: completionTokens,
+                    total_tokens: promptTokens + completionTokens,
                 },
                 is_image: true,
             }

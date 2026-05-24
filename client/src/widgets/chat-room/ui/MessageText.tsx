@@ -18,7 +18,7 @@ export const MessageText = ({
   if (isUser) {
     return (
       <p
-        className={`whitespace-pre-wrap break-words transition-opacity duration-300 ${visibilityClassName}`}
+        className={`whitespace-pre-wrap text-white break-words transition-opacity duration-300 ${visibilityClassName}`}
       >
         {text}
       </p>
@@ -27,7 +27,7 @@ export const MessageText = ({
 
   return (
     <div
-      className={`break-words text-[var(--color-text-primary)] transition-opacity duration-300 ${visibilityClassName}`}
+      className={`break-words bg-[var(--color-bg-secondary)] p-5 rounded-tr-2xl rounded-br-2xl shadow-sm rounded-bl-2xl text-[var(--color-text-primary)] transition-opacity duration-300 ${visibilityClassName}`}
     >
       <ReactMarkdown
         components={{

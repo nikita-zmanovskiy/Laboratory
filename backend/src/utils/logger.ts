@@ -85,7 +85,7 @@ const baseLogger = pino(
                   ignore: 'pid,hostname',
               },
           })
-        : undefined,
+        : undefined
 )
 
 const normalizeMeta = (meta?: LogMeta): Record<string, unknown> => {

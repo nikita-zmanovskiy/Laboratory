@@ -1,6 +1,5 @@
 import type { Request, Response, NextFunction } from 'express'
 import { RateLimitService } from '../services/rateLimit.service.js'
-import { CsrfService } from '../services/csrf.service.js'
 import { logger } from '../utils/logger.js'
 
 const rateLimitService = new RateLimitService()
@@ -31,8 +30,6 @@ export const rateLimitMiddleware = (req: Request, res: Response, next: NextFunct
     res.setHeader('X-RateLimit-Window', '60 seconds')
 
     if (!result.allowed) {
-        const stats = rateLimitService.getStats(rateLimitKey)
-
         res.setHeader('X-RateLimit-Remaining', '0')
         res.setHeader('Retry-After', String(result.retryAfter || 60))
 
@@ -47,8 +44,7 @@ export const rateLimitMiddleware = (req: Request, res: Response, next: NextFunct
             error: result.reason,
             retry_after_seconds: result.retryAfter,
             limit: 10,
-            window_seconds: 3,
-            tip: 'Wait before making new requests',
+            window_seconds: 60,
         })
     }
 

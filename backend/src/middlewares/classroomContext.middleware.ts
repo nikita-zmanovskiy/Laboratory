@@ -24,7 +24,6 @@ export const classroomContextMiddleware = async (
     if (!classroomCode) {
         return res.status(400).json({
             error: 'classroom_code is required',
-            hint: 'Provide classroom_code in header (x-classroom-code) or body',
         })
     }
     const ip = req.ip || req.socket.remoteAddress || 'unknown'
@@ -39,7 +38,6 @@ export const classroomContextMiddleware = async (
         rateLimitService.recordFailure(bruteKey)
         return res.status(400).json({
             error: 'Invalid classroom_code format',
-            hint: 'Classroom code must be 6 characters (uppercase letters and numbers)',
         })
     }
 
@@ -49,7 +47,6 @@ export const classroomContextMiddleware = async (
         rateLimitService.recordFailure(bruteKey)
         return res.status(404).json({
             error: 'Classroom not found',
-            hint: 'Create a new classroom first: POST /api/classrooms',
         })
     }
 
@@ -66,13 +63,11 @@ export const classroomContextMiddleware = async (
         return res.status(410).json({
             error: 'Classroom has expired',
             expired_at: classroom.expires_at,
-            hint: 'Create a new classroom for your lesson',
         })
     }
     if (!classroom.is_active) {
         return res.status(410).json({
             error: 'Classroom is no longer active',
-            hint: 'Create a new classroom: POST /api/classrooms',
         })
     }
 

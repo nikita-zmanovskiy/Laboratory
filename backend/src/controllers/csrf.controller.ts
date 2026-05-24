@@ -1,12 +1,7 @@
 import type { Request, Response } from 'express'
 import { CsrfService } from '../services/csrf.service.js'
 import { RateLimitService } from '../services/rateLimit.service.js'
-import {
-    setStudentCookie,
-    clearStudentCookie,
-    getStudentTokenFromRequest,
-    STUDENT_COOKIE_NAME,
-} from '../utils/authCookie.js'
+import { setStudentCookie, clearStudentCookie, STUDENT_COOKIE_NAME } from '../utils/authCookie.js'
 
 export class CsrfController {
     constructor(

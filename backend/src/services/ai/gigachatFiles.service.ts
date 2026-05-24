@@ -33,18 +33,14 @@ export class GigaChatFilesService {
         const httpsAgent = this.createHttpsAgent()
 
         try {
-            const response = await axios.post(
-                `${config.gigachat.apiUrl}/files`,
-                form,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                        ...form.getHeaders(),
-                    },
-                    httpsAgent,
-                    timeout: 30000,
-                }
-            )
+            const response = await axios.post(`${config.gigachat.apiUrl}/files`, form, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    ...form.getHeaders(),
+                },
+                httpsAgent,
+                timeout: 30000,
+            })
 
             return response.data.id
         } catch (error: unknown) {

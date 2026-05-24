@@ -2,17 +2,22 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
+
+import { ChatRoomWidget, useClassroomSocket } from "@/widgets/chat-room"
+
+import { useRoleStore } from "@/features/role-select"
+import { useLessonTimer } from "@/features/teacher-panel/model/useLessonTimer"
+
 import { useChatStore } from "@/entities/chat"
 import { useSessionStore } from "@/entities/session"
-import { useRoleStore } from "@/features/role-select"
-import styles from './templateHomePage.module.css'
-import { LessonTimer } from "@/shared/ui/lesson-timer/ui/LessonTimer"
-import { useLessonTimer } from "@/features/teacher-panel/model/useLessonTimer"
-import { ClassroomClosedModal } from "@/shared/ui/ClassroomClosedModal"
-import { useLessonNotification } from "@/shared/lib/useLessonNotification"
-import { NotificationToast } from "@/shared/ui/notification-toast/ui/NotificationToast"
+
 import { establishTeacherPreviewSession } from "@/shared/api/classroom"
-import { ChatRoomWidget, useClassroomSocket } from "@/widgets/chat-room"
+import { useLessonNotification } from "@/shared/lib/useLessonNotification"
+import { ClassroomClosedModal } from "@/shared/ui/ClassroomClosedModal"
+import { LessonTimer } from "@/shared/ui/lesson-timer/ui/LessonTimer"
+import { NotificationToast } from "@/shared/ui/notification-toast/ui/NotificationToast"
+
+import styles from './templateHomePage.module.css'
 
 export default function TemplateHomePage() {
     const messages = useChatStore((state) => state.messages)

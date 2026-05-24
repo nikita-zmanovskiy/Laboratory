@@ -1,6 +1,6 @@
 import type { Message } from "@/entities/chat"
 
-import { ChatMessage } from "../../../widgets/chat-room/ui/ChatMessage"
+import { ChatMessage } from "./ChatMessage"
 
 interface MessageListProps {
     messages: Message[]

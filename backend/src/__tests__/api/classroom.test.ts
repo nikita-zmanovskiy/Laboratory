@@ -24,13 +24,28 @@ describe('Classroom API', () => {
         expect(response.body.is_active).toBe(true)
     })
 
-    test('duplicate title returns 409', async () => {
-        const response = await request(app)
+    test('duplicate title is allowed and returns 201', async () => {
+        const ts = Date.now()
+        const title = `API Test Class ${ts}`
+
+        const firstResponse = await request(app)
             .post('/api/classrooms')
             .set('x-csrf-token', csrfToken)
-            .send({ title: 'API Test Class ' + ts, expires_in_minutes: 10 })
+            .send({ title, expires_in_minutes: 10 })
 
-        expect(response.status).toBe(409)
+        expect(firstResponse.status).toBe(201)
+        expect(firstResponse.body.title).toBe(title)
+        expect(firstResponse.body.code).toMatch(/^[A-Z0-9]{6}$/)
+
+        const secondResponse = await request(app)
+            .post('/api/classrooms')
+            .set('x-csrf-token', csrfToken)
+            .send({ title, expires_in_minutes: 10 })
+
+        expect(secondResponse.status).toBe(201)
+        expect(secondResponse.body.title).toBe(title)
+        expect(secondResponse.body.code).toMatch(/^[A-Z0-9]{6}$/)
+        expect(secondResponse.body.code).not.toBe(firstResponse.body.code)
     })
 
     test('empty title returns 400', async () => {

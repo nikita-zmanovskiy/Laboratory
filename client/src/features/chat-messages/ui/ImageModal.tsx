@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import { useEffect, useState } from "react"
 
 interface ImageModalProps {
@@ -24,7 +25,7 @@ export const ImageModal = ({ src, onClose }: ImageModalProps) => {
 
     return (
         <div
-            className={`fixed inset-0 z-50 flex cursor-zoom-out items-center justify-center bg-black/80 p-4 backdrop-blur-sm transition-all duration-300 ${
+            className={`fixed mb-0 inset-0 z-50 flex cursor-zoom-out items-center justify-center bg-black/80 p-4 backdrop-blur-sm transition-all duration-300 ${
                 visible && !closing ? "opacity-100" : "opacity-0"
             }`}
             onClick={handleClose}
@@ -37,13 +38,17 @@ export const ImageModal = ({ src, onClose }: ImageModalProps) => {
                     </div>
                 </div>
             )}
-            <img
+         
+            <Image
                 src={src}
-                alt="Enlarged"
+                alt="Изображение"
+                fill
+                sizes="100vw"
                 onLoad={() => setLoaded(true)}
                 className={`max-h-[85vh] max-w-[90vw] rounded-lg object-contain shadow-2xl transition-all duration-500 ${
                     loaded && !closing ? "opacity-100 scale-100" : "opacity-0 scale-95"
                 }`}
+                unoptimized
             />
         </div>
     )

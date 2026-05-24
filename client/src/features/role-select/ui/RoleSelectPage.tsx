@@ -3,15 +3,16 @@
 import type { CSSProperties } from "react"
 
 import { CodeInputContainer } from "@/features/join-classroom"
+
 import { ScreenSizeWarning } from "@/shared/ui/ScreenSizeWarningModal"
 
 import { useRoleSelectPage } from "../model/useRoleSelectPage"
-import { RoleCard } from "./RoleCard"
 
- 
-import styles from "./roleCard.module.css"
+import { RoleCard } from "./RoleCard"
 import { StudentIcon } from "./StudentIcon"
 import { TeacherIcon } from "./TeacherIcon"
+
+import styles from "./roleCard.module.css"
 
 export const RoleSelectPage = () => {
   const {

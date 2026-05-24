@@ -18,7 +18,5 @@ const IMAGE_KEYWORDS = [
 export function detectGigaChatMode(prompt: string): GigaChatMode {
     const lowerPrompt = prompt.toLowerCase()
 
-    return IMAGE_KEYWORDS.some((keyword) => lowerPrompt.includes(keyword))
-        ? 'image'
-        : 'text'
+    return IMAGE_KEYWORDS.some((keyword) => lowerPrompt.includes(keyword)) ? 'image' : 'text'
 }

@@ -5,6 +5,7 @@ import type { MouseEvent } from "react"
 import type { Message } from "@/entities/chat"
 
 import { useChatMessage } from "../model/useChatMessage"
+
 import { MessageImage } from "./MessageImage"
 import { MessageText } from "./MessageText"
 import { TokenUsage } from "./TokenUsage"

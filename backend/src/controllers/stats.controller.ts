@@ -69,7 +69,6 @@ export class StatsController {
             if (!csrfToken) {
                 return res.status(403).json({
                     error: 'CSRF token is required',
-                    hint: 'Get token from GET /api/csrf/token',
                 })
             }
 
@@ -78,7 +77,6 @@ export class StatsController {
             if (!validation.valid) {
                 return res.status(403).json({
                     error: validation.error || 'Invalid or expired CSRF token',
-                    hint: 'Get a new token from GET /api/csrf/token',
                 })
             }
 

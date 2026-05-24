@@ -5,11 +5,8 @@ import { RequestQueueService } from './requestQueue.service.js'
 import { config } from '../../config/env.js'
 import type { AiGenerateResult } from '../../types/ai.js'
 
-import type {
-    GigaChatRequestData,
-    GigaChatResponse,
-} from './gigachat/gigachat.types.js'
-import { detectGigaChatMode } from './gigachatPromptMode.js' 
+import type { GigaChatRequestData, GigaChatResponse } from './gigachat/gigachat.types.js'
+import { detectGigaChatMode } from './gigachatPromptMode.js'
 import { GigaChatRequestFactory } from './gigachat/gigachatRequestFactory.js'
 import { GigaChatResponseParser } from './gigachat/gigachatResponseParser.js'
 import { GigaChatMockService } from './gigachat/gigachatMock.service.js'
