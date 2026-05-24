@@ -15,14 +15,14 @@ export const ChatRoomWidget = () => {
 
     return (
         <>
-            <div className="mb-0 min-h-0 w-full flex-1">
+            <section className="mb-0 min-h-0 w-full flex-1">
                 {messages.length > 0 ? (
                     <ChatMessagesContainer messages={messages} isLoading={isLoading} isTextMode={mode === "text"} />
                 ) : (
                     <EmptyChatState />
                 )}
-            </div>
-            <div className="sticky bottom-4 w-full">
+            </section>
+            <section className="sticky bottom-4 w-full">
                 <ChatInputContainer
                     modeToggleSlot={({ isLoading: isInputLoading, isImageLoading, isOnline }) => (
                         <ChatModeToggleContainer
@@ -31,7 +31,7 @@ export const ChatRoomWidget = () => {
                         />
                     )}
                 />
-            </div>
+            </section>
         </>
     )
 }

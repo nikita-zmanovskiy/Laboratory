@@ -4,25 +4,27 @@ import { useCallback,useEffect, useState } from "react"
 
 type Theme = "dark" | "light"
 
+const getInitialTheme = (): Theme => {
+    if (typeof window === "undefined") {
+      return "dark";
+    }
+  
+    return localStorage.getItem("theme") === "light" ? "light" : "dark"
+}
+
 export const useTheme = () => {
-    const [theme, setTheme] = useState<Theme>("dark")
+    const [theme, setTheme] = useState<Theme>(getInitialTheme)
 
     useEffect(() => {
-        const stored = localStorage.getItem("theme") as Theme | null
-        if (stored) {
-            setTheme(stored)
-            document.documentElement.classList.toggle("light", stored === "light")
-        }
-    }, [])
-
-    const toggleTheme = useCallback(() => {
-        setTheme((prev) => {
-            const next = prev === "dark" ? "light" : "dark"
-            localStorage.setItem("theme", next)
-            document.documentElement.classList.toggle("light", next === "light")
-            return next
-        })
-    }, [])
+        document.documentElement.classList.toggle("light", theme === "light")
+        localStorage.setItem("theme", theme)
+      }, [theme])
+    
+      const toggleTheme = () => {
+        setTheme((currentTheme) =>
+          currentTheme === "dark" ? "light" : "dark",
+        )
+      }
 
     return { theme, toggleTheme }
 }

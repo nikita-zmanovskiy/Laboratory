@@ -1,17 +1,12 @@
-"use client"
+import type { Metadata } from "next";
 
-import { useEffect } from "react"
+import { TeacherPageClient } from "./TeacherPageClient";
 
-import { CreateClassroomContainer } from "@/features/create-classroom"
-
-import { useSessionStore } from "@/entities/session"
+export const metadata: Metadata = {
+  title: "Страница преподавателя | Лаборатория ИИ",
+  description: "Страница преподавателя учебной лаборатории ИИ.",
+};
 
 export default function TeacherPage() {
-    const initialize = useSessionStore((state) => state.initialize)
-
-    useEffect(() => {
-        initialize()
-    }, [initialize])
-
-    return <CreateClassroomContainer />
+  return <TeacherPageClient />;
 }

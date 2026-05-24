@@ -69,12 +69,12 @@ export class ClassroomController {
                 grade?: number
             }
 
-            const existing = await this.classroomRepo.findByTitle(title)
-            if (existing) {
-                return res.status(409).json({
-                    error: `Classroom with title "${title}" already exists`,
-                })
-            }
+            // const existing = await this.classroomRepo.findByTitle(title)
+            // if (existing) {
+            //     return res.status(409).json({
+            //         error: `Classroom with title "${title}" already exists`,
+            //     })
+            // }
 
             const expiresInMinutes = expires_in_minutes || 1440,
                 expiresAt = new Date(Date.now() + expiresInMinutes * 60 * 1000),
