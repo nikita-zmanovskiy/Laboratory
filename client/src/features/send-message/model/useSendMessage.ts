@@ -19,11 +19,11 @@ interface UseSendMessageReturn {
 }
 
 export const useSendMessage = (): UseSendMessageReturn => {
-    const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState<string | null>(null)
+    const [isLoading, setIsLoading] = useState(false),
+     [error, setError] = useState<string | null>(null)
 
-    const { addMessage, updateMessage, removeMessage, setLoading } = useChatStore()
-    const sessionId = useSessionStore((state) => state.sessionId)
+    const { addMessage, updateMessage, removeMessage, setLoading } = useChatStore(),
+     sessionId = useSessionStore((state) => state.sessionId)
 
     const clearError = useCallback(() => setError(null), [])
 
@@ -48,8 +48,8 @@ export const useSendMessage = (): UseSendMessageReturn => {
             setLoading(true)
 
             try {
-                const isTeacherPreview = role === "teacher"
-                const effectiveSessionId = isTeacherPreview
+                const isTeacherPreview = role === "teacher",
+                 effectiveSessionId = isTeacherPreview
                     ? `teacher-preview-${classroomCode}`
                     : sessionId
 

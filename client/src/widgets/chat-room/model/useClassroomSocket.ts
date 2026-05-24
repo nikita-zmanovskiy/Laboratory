@@ -13,11 +13,11 @@ interface UseClassroomSocketReturn {
 }
 
 export const useClassroomSocket = (classroomCode: string): UseClassroomSocketReturn => {
-    const [isClosed, setIsClosed] = useState(false)
-    const [closeMessage, setCloseMessage] = useState("")
-    const wsRef = useRef<WebSocket | null>(null)
-    const extendCallbackRef = useRef<((newExpiresAt: string) => void) | null>(null)
-    const connectingRef = useRef(false)
+    const [isClosed, setIsClosed] = useState(false),
+     [closeMessage, setCloseMessage] = useState(""),
+     wsRef = useRef<WebSocket | null>(null),
+     extendCallbackRef = useRef<((newExpiresAt: string) => void) | null>(null),
+     connectingRef = useRef(false)
 
     const onExtend = useCallback((callback: (newExpiresAt: string) => void) => {
         extendCallbackRef.current = callback
@@ -29,8 +29,8 @@ export const useClassroomSocket = (classroomCode: string): UseClassroomSocketRet
         connectingRef.current = true
 
         try {
-            const { token } = await getWebSocketAuthToken(classroomCode)
-            const ws = new WebSocket(getClassroomWebSocketUrl(classroomCode, token))
+            const { token } = await getWebSocketAuthToken(classroomCode),
+             ws = new WebSocket(getClassroomWebSocketUrl(classroomCode, token))
 
             ws.onmessage = (event) => {
                 try {

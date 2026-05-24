@@ -2,7 +2,7 @@
 
 import { useChatInput } from "../model/useChatInput"
 
-import { ChatInputView } from "./ChatInputView"
+import { ChatInputView } from "../../../widgets/chat-room/ui/ChatInputView"
 
 export interface ChatInputControlsState {
     isLoading: boolean

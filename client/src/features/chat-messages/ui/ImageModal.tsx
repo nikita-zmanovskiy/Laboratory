@@ -8,9 +8,9 @@ interface ImageModalProps {
 }
 
 export const ImageModal = ({ src, onClose }: ImageModalProps) => {
-    const [loaded, setLoaded] = useState(false)
-    const [visible, setVisible] = useState(false)
-    const [closing, setClosing] = useState(false)
+    const [loaded, setLoaded] = useState(false),
+     [visible, setVisible] = useState(false),
+     [closing, setClosing] = useState(false)
 
     useEffect(() => {
         setTimeout(() => setVisible(true), 10)

@@ -1,12 +1,12 @@
-"use client"
+import type { Metadata } from "next";
 
-import { useParams } from "next/navigation"
+import { ClassroomPageClient } from "./ClassroomPageClient";
 
-import { TeacherPanelContainer } from "@/features/teacher-panel"
+export const metadata: Metadata = {
+  title: "Логи класса | Лаборатория ИИ",
+  description: "Страница просмотра логов и активности учебного класса.",
+};
 
 export default function ClassroomPage() {
-    const params = useParams()
-    const code = (params?.code ?? "") as string
-
-    return <TeacherPanelContainer key={code} code={code} />
+  return <ClassroomPageClient />;
 }

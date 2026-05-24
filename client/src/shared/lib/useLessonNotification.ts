@@ -7,16 +7,16 @@ interface UseLessonNotificationReturn {
 }
 
 export const useLessonNotification = (expiresAt: string | null): UseLessonNotificationReturn => {
-    const [showNotification, setShowNotification] = useState(false)
-    const [notificationMessage, setNotificationMessage] = useState("")
-    const [dismissed, setDismissed] = useState(false)
+    const [showNotification, setShowNotification] = useState(false),
+     [notificationMessage, setNotificationMessage] = useState(""),
+     [dismissed, setDismissed] = useState(false)
 
     const checkTime = useCallback(() => {
         if (!expiresAt || dismissed) return
 
-        const now = Date.now()
-        const end = new Date(expiresAt).getTime()
-        const diffMinutes = Math.floor((end - now) / 60000)
+        const now = Date.now(),
+         end = new Date(expiresAt).getTime(),
+         diffMinutes = Math.floor((end - now) / 60000)
 
         if (diffMinutes === 5) {
             setShowNotification(true)

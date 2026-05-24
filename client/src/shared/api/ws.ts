@@ -5,7 +5,6 @@ export interface WebSocketAuthResponse {
     role: "teacher" | "student"
 }
 
-/** Токен для подключения к /ws (cookie httpOnly → JSON через API). */
 export const getWebSocketAuthToken = async (
     classroomCode: string
 ): Promise<WebSocketAuthResponse> => {

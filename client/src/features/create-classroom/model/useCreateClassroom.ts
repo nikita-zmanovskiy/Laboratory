@@ -32,17 +32,17 @@ interface UseCreateClassroomReturn {
 }
 
 export const useCreateClassroom = (): UseCreateClassroomReturn => {
-    const [title, setTitle] = useState("")
-    const [grade, setGrade] = useState(7)
-    const [duration, setDuration] = useState(45)
-    const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState<string | null>(null)
+    const [title, setTitle] = useState(""),
+     [grade, setGrade] = useState(7),
+     [duration, setDuration] = useState(45),
+     [isLoading, setIsLoading] = useState(false),
+     [error, setError] = useState<string | null>(null)
 
-    const sessionId = useSessionStore((state) => state.sessionId)
-    const setRole = useRoleStore((state) => state.setRole)
-    const setClassroomCode = useRoleStore((state) => state.setClassroomCode)
-    const setExpiresAt = useRoleStore((state) => state.setExpiresAt)
-    const router = useRouter()
+    const sessionId = useSessionStore((state) => state.sessionId),
+     setRole = useRoleStore((state) => state.setRole),
+     setClassroomCode = useRoleStore((state) => state.setClassroomCode),
+     setExpiresAt = useRoleStore((state) => state.setExpiresAt),
+     router = useRouter()
 
     const handleCreate = useCallback(async () => {
         if (!title.trim()) {

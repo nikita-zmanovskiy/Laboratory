@@ -28,11 +28,11 @@ export const EmptyChatState = React.memo(
                         <path fillRule="evenodd" d="M11.5 5a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0v-4a.5.5 0 0 1 .5-.5z"/>
                         <path d="M3.56 11V7.01h.056l1.428 3.239h.774l1.42-3.24h.056V11h1.073V5.001h-1.2l-1.71 3.894h-.039l-1.71-3.894H2.5V11h1.06z"/>
                       </svg>
-                      <p>Можно использовать Markdown для форматирования ответов</p>
+                      <p className="max-[500px]:text-[10px] max-[420px]:max-w-[200px] max-[400px]:text-start">Можно использовать Markdown для форматирования ответов</p>
                     </div>
                     <div className="flex justify-center items-center gap-2">
                         <svg stroke="var(--color-text-attach)" opacity={'var(--color-opacity-attach)'} width="15px" height="15px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
-                        <p>Прикрепляйте изображения для анализа или генерации</p>   
+                        <p className="max-[500px]:text-[10px] max-[400px]:text-start">Прикрепляйте изображения для анализа или генерации</p>   
                     </div>
                     <div className="flex justify-center items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" width="19px" height="19px" viewBox="0 0 24 24" version="1.1">
@@ -42,14 +42,14 @@ export const EmptyChatState = React.memo(
                                 </g>
                             </g>
                         </svg>
-                        <p>Введите промпт в поле ниже и нажмите отправить</p>
+                        <p className="max-[500px]:text-[10px] max-[400px]:text-start">Введите промпт в поле ниже и нажмите отправить</p>
                     </div>
                     <div className="flex justify-center items-center gap-2">
                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="var(--color-text-muted)">
                         <path d="M6 12C4.89543 12 4 11.1046 4 10C4 8.89543 4.89543 8 6 8C7.10457 8 8 8.89543 8 10C8 11.1046 7.10457 12 6 12Z"/>
                         <path d="M18 10C18 7.79086 16.2091 6 14 6H6C3.79086 6 2 7.79086 2 10C2 12.2091 3.79086 14 6 14H14C16.2091 14 18 12.2091 18 10ZM14 7C15.6569 7 17 8.34315 17 10C17 11.6569 15.6569 13 14 13H6C4.34315 13 3 11.6569 3 10C3 8.34315 4.34315 7 6 7H14Z"/>
                         </svg>
-                        <p>Переключайте режимы Текст или Изображение</p>
+                        <p className="max-[500px]:text-[10px] max-[400px]:text-start">Переключайте режимы Текст или Изображение</p>
                     </div>
                 </div>
             </div>

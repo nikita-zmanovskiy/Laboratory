@@ -1,11 +1,13 @@
 import type { Metadata } from "next"
 import { Roboto } from "next/font/google"
 
-import { PageLoader } from "@/shared/ui/PageLoader"
+import { PageLoader } from "@/shared/ui/page-loader/ui/PageLoader"
 
 import { AuthGuard } from "./AuthGuard"
 
 import "./globals.css"
+import { ThemeToggle } from "@/shared/ui/theme/ui/ThemeToggle"
+
 
 const roboto = Roboto({
     subsets: ["latin", "cyrillic"],
@@ -32,8 +34,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="ru">
             <body className={`${roboto.className} antialiased min-h-screen`}>
+             
               <PageLoader />
                 <AuthGuard>{children}</AuthGuard>
+                <ThemeToggle />
             </body>
         </html>
     )

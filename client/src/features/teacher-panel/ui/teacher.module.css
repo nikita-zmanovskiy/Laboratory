@@ -26,6 +26,9 @@
     position: relative;
     min-height: 420px;
 }
+.teacher__wrapper {
+    background: var(--color-bg-teacher-panel);
+}
 
 .tableScroll {
     overflow-x: auto;

@@ -95,7 +95,7 @@
 	--color-text-attach: #6b7280;
     --color-text-error: #ef4444;
     --color-text-success: #10b981;
-
+	--color-bg-role-card: rgba(0, 0, 0, 0.249);
 
 	--color-toggle-text: #9a2e49;
 
@@ -126,11 +126,12 @@
 	--color-background-chat: #000;
 	--color-user-text-message:#ffffff;
 	--color-text-toggle:#000;
-    
+    --color-bg-input-chat: rgba(0, 0, 0, 0.249);
     --color-success: #10b981;
     --color-warning: #f59e0b;
 	--color-toggle-image: #2158b0;
-
+	--color-loading-white: #000;
+	--color-bg-teacher:  linear-gradient(180deg, rgba(75, 144, 255, 0.2) -33.33%, rgba(0, 0, 0, 0.2) 44.31%), #000000;
 }
 .light {
 	--color-bg-join-classroom: radial-gradient(61.76% 61.76% at 50% -11.76%, rgba(255, 0, 64, 0.457) 0%, rgba(255, 255, 255, 0.2) 100%), #ffffff;
@@ -139,9 +140,12 @@
 	--color-bg-home: radial-gradient(25.47% 28.24% at 0% 100%, rgba(255, 0, 64, 0.514) 0%, rgba(255, 255, 255, 0.2) 100%),
         radial-gradient(17.03% 46.18% at 100.57% 101.11%, rgba(0, 98, 255, 0.639) 0%, rgba(255, 255, 255, 0.2) 100%),
         #ffffff;
+		--color-bg-input-chat: rgba(155, 155, 155, 0.249);
 
 		--color-text-attach: #ffffff;
 		--color-chart-top: linear-gradient(360deg, rgba(75, 144, 255, 0.365) -12.04%, rgba(255, 255, 255, 0.2) 55.69%), #ffffff;
+		--color-loading-white: #ffffff4a;
+		--color-bg-role-card:  rgba(0, 0, 0, 0.164);
 
     --color-bg-primary: #f8fafc;
 	--color-toggle-text: #d4375e;
@@ -153,13 +157,19 @@
 
     --color-bg-tertiary: #f1f5f9;
     --color-bg-hover: rgba(0, 0, 0, 0.04);
+
+
+
+
+
+	--color-bg-teacher: linear-gradient(180deg, rgba(75, 144, 255, 0.2) -33.33%, rgba(0, 0, 0, 0.2) 44.31%), #000000;
 	--color-background-chat: #fff;
 	--color-opacity-attach: .5;
 	--color-user-text-message:#fff;
     
     --color-text-primary: #0f172a;
     --color-text-secondary: #475569;
-    --color-text-muted: #94a3b8;
+    --color-text-muted: #6f6f70;
     --color-text-error: #dc2626;
     --color-text-success: #059669;
     

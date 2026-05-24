@@ -1,6 +1,6 @@
 import { useEffect,useState } from 'react'
 
-import { CustomSelect } from '@/shared/ui/CustomSelect'
+import { CustomSelect } from '@/shared/ui/custom-select/ui/CustomSelect'
 
 import styles from './createClassroom.module.css'
 
@@ -134,7 +134,7 @@ export const CreateClassroomForm = ({
                         <button
                             onClick={onSubmit}
                             disabled={isLoading || !title.trim()}
-                            className={`flex-1 rounded-xl cursor-pointer px-4 py-3 text-sm font-medium text-white relative overflow-hidden ${styles.submitButton}`}
+                            className={`flex-1 max-[480px]:text-xs rounded-xl cursor-pointer px-4 py-3 text-sm font-medium text-white relative overflow-hidden ${styles.submitButton}`}
                         >
                             {isLoading && (
                                 <span className="absolute inset-0 flex items-center justify-center">

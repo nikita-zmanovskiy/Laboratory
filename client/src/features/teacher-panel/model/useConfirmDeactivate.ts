@@ -9,8 +9,8 @@ interface UseConfirmDeactivateReturn {
 export const useConfirmDeactivate = (): UseConfirmDeactivateReturn => {
     const [showConfirm, setShowConfirm] = useState(false)
 
-    const openConfirm = useCallback(() => setShowConfirm(true), [])
-    const closeConfirm = useCallback(() => setShowConfirm(false), [])
+    const openConfirm = useCallback(() => setShowConfirm(true), []),
+     closeConfirm = useCallback(() => setShowConfirm(false), [])
 
     return { showConfirm, openConfirm, closeConfirm }
 }

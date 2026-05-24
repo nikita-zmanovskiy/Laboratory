@@ -25,11 +25,11 @@ interface UseWebSocketLogsReturn {
 }
 
 export const useWebSocketLogs = (classroomCode: string): UseWebSocketLogsReturn => {
-    const [realtimeLogs, setRealtimeLogs] = useState<LogEntry[]>([])
-    const [isConnected, setIsConnected] = useState(false)
-    const wsRef = useRef<WebSocket | null>(null)
-    const callbackRef = useRef<(() => void) | null>(null)
-    const connectingRef = useRef(false)
+    const [realtimeLogs, setRealtimeLogs] = useState<LogEntry[]>([]),
+     [isConnected, setIsConnected] = useState(false),
+     wsRef = useRef<WebSocket | null>(null),
+     callbackRef = useRef<(() => void) | null>(null),
+     connectingRef = useRef(false)
 
     const onNewLog = useCallback((callback: () => void) => {
         callbackRef.current = callback
@@ -42,8 +42,8 @@ export const useWebSocketLogs = (classroomCode: string): UseWebSocketLogsReturn 
         setIsConnected(false)
 
         try {
-            const { token } = await getWebSocketAuthToken(classroomCode)
-            const ws = new WebSocket(getClassroomWebSocketUrl(classroomCode, token))
+            const { token } = await getWebSocketAuthToken(classroomCode),
+             ws = new WebSocket(getClassroomWebSocketUrl(classroomCode, token))
 
             ws.onopen = () => {
                 setIsConnected(true)

@@ -21,12 +21,12 @@ interface UseChatInputReturn {
 }
 
 export const useChatInput = (): UseChatInputReturn => {
-    const mode = useChatStore((state) => state.mode)
-    const [inputValue, setInputValue] = useState("")
-    const [isOnline, setIsOnline] = useState(true)
+    const mode = useChatStore((state) => state.mode),
+     [inputValue, setInputValue] = useState(""),
+     [isOnline, setIsOnline] = useState(true)
 
-    const { isLoading, error: sendError, sendMessage } = useSendMessage()
-    const {
+    const { isLoading, error: sendError, sendMessage } = useSendMessage(),
+     {
         imagePreview,
         isImageLoading,
         fileInputRef,
@@ -38,13 +38,13 @@ export const useChatInput = (): UseChatInputReturn => {
         imageFile,
     } = useFileUpload(isLoading)
 
-    const isTextMode = mode === "text"
-    const displayError = sendError || fileError
+    const isTextMode = mode === "text",
+     displayError = sendError || fileError
 
     useEffect(() => {
         setIsOnline(navigator.onLine)
-        const handleOnline = () => setIsOnline(true)
-        const handleOffline = () => setIsOnline(false)
+        const handleOnline = () => setIsOnline(true),
+         handleOffline = () => setIsOnline(false)
         window.addEventListener("online", handleOnline)
         window.addEventListener("offline", handleOffline)
         return () => {
@@ -57,8 +57,8 @@ export const useChatInput = (): UseChatInputReturn => {
         if (e) e.preventDefault()
         if (!inputValue.trim() || isLoading || isImageLoading) return
 
-        const prompt = inputValue
-        const preview = imagePreview
+        const prompt = inputValue,
+         preview = imagePreview
         setInputValue("")
 
         let imageBase64: string | null = null

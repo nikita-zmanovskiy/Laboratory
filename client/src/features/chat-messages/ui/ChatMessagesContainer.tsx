@@ -18,8 +18,8 @@ export const ChatMessagesContainer = ({
     isLoading,
     isTextMode,
 }: ChatMessagesContainerProps) => {
-    const { activeImage, setActiveImage, handleDownload } = useImageActions()
-    const bottomRef = useAutoScroll([messages, isLoading])
+    const { activeImage, setActiveImage, handleDownload } = useImageActions(),
+     bottomRef = useAutoScroll([messages, isLoading])
 
     return (
         <ChatMessages

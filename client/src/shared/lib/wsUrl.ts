@@ -23,7 +23,6 @@ function getWsBaseUrl(): string {
     return httpBaseToWsBase("http://localhost:3000")
 }
 
-/** URL WebSocket: /ws?classroom=ABC123&token=<student-or-teacher-token> */
 export function getClassroomWebSocketUrl(classroomCode: string, token: string): string {
     const params = new URLSearchParams({
         classroom: classroomCode,

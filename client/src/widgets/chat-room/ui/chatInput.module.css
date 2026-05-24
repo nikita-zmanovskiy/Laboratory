@@ -16,7 +16,7 @@
   top: -10px;
   backdrop-filter: blur(10px);
   right: -20px;
-  background-color: var(--color-bg-primary);
+  background-color: var(--color-bg-input-chat);
   border-radius: 20px;
 }
 
@@ -66,10 +66,16 @@
       0 4px 20px rgba(0, 0, 0, 0.6);
 }
 
-.chatInput__wrappec {
+.chatInput__wrapper {
   position: fixed;
   left: 50%;
   bottom: 30px;
   transform: translateX(-50%);
   max-width: 1000px;
+}
+
+@media (max-width: 500px) {
+  .chatInput__wrapper {
+    bottom: 10px;
+  }
 }

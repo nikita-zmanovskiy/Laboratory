@@ -24,16 +24,16 @@ interface UseClassroomDataReturn {
 }
 
 export const useClassroomData = (code: string): UseClassroomDataReturn => {
-    const [logs, setLogs] = useState<ClassroomLog[]>([])
-    const [stats, setStats] = useState<ClassroomStats | null>(null)
-    const [expiresAt, setExpiresAt] = useState<string | null>(null)
-    const [logsPage, setLogsPage] = useState(1)
-    const [logsTotal, setLogsTotal] = useState(0)
-    const [logsTotalPages, setLogsTotalPages] = useState(0)
-    const [isInitialLoading, setIsInitialLoading] = useState(true)
-    const [isRefreshing, setIsRefreshing] = useState(false)
-    const [error, setError] = useState<string | null>(null)
-    const hasLoadedOnceRef = useRef(false)
+    const [logs, setLogs] = useState<ClassroomLog[]>([]),
+     [stats, setStats] = useState<ClassroomStats | null>(null),
+     [expiresAt, setExpiresAt] = useState<string | null>(null),
+     [logsPage, setLogsPage] = useState(1),
+     [logsTotal, setLogsTotal] = useState(0),
+     [logsTotalPages, setLogsTotalPages] = useState(0),
+     [isInitialLoading, setIsInitialLoading] = useState(true),
+     [isRefreshing, setIsRefreshing] = useState(false),
+     [error, setError] = useState<string | null>(null),
+     hasLoadedOnceRef = useRef(false)
 
     const loadLogs = useCallback(async (page: number, filters?: LogFilters) => {
         if (hasLoadedOnceRef.current) {

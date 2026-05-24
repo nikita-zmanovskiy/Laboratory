@@ -9,9 +9,9 @@ import { useChatStore } from "@/entities/chat"
 import { EmptyChatState } from "@/shared/ui/EmptyChatState"
 
 export const ChatRoomWidget = () => {
-    const messages = useChatStore((state) => state.messages)
-    const isLoading = useChatStore((state) => state.isLoading)
-    const mode = useChatStore((state) => state.mode)
+    const messages = useChatStore((state) => state.messages),
+     isLoading = useChatStore((state) => state.isLoading),
+     mode = useChatStore((state) => state.mode)
 
     return (
         <>

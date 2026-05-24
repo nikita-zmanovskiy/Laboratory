@@ -19,8 +19,8 @@ import { TeacherPanel } from "./TeacherPanel"
 export const TeacherPanelContainer = ({ code }: { code: string }) => {
     const router = useRouter()
 
-    const { logs, stats, logsPage, logsTotal, logsTotalPages, isInitialLoading, isRefreshing, error, loadLogs, refreshAll, refreshStatsOnly } = useClassroomData(code)
-    const { isExtending, isDeactivating, actionError, handleExtend, handleExport, isExporting, handleDeactivate } = useClassroomActions(
+    const { logs, stats, logsPage, logsTotal, logsTotalPages, isInitialLoading, isRefreshing, error, loadLogs, refreshAll, refreshStatsOnly } = useClassroomData(code),
+     { isExtending, isDeactivating, actionError, handleExtend, handleExport, isExporting, handleDeactivate } = useClassroomActions(
         code, 
         refreshAll,
         (newExpiresAt) => {
@@ -37,18 +37,18 @@ export const TeacherPanelContainer = ({ code }: { code: string }) => {
             }
         }
     )
-    const { realtimeLogs, isConnected, onNewLog } = useWebSocketLogs(code)
-    const { showConfirm, openConfirm, closeConfirm } = useConfirmDeactivate()
-    const resetRole = useRoleStore((state) => state.reset)
+    const { realtimeLogs, isConnected, onNewLog } = useWebSocketLogs(code),
+     { showConfirm, openConfirm, closeConfirm } = useConfirmDeactivate(),
+     resetRole = useRoleStore((state) => state.reset)
 
-    const [expiresAt, setExpiresAt] = useState<string | null>(null)
-    const [searchQuery, setSearchQuery] = useState("")
-    const [modeFilter, setModeFilter] = useState("all")
-    const [statusFilter, setStatusFilter] = useState("all")
-    const [imageFilter, setImageFilter] = useState("all")
-    const [sortOrder, setSortOrder] = useState("newest")
-    const [filtersClosing, setFiltersClosing] = useState(false)
-    const skipFilterFetchOnMount = useRef(true)
+    const [expiresAt, setExpiresAt] = useState<string | null>(null),
+     [searchQuery, setSearchQuery] = useState(""),
+     [modeFilter, setModeFilter] = useState("all"),
+     [statusFilter, setStatusFilter] = useState("all"),
+     [imageFilter, setImageFilter] = useState("all"),
+     [sortOrder, setSortOrder] = useState("newest"),
+     [filtersClosing, setFiltersClosing] = useState(false),
+     skipFilterFetchOnMount = useRef(true)
 
     const hasActiveFilters = useMemo(
         () => hasActiveLogFilters(searchQuery, modeFilter, statusFilter, imageFilter),
@@ -60,9 +60,8 @@ export const TeacherPanelContainer = ({ code }: { code: string }) => {
         [searchQuery, modeFilter, statusFilter, imageFilter, sortOrder]
     )
 
-    const logout = useRoleStore((state) => state.logout)
-    const role = useRoleStore((state) => state.role)
-    const setRole = useRoleStore((state) => state.setRole)
+    const role = useRoleStore((state) => state.role),
+     setRole = useRoleStore((state) => state.setRole)
     useEffect(() => {
         if (stats?.expires_at) {
             setExpiresAt(stats.expires_at)
@@ -79,17 +78,17 @@ export const TeacherPanelContainer = ({ code }: { code: string }) => {
             return
         }
 
-        const delay = searchQuery.trim() ? 350 : 0
-        const timer = setTimeout(() => {
+        const delay = searchQuery.trim() ? 350 : 0,
+         timer = setTimeout(() => {
             loadLogs(1, getFilters())
         }, delay)
 
         return () => clearTimeout(timer)
     }, [searchQuery, modeFilter, statusFilter, imageFilter, sortOrder, loadLogs, getFilters, hasActiveFilters, filtersClosing])
 
-    const { isExpired } = useLessonTimer(expiresAt)
-    const { showNotification, notificationMessage, dismissNotification } = useLessonNotification(expiresAt)
-    const handleRefreshFiltered = () => {
+    const { isExpired } = useLessonTimer(expiresAt),
+     { showNotification, notificationMessage, dismissNotification } = useLessonNotification(expiresAt),
+     handleRefreshFiltered = () => {
         loadLogs(1, getFilters())
     }
 

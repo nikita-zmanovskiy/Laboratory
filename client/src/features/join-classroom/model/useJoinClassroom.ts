@@ -15,14 +15,14 @@ interface UseJoinClassroomReturn {
 }
 
 export const useJoinClassroom = (): UseJoinClassroomReturn => {
-    const [code, setCode] = useState("")
-    const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState<string | null>(null)
+    const [code, setCode] = useState(""),
+     [isLoading, setIsLoading] = useState(false),
+     [error, setError] = useState<string | null>(null)
 
-    const router = useRouter()
-    const setRole = useRoleStore((state) => state.setRole)
-    const setClassroomCode = useRoleStore((state) => state.setClassroomCode)
-    const setExpiresAt = useRoleStore((state) => state.setExpiresAt)
+    const router = useRouter(),
+     setRole = useRoleStore((state) => state.setRole),
+     setClassroomCode = useRoleStore((state) => state.setClassroomCode),
+     setExpiresAt = useRoleStore((state) => state.setExpiresAt)
 
     const handleJoin = useCallback(async () => {
         const trimmedCode = code.trim().toUpperCase()
@@ -41,8 +41,8 @@ export const useJoinClassroom = (): UseJoinClassroomReturn => {
         setError(null)
 
         try {
-            const response = await http.get(`/api/classrooms/${trimmedCode}/join?student_id=1`)
-            const expires = response.data.expires_at as string | undefined
+            const response = await http.get(`/api/classrooms/${trimmedCode}/join?student_id=1`),
+             expires = response.data.expires_at as string | undefined
 
             if (expires) {
                 localStorage.setItem("expiresAt", expires)

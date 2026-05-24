@@ -1,16 +1,13 @@
-import type { ClassroomLog, ClassroomStats } from "@/shared/api/classroom"
-import { ClassroomClosedModal } from "@/shared/ui/ClassroomClosedModal"
-import { CustomSelect } from "@/shared/ui/CustomSelect"
-import { LessonTimer } from "@/shared/ui/LessonTimer"
-import { NotificationToast } from "@/shared/ui/NotificationToast"
-import { ConfirmModal } from "@/shared/ui/shared/ui/ConfirmModal"
-
+import { LessonTimer } from "@/shared/ui/lesson-timer/ui/LessonTimer"
 import { LogEntry } from "../model/useWebSocketLogs"
-
-import { ChartsSection } from "./ChartsSection"
-import { CopyCodeContainer } from "./CopyCodeContainer"
 import { RealtimeLogItem } from "./RealtimeLogItem"
-
+import { ChartsSection } from "./ChartsSection"
+import { CopyCodeContainer } from "./copy-button/CopyCodeContainer"
+import { ConfirmModal } from "@/shared/ui/ConfirmModal"
+import { ClassroomClosedModal } from "@/shared/ui/ClassroomClosedModal"
+import { NotificationToast } from "@/shared/ui/notification-toast/ui/NotificationToast"
+import { CustomSelect } from "@/shared/ui/custom-select/ui/CustomSelect"
+import type { ClassroomLog, ClassroomStats } from "@/shared/api/classroom"
 import styles from './teacher.module.css'
 
 const MODE_FILTER_OPTIONS = [
@@ -115,38 +112,38 @@ export const TeacherPanel = ({
     notificationMessage, dismissNotification, showNotification,
     onResetFilters,
 }: TeacherPanelProps) => (
-    <div className={`${styles.logs__overlay} min-h-screen bg-[var(--color-bg-primary)] page__animation-opacity`}>
-        <div className="mx-auto max-w-6xl px-4 py-6">
+        <main className={`w-full min-h-screen page__animation-opacity block overflow-x-hidden ${styles.teacher__wrapper}`}>
+            <div className="mx-auto max-w-6xl px-4 py-6">
             {showNotification && <NotificationToast message={notificationMessage} onClose={dismissNotification} />}
 
-            <div className="mb-6 flex items-center justify-between">
+            <div className="mb-6 flex items-center justify-between max-[690px]:flex-col max-[690px]:gap-3">
                 <div>
                     <div className="flex items-center gap-3">
-                        <h1 className="text-xl font-bold text-[var(--color-text-primary)]">Класс: {code}</h1>
+                        <h1 className="text-xl max-[730px]:text-lg font-bold text-[var(--color-text-primary)]">Класс: {code}</h1>
                         <CopyCodeContainer code={code} />
                     </div>
                     {stats && (
-                        <p className="text-sm text-[var(--color-text-secondary)] mt-3">
+                        <p className="text-sm max-[730px]:text-xs text-[var(--color-text-secondary)] mt-3">
                             Запросов: {stats?.total_requests || 0} | Учеников: {stats?.active_sessions || 0} | Ошибок: {stats?.error_rate || "0%"}
                         </p>
                     )}
                 </div>
-                <div className="flex gap-3">
+                <div className="flex gap-3 max-[690px]:flex-col max-[690px]:w-full">
                     {expiresAt && <LessonTimer expiresAt={expiresAt} />}
                     {expiresAt && new Date(expiresAt).getTime() - Date.now() < 12 * 60 * 60 * 1000 && (
                         <button onClick={() => onExtend(15)} disabled={isExtending}
-                            className="rounded-xl cursor-pointer bg-[var(--color-success)]/20 border border-[var(--color-success)]/20 px-4 py-2 text-sm font-medium text-[var(--color-text-success)] hover:bg-[var(--color-success)]/30 disabled:opacity-50 transition-colors">
+                            className="rounded-xl max-[730px]:text-xs cursor-pointer bg-[var(--color-success)]/20 border border-[var(--color-success)]/20 px-4 py-2 text-sm font-medium text-[var(--color-text-success)] hover:bg-[var(--color-success)]/30 disabled:opacity-50 transition-colors">
                             +15 мин
                         </button>
                     )}
                     {expiresAt && new Date(expiresAt).getTime() > Date.now() && (
                         <button onClick={onOpenConfirm} disabled={isDeactivating}
-                            className="rounded-xl cursor-pointer bg-[var(--color-danger)]/20 border border-[var(--color-danger)]/20 px-4 py-2 text-sm font-medium text-[var(--color-text-error)] hover:bg-[var(--color-danger)]/30 disabled:opacity-50 transition-colors">
+                            className="rounded-xl max-[730px]:text-xs cursor-pointer bg-[var(--color-danger)]/20 border border-[var(--color-danger)]/20 px-4 py-2 text-sm font-medium text-[var(--color-text-error)] hover:bg-[var(--color-danger)]/30 disabled:opacity-50 transition-colors">
                             Завершить
                         </button>
                     )}
                     <button onClick={onBack}
-                        className="rounded-xl cursor-pointer border border-[var(--color-border-primary)] px-4 py-2 text-sm text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-hover)] transition-colors">
+                        className="rounded-xl max-[730px]:text-xs cursor-pointer border border-[var(--color-border-primary)] px-4 py-2 text-sm text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-hover)] transition-colors">
                         Назад
                     </button>
                 </div>
@@ -155,16 +152,16 @@ export const TeacherPanel = ({
             {actionError && <p className="mb-4 text-sm text-[var(--color-text-error)]">{actionError}</p>}
 
             {stats?.charts && (
-                <div className="mb-6 grid grid-cols-4 gap-4">
+                <div className="mb-6 grid grid-cols-4 gap-4 max-[690px]:flex max-[690px]:flex-col">
                     {[
                         { label: "Текстовых запросов", value: stats.text_requests },
                         { label: "Изображений", value: stats.image_requests },
-                        { label: "Среднее время ответа", value: `${stats?.avg_response_time ?? 0}ms` },
+                        { label: "Среднее время ответа", value: `${stats?.avg_response_time || stats?.avg_response_time_ms || 0}ms` },
                         { label: "Средние токены", value: stats.charts?.avg_tokens_per_request || 0 },
                     ].map((item) => (
                         <div key={item.label} className="rounded-xl border border-[var(--color-border-primary)] bg-[var(--color-bg-hover)] p-4">
                             <p className="text-xs text-[var(--color-text-muted)]">{item.label}</p>
-                            <p className="text-2xl font-bold text-[var(--color-text-primary)]">{item.value}</p>
+                            <p className="text-2xl font-bold max-[730px]:text-[20px] text-[var(--color-text-primary)]">{item.value}</p>
                         </div>
                     ))}
                 </div>
@@ -189,8 +186,8 @@ export const TeacherPanel = ({
                 )}
             </div>
 
-            <div className="rounded-xl border border-[var(--color-border-primary)] bg-[var(--color-bg-hover)]">
-                <div className="p-4 flex flex-wrap items-center gap-3 border-b border-[var(--color-border-primary)]">
+            <div className="rounded-xl border border-[var(--color-border-primary)] bg-[var(--color-bg-hover)] w-full">
+                <div className="p-4 flex flex-wrap max-[750px]:!justify-center items-center gap-3 border-b border-[var(--color-border-primary)]">
                     <input type="text" value={searchQuery} onChange={(e) => onSearchChange(e.target.value)}
                         placeholder="Поиск по ID сессии..."
                         className="rounded-xl bg-[var(--color-bg-hover)] border border-[var(--color-border-primary)] px-3 py-1.5 text-sm text-[var(--color-text-primary)] placeholder:text-[var(--color-text-muted)] focus:border-[var(--color-accent)] focus:outline-none" />
@@ -198,10 +195,10 @@ export const TeacherPanel = ({
                     <CustomSelect compact value={statusFilter} options={[...STATUS_FILTER_OPTIONS]} onChange={onStatusFilterChange} />
                     <CustomSelect compact value={imageFilter} options={[...IMAGE_FILTER_OPTIONS]} onChange={onImageFilterChange} />
                     <CustomSelect compact value={sortOrder} options={[...SORT_OPTIONS]} onChange={onSortOrderChange} />
-                    <div className={`flex items-center gap-3 transition-all duration-300 min-h-[36px] ${
+                    <div className={`flex items-center max-[400px]:flex-wrap max-[400px]:justify-center max-[400px]:!min-w-[200px] gap-3 transition-all duration-300 min-h-[36px] ${
                         hasActiveFilters 
                             ? "opacity-100 translate-y-0 max-w-md" 
-                            : "opacity-0 -translate-y-2 max-w-0 overflow-hidden"
+                            : "opacity-0 -translate-y-2 max-w-0"
                     }`}>
                         <button onClick={onRefreshFiltered} disabled={isRefreshing || isInitialLoading}
                             className="rounded-xl border border-[var(--color-accent)]/30 bg-[var(--color-accent-light)] px-4 py-2 text-sm text-[var(--color-accent)] hover:bg-[var(--color-accent)]/20 disabled:opacity-50 transition-colors whitespace-nowrap">
@@ -245,7 +242,7 @@ export const TeacherPanel = ({
                                         className="m-4 rounded-xl cursor-pointer border border-[var(--color-border-primary)] px-4 py-2 text-sm text-[var(--color-text-secondary)] hover:bg-[var(--color-bg-hover)] disabled:opacity-50 transition-colors">
                                         {isExporting ? "Экспорт..." : "CSV"}
                                     </button>
-                                    <div className={styles.tableScroll}>
+                                    <div className={styles.tableScroll + "block max-w-full overflow-x-auto scrollbar-thin"}>
                                         <table className="w-full min-w-[960px] text-sm">
                                             <thead>
                                                 <tr className="border-b border-[var(--color-border-primary)]">
@@ -312,5 +309,5 @@ export const TeacherPanel = ({
             )}
             {isExpired && <ClassroomClosedModal message="Время урока истекло" onExit={onExitToHome} />}
         </div>
-    </div>
+    </main>
 )
