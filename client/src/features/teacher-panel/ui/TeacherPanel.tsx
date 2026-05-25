@@ -198,11 +198,16 @@ export const TeacherPanel = ({
                     <CustomSelect compact value={statusFilter} options={[...STATUS_FILTER_OPTIONS]} onChange={onStatusFilterChange} />
                     <CustomSelect compact value={imageFilter} options={[...IMAGE_FILTER_OPTIONS]} onChange={onImageFilterChange} />
                     <CustomSelect compact value={sortOrder} options={[...SORT_OPTIONS]} onChange={onSortOrderChange} />
-                    <div className={`flex items-center max-[400px]:flex-wrap max-[400px]:justify-center max-[400px]:!min-w-[200px] gap-3 transition-all duration-300 min-h-[36px] ${
-                        hasActiveFilters 
-                            ? "opacity-100 translate-y-0 max-w-md" 
-                            : "opacity-0 -translate-y-2 max-w-0"
-                    }`}>
+                    <div
+                        className={`flex min-h-[36px] min-w-[360px] items-center gap-3 transition-opacity duration-200
+                            max-[520px]:min-w-full max-[520px]:justify-center max-[400px]:flex-wrap
+                            ${
+                                hasActiveFilters
+                                    ? "visible opacity-100 pointer-events-auto"
+                                    : "invisible opacity-0 pointer-events-none"
+                            }
+                        `}
+                    >
                         <button onClick={onRefreshFiltered} disabled={isRefreshing || isInitialLoading}
                             className="rounded-xl cursor-pointer border border-[var(--color-accent)]/30 bg-[var(--color-accent-light)] px-4 py-2 text-sm text-[var(--color-accent)] hover:bg-[var(--color-accent)]/20 disabled:opacity-50 transition-colors whitespace-nowrap">
                             {isRefreshing ? "Загрузка..." : "Обновить таблицу"}

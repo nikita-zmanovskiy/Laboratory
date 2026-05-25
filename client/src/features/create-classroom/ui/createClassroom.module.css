@@ -26,7 +26,7 @@
 }
 
 .submitButton {
-    background: linear-gradient(135deg, #0b2247, #3466d2);
+    background: linear-gradient(135deg, var(--color-create-button-room), #3466d2);
     border: 1px solid rgba(255, 255, 255, 0.1);
     transition: all 0.5s ease;
     position: relative;
@@ -45,10 +45,7 @@
     transition: all 0.5s ease;
 }
 
-.submitButton:not(:disabled) {
-    background: linear-gradient(135deg, #0b2247, #3466d2);
-    transition: all 0.5s ease;
-}
+
 
 .counter {
     color: var(--color-text-muted);

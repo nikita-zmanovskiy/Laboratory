@@ -62,7 +62,7 @@ export const CodeInput = ({
           >
             <div className="flex flex-col items-center gap-3">
               <div className="relative h-10 w-10" aria-hidden="true">
-                <div className="absolute inset-0 rounded-full border-2 border-white/20" />
+                <div className="absolute inset-0 rounded-full border-2 border-[var(--color-loading-code)]" />
                 <div className="absolute inset-0 animate-spin rounded-full border-2 border-transparent border-t-[var(--color-text-primary)]" />
               </div>
 

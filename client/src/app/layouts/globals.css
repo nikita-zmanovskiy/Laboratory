@@ -131,10 +131,15 @@
     --color-warning: #f59e0b;
 	--color-toggle-image: #2158b0;
 	--color-loading-white: #000;
+	--color-loading-code: #ffffff27;
+	--color-create-button-room: #0b2247;
 	--color-bg-teacher:  linear-gradient(180deg, rgba(75, 144, 255, 0.2) -33.33%, rgba(0, 0, 0, 0.2) 44.31%), #000000;
 }
 .light {
 	--color-bg-loader: #fff;
+	--color-loading-code: #00000027;
+	--color-create-button-room: #00eaff93;
+
 
 	--color-bg-join-classroom: radial-gradient(61.76% 61.76% at 50% -11.76%, rgba(255, 0, 64, 0.457) 0%, rgba(255, 255, 255, 0.2) 100%), #ffffff;
 	--color-bg-create-classroom: radial-gradient(52.96% 52.96% at 50% -11.76%, rgba(0, 98, 255, 0.639) 0%, rgba(255, 255, 255, 0.2) 100%), #ffffff;
