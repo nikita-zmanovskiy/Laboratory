@@ -1,7 +1,6 @@
 import type { Request, Response } from 'express'
 import { config } from '../config/env.js'
 
-
 export const TEACHER_COOKIE_NAME = 'lab_teacher'
 
 export const STUDENT_COOKIE_NAME = 'lab_student'

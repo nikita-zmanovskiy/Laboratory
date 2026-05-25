@@ -1,6 +1,8 @@
 "use client"
 
-import { useEffect, useRef, useState, useCallback } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
+
+import { getWebSocketAuthToken } from "@/shared/api/ws"
 import { closeWebSocket } from "@/shared/lib/closeWebSocket"
 import { getClassroomWebSocketUrl } from "@/shared/lib/wsUrl"
 
@@ -11,47 +13,58 @@ interface UseClassroomSocketReturn {
 }
 
 export const useClassroomSocket = (classroomCode: string): UseClassroomSocketReturn => {
-    const [isClosed, setIsClosed] = useState(false)
-    const [closeMessage, setCloseMessage] = useState("")
-    const wsRef = useRef<WebSocket | null>(null)
-    const extendCallbackRef = useRef<((newExpiresAt: string) => void) | null>(null)
+    const [isClosed, setIsClosed] = useState(false),
+     [closeMessage, setCloseMessage] = useState(""),
+     wsRef = useRef<WebSocket | null>(null),
+     extendCallbackRef = useRef<((newExpiresAt: string) => void) | null>(null),
+     connectingRef = useRef(false)
 
     const onExtend = useCallback((callback: (newExpiresAt: string) => void) => {
         extendCallbackRef.current = callback
     }, [])
 
-    const connect = useCallback(() => {
-        if (wsRef.current?.readyState === WebSocket.OPEN) return
+    const connect = useCallback(async () => {
+        if (wsRef.current?.readyState === WebSocket.OPEN || connectingRef.current) return
 
-        const ws = new WebSocket(getClassroomWebSocketUrl(classroomCode))
+        connectingRef.current = true
 
-        ws.onmessage = (event) => {
-            try {
-                const data = JSON.parse(event.data)
-                if (data.type === "classroom_closed") {
-                    setIsClosed(true)
-                    setCloseMessage(data.message || "Урок завершен")
+        try {
+            const { token } = await getWebSocketAuthToken(classroomCode),
+             ws = new WebSocket(getClassroomWebSocketUrl(classroomCode, token))
+
+            ws.onmessage = (event) => {
+                try {
+                    const data = JSON.parse(event.data)
+                    if (data.type === "classroom_closed") {
+                        setIsClosed(true)
+                        setCloseMessage(data.message || "Урок завершен")
+                    }
+                    if (data.type === "classroom_extended") {
+                        localStorage.setItem("expiresAt", data.new_expires_at)
+                        extendCallbackRef.current?.(data.new_expires_at)
+                    }
+                } catch {
+                    // ignore
                 }
-                if (data.type === "classroom_extended") {
-                    localStorage.setItem("expiresAt", data.new_expires_at)
-                    extendCallbackRef.current?.(data.new_expires_at)
+            }
+
+            ws.onclose = (event) => {
+                wsRef.current = null
+                if (event.code !== 1000) {
+                    setTimeout(() => void connect(), 5000)
                 }
-            } catch {
-                // ignore
             }
-        }
 
-        ws.onclose = (event) => {
-            if (event.code !== 1000) {
-                setTimeout(connect, 5000)
-            }
+            wsRef.current = ws
+        } catch {
+            setTimeout(() => void connect(), 5000)
+        } finally {
+            connectingRef.current = false
         }
-
-        wsRef.current = ws
     }, [classroomCode])
 
     useEffect(() => {
-        connect()
+        void connect()
         return () => {
             if (wsRef.current) {
                 closeWebSocket(wsRef.current)

@@ -1,6 +1,7 @@
 "use client"
 
 import { useChatMode } from "../model/useChatMode"
+
 import { ChatModeToggle } from "./ChatModeToggle"
 
 export interface ChatModeToggleContainerProps {

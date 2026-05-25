@@ -1,15 +1,18 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useEffect,useState } from "react"
 import { useRouter } from "next/navigation"
+
+import { useRoleStore } from "@/entities/session"
+
 import { useCreateClassroom } from "../model/useCreateClassroom"
-import { useRoleStore } from "@/features/role-select"
+
 import { CreateClassroomForm } from "./CreateClassroomForm"
 
 export const CreateClassroomContainer = () => {
-    const router = useRouter()
-    const props = useCreateClassroom()
-    const [currentClass, setCurrentClass] = useState<{ code: string; title: string; expires_at: string } | null>(null)
+    const router = useRouter(),
+     props = useCreateClassroom(),
+     [currentClass, setCurrentClass] = useState<{ code: string; title: string; expires_at: string } | null>(null)
 
     const syncCurrentClass = () => {
         const stored = localStorage.getItem("currentClass")
@@ -41,10 +44,10 @@ export const CreateClassroomContainer = () => {
         return () => window.removeEventListener("focus", syncCurrentClass)
     }, [])
 
-    const [isOpeningClass, setIsOpeningClass] = useState(false)
-    const setRole = useRoleStore((state) => state.setRole)
-    const setClassroomCode = useRoleStore((state) => state.setClassroomCode)
-    const setExpiresAt = useRoleStore((state) => state.setExpiresAt)
+    const [isOpeningClass, setIsOpeningClass] = useState(false),
+     setRole = useRoleStore((state) => state.setRole),
+     setClassroomCode = useRoleStore((state) => state.setClassroomCode),
+     setExpiresAt = useRoleStore((state) => state.setExpiresAt)
 
     const handleOpenCurrentClass = () => {
         if (!currentClass) return

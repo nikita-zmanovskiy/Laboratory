@@ -1,4 +1,4 @@
-import { validateImageSize, ALLOWED_IMAGE_TYPES } from '../../utils/imageValidator.js'
+import { validateImageSize } from '../../utils/imageValidator.js'
 
 describe('validateImageSize', () => {
     test('empty string is invalid', () => {

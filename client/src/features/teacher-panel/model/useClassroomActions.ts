@@ -1,5 +1,6 @@
-import { useState, useCallback } from "react"
-import { extendClassroom, deactivateClassroom, exportLogsCsv } from "@/shared/api/classroom"
+import { useCallback,useState } from "react"
+
+import { deactivateClassroom, exportLogsCsv,extendClassroom } from "@/shared/api/classroom"
 
 interface UseClassroomActionsReturn {
     isExtending: boolean
@@ -12,10 +13,10 @@ interface UseClassroomActionsReturn {
 }
 
 export const useClassroomActions = (code: string, onSuccess: () => void, onExtendSuccess?: (newExpiresAt: string) => void ): UseClassroomActionsReturn => {
-    const [isExtending, setIsExtending] = useState(false)
-    const [isDeactivating, setIsDeactivating] = useState(false)
-    const [actionError, setActionError] = useState<string | null>(null)
-    const [isExporting, setIsExporting] = useState(false)
+    const [isExtending, setIsExtending] = useState(false),
+     [isDeactivating, setIsDeactivating] = useState(false),
+     [actionError, setActionError] = useState<string | null>(null),
+     [isExporting, setIsExporting] = useState(false)
 
 
     const handleExtend = useCallback(async (minutes: number) => {

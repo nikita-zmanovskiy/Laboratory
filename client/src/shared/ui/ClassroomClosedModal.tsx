@@ -13,7 +13,7 @@ export const ClassroomClosedModal = ({ message, onExit }: ClassroomClosedModalPr
             <p className="mt-2 text-sm text-[var(--color-text-secondary)]">{message}</p>
             <button
                 onClick={onExit}
-                className="mt-6 w-full rounded-xl bg-[var(--color-bg-hover)] border border-[var(--color-border-primary)] px-4 py-2.5 text-sm font-medium text-[var(--color-text-primary)] transition-colors hover:bg-[var(--color-bg-hover)]/80"
+                className="mt-6 w-full cursor-pointer rounded-xl bg-[var(--color-bg-hover)] border border-[var(--color-border-primary)] px-4 py-2.5 text-sm font-medium text-[var(--color-text-primary)] transition-colors hover:bg-[var(--color-bg-hover)]/80"
             >
                 Выйти
             </button>

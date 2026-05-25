@@ -1,8 +1,6 @@
 import { Router, Request, Response } from 'express'
 import { pool } from '../db/pool.js'
-import {getMoscowISOString} from "../utils/moscowTime.js";
-import {RequestQueueService} from "../services/ai/requestQueue.service.js";
-
+import { getMoscowISOString } from '../utils/moscowTime.js'
 const healthRouter = Router()
 
 healthRouter.get('/', async (req: Request, res: Response) => {
@@ -13,14 +11,14 @@ healthRouter.get('/', async (req: Request, res: Response) => {
         uptime: process.uptime(),
         services: {
             api: 'healthy',
-            database: 'unknown'
-        }
+            database: 'unknown',
+        },
     }
 
     try {
         await pool.query('SELECT 1') // проверка что бд работает
         health.services.database = 'healthy'
-    } catch (error) {
+    } catch {
         health.services.database = 'unhealthy'
         health.status = 'degraded'
     }

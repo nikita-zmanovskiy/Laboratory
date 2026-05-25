@@ -18,3 +18,10 @@
 .template__exit {
     transition: .5s ease all;
 }
+
+@media (max-width: 1520px) {
+    .template__header {
+    background: linear-gradient(180deg, var(--color-bg-primary) 50%, transparent 90.18%);
+
+    }
+}

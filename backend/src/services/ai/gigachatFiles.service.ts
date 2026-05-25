@@ -1,101 +1,99 @@
 import axios from 'axios'
+import FormData from 'form-data'
+import path from 'path'
 import https from 'https'
 import fs from 'fs'
-import path from 'path'
-import FormData from 'form-data'
-import { GigaChatAuthService } from './gigachatAuth.service.js'
+
 import { config } from '../../config/env.js'
-import { AppError } from '../../utils/errors.js'
 import { logger } from '../../utils/logger.js'
-
-function getHttpsAgent(): https.Agent {
-    const certPaths = [
-        path.join(process.cwd(), 'russian_trusted_root_ca.cer'),
-        path.join(process.cwd(), 'src/tests/russian_trusted_root_ca.cer'),
-    ]
-
-    for (const certPath of certPaths) {
-        if (fs.existsSync(certPath)) {
-            return new https.Agent({ ca: fs.readFileSync(certPath) })
-        }
-    }
-
-    return new https.Agent({ rejectUnauthorized: false })
-}
-
-interface UploadedFile {
-    id: string
-    object: string
-    bytes: number
-    created_at: number
-    filename: string
-    purpose: string
-}
+import { GigaChatAuthService } from './gigachatAuth.service.js'
 
 export class GigaChatFilesService {
-    private authService: GigaChatAuthService
-    private httpsAgent: https.Agent
+    private readonly authService: GigaChatAuthService
 
     constructor() {
         this.authService = new GigaChatAuthService()
-        this.httpsAgent = getHttpsAgent()
     }
 
-    async uploadImage(base64Image: string, fileName: string = 'image.png'): Promise<string> {
+    async uploadImage(base64Image: string): Promise<string> {
         const token = await this.authService.getAccessToken()
 
-        // конвертируем base64 в buffer
-        const base64Data = base64Image.replace(/^data:image\/\w+;base64,/, ''),
-         buffer = Buffer.from(base64Data, 'base64')
+        const base64Data = base64Image.replace(/^data:image\/\w+;base64,/, '')
+        const buffer = Buffer.from(base64Data, 'base64')
 
         const form = new FormData()
+
         form.append('file', buffer, {
-            filename: fileName,
-            contentType: 'image/png'
+            filename: 'image.png',
+            contentType: 'image/png',
         })
+
         form.append('purpose', 'general')
 
+        const httpsAgent = this.createHttpsAgent()
+
         try {
-            const response = await axios.post(
-                `${config.gigachat.apiUrl}/files`,
-                form,
+            const response = await axios.post(`${config.gigachat.apiUrl}/files`, form, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                    ...form.getHeaders(),
+                },
+                httpsAgent,
+                timeout: 30000,
+            })
+
+            return response.data.id
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                logger.error('[GigaChat Upload] Error', {
+                    status: error.response?.status,
+                    data: error.response?.data,
+                })
+            }
+
+            throw error
+        }
+    }
+
+    async downloadImage(imageId: string): Promise<Buffer> {
+        const token = await this.authService.getAccessToken()
+        const httpsAgent = this.createHttpsAgent()
+
+        try {
+            const response = await axios.get<ArrayBuffer>(
+                `${config.gigachat.apiUrl}/files/${imageId}/content`,
                 {
                     headers: {
-                        'Authorization': `Bearer ${token}`,
-                        'Accept': 'application/json',
-                        ...form.getHeaders()
+                        Authorization: `Bearer ${token}`,
+                        Accept: 'image/jpeg',
                     },
-                    httpsAgent: this.httpsAgent,
+                    responseType: 'arraybuffer',
+                    httpsAgent,
                     timeout: 30000,
-                    maxContentLength: 10 * 1024 * 1024, // 10мб TODO: изменить на 5 мб
-                    maxBodyLength: 10 * 1024 * 1024
                 }
             )
 
-            const file: UploadedFile = response.data
-            return file.id
-
+            return Buffer.from(response.data)
         } catch (error: unknown) {
-            const status = axios.isAxiosError(error) ? error.response?.status : undefined
-            const message = error instanceof Error ? error.message : 'unknown upload error'
-            logger.error('gigaChat files - upload error', { status })
-            throw new AppError(400, `failed to upload image: ${message}`)
+            if (axios.isAxiosError(error)) {
+                logger.error('[GigaChat Download] Error', {
+                    imageId,
+                    status: error.response?.status,
+                    data: error.response?.data,
+                })
+            }
+
+            throw error
         }
     }
 
-    async deleteFile(fileId: string): Promise<void> {
-        const token = await this.authService.getAccessToken()
+    private createHttpsAgent(): https.Agent {
+        const certPath = path.join(process.cwd(), 'russian_trusted_root_ca.cer')
+        const certExists = fs.existsSync(certPath)
 
-        try {
-            await axios.delete(`${config.gigachat.apiUrl}/files/${fileId}`, {
-                headers: {
-                    'Authorization': `Bearer ${token}`
-                },
-                httpsAgent: this.httpsAgent,
-                timeout: 10000
-            })
-        } catch (error: unknown) {
-            logger.error('gigaChat files - delete error', error instanceof Error ? error.message : 'unknown delete error')
-        }
+        return new https.Agent({
+            ca: certExists ? fs.readFileSync(certPath) : undefined,
+            rejectUnauthorized: !certExists,
+        })
     }
 }

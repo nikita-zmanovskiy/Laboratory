@@ -1,7 +1,7 @@
-interface QueuedRequest<T = unknown> {
+interface QueuedRequest {
     id: string
-    execute: () => Promise<T>
-    resolve: (value: T) => void
+    execute: () => Promise<unknown>
+    resolve: (value: unknown) => void
     reject: (error: unknown) => void
     timestamp: number
 }
@@ -22,11 +22,11 @@ export class RequestQueueService {
             this.queue.push({
                 id: Math.random().toString(36).substring(7),
                 execute,
-                resolve,
+                resolve: (value) => resolve(value as T),
                 reject,
-                timestamp: Date.now()
+                timestamp: Date.now(),
             })
-            this.processQueue()
+            void this.processQueue()
         })
     }
 
@@ -60,6 +60,6 @@ export class RequestQueueService {
     }
 
     private sleep(ms: number): Promise<void> {
-        return new Promise(resolve => setTimeout(resolve, ms))
+        return new Promise((resolve) => setTimeout(resolve, ms))
     }
 }

@@ -35,9 +35,10 @@ export class GenerateUseCase {
             classroomId = classroom.id
 
             const normalizedImage = this.normalizeImageInput(dto.image)
-            const result = dto.mode === 'text'
-                ? await this.generateText(dto, classroom.grade || 11, normalizedImage)
-                : await this.generateImage(dto, normalizedImage)
+            const result =
+                dto.mode === 'text'
+                    ? await this.generateText(dto, classroom.grade || 11, normalizedImage)
+                    : await this.generateImage(dto, normalizedImage)
 
             if (result.blocked) {
                 status = 403
@@ -67,14 +68,16 @@ export class GenerateUseCase {
             errorMessage = error instanceof Error ? error.message : 'Internal error'
             throw new AppError(500, errorMessage)
         } finally {
-            await this.auditLogService.recordGenerateRequest({
-                dto,
-                classroomId,
-                tokenUsage,
-                status,
-                responseTimeMs: Date.now() - startTime,
-                errorMessage,
-            }).catch(() => null)
+            await this.auditLogService
+                .recordGenerateRequest({
+                    dto,
+                    classroomId,
+                    tokenUsage,
+                    status,
+                    responseTimeMs: Date.now() - startTime,
+                    errorMessage,
+                })
+                .catch(() => null)
         }
     }
 
@@ -103,7 +106,10 @@ export class GenerateUseCase {
         normalizedImage?: string
     ): Promise<AiGenerateResult> {
         const systemPrompt = this.promptBuilder.buildImageSystemPrompt()
-        const imagePrompt = this.promptBuilder.buildImagePrompt(dto.prompt, Boolean(normalizedImage))
+        const imagePrompt = this.promptBuilder.buildImagePrompt(
+            dto.prompt,
+            Boolean(normalizedImage)
+        )
 
         return normalizedImage
             ? this.gigaChat.generateWithImage(imagePrompt, normalizedImage, systemPrompt)

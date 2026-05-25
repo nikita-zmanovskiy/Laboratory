@@ -1,8 +1,10 @@
-import { useState, useRef, useCallback } from "react"
-import { toBase64, isValidBase64Image } from "@/shared"
+import { useCallback,useRef, useState } from "react"
 
-const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"]
-const MAX_FILE_SIZE = 5 * 1024 * 1024
+import { toBase64 } from "@/shared/lib/toBase64"
+import { isValidBase64Image } from "@/shared/lib/validateBase64"
+
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"],
+ MAX_FILE_SIZE = 5 * 1024 * 1024
 
 interface UseFileUploadReturn {
     imageFile: File | null
@@ -17,11 +19,11 @@ interface UseFileUploadReturn {
 }
 
 export const useFileUpload = (isLoading: boolean): UseFileUploadReturn => {
-    const [imageFile, setImageFile] = useState<File | null>(null)
-    const [imagePreview, setImagePreview] = useState<string | null>(null)
-    const [isImageLoading, setIsImageLoading] = useState(false)
-    const [error, setError] = useState<string | null>(null)
-    const fileInputRef = useRef<HTMLInputElement | null>(null)
+    const [imageFile, setImageFile] = useState<File | null>(null),
+     [imagePreview, setImagePreview] = useState<string | null>(null),
+     [isImageLoading, setIsImageLoading] = useState(false),
+     [error, setError] = useState<string | null>(null),
+     fileInputRef = useRef<HTMLInputElement | null>(null)
 
     const handleFileChange = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0]
@@ -55,12 +57,17 @@ export const useFileUpload = (isLoading: boolean): UseFileUploadReturn => {
 
     const convertToBase64 = useCallback(async (): Promise<string | null> => {
         if (!imageFile) return null
-        const base64Result = await toBase64(imageFile)
-        if (!isValidBase64Image(base64Result)) {
-            setError("Файл поврежден или имеет некорректный формат данных")
-            return null
-        }
-        return base64Result
+        setIsImageLoading(true)
+        try {
+            const base64Result = await toBase64(imageFile)
+            if (!isValidBase64Image(base64Result)) {
+                setError("Файл поврежден или имеет некорректный формат данных")
+                return null
+            }
+            return base64Result
+        } finally {
+            setIsImageLoading(false)
+        } 
     }, [imageFile])
 
     const clearFile = useCallback(() => {

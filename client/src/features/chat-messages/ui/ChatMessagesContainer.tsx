@@ -1,8 +1,10 @@
 "use client"
 
 import { Message } from "@/entities/chat"
-import { useImageActions } from "../model/useImageActions"
+
 import { useAutoScroll } from "../model/useAutoScroll"
+import { useImageActions } from "../model/useImageActions"
+
 import { ChatMessages } from "./ChatMessages"
 
 export interface ChatMessagesContainerProps {
@@ -16,8 +18,8 @@ export const ChatMessagesContainer = ({
     isLoading,
     isTextMode,
 }: ChatMessagesContainerProps) => {
-    const { activeImage, setActiveImage, handleDownload } = useImageActions()
-    const bottomRef = useAutoScroll([messages, isLoading])
+    const { activeImage, setActiveImage, handleDownload } = useImageActions(),
+     bottomRef = useAutoScroll(messages.length, isLoading)
 
     return (
         <ChatMessages

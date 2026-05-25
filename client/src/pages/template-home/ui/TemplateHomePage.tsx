@@ -2,18 +2,22 @@
 
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { useChatStore } from "@/entities/chat"
-import { useSessionStore } from "@/entities/session"
-import { useRoleStore } from "@/features/role-select"
-import { ScreenSizeWarning } from "@/shared/ui/ScreenSizeWarningModal"
-import styles from './templateHomePage.module.css'
-import { LessonTimer } from "@/shared/ui/LessonTimer"
-import { useLessonTimer } from "@/features/teacher-panel/model/useLessonTimer"
-import { ClassroomClosedModal } from "@/shared/ui/ClassroomClosedModal"
-import { useLessonNotification } from "@/shared/lib/useLessonNotification"
-import { NotificationToast } from "@/shared/ui/NotificationToast"
-import { establishTeacherPreviewSession } from "@/shared/api/classroom"
+
 import { ChatRoomWidget, useClassroomSocket } from "@/widgets/chat-room"
+
+import { useLessonTimer } from "@/features/teacher-panel"
+
+import { useChatStore } from "@/entities/chat"
+import { useRoleStore } from "@/entities/session"
+import { useSessionStore } from "@/entities/session"
+
+import { establishTeacherPreviewSession } from "@/shared/api/classroom"
+import { useLessonNotification } from "@/shared/lib/useLessonNotification"
+import { ClassroomClosedModal } from "@/shared/ui/ClassroomClosedModal"
+import { LessonTimer } from "@/shared/ui/lesson-timer/ui/LessonTimer"
+import { NotificationToast } from "@/shared/ui/notification-toast/ui/NotificationToast"
+
+import styles from './templateHomePage.module.css'
 
 export default function TemplateHomePage() {
     const messages = useChatStore((state) => state.messages)
@@ -84,23 +88,6 @@ export default function TemplateHomePage() {
 
     const handleExit = () => {
         if (role === "teacher") {
-            let target = "/teacher"
-            try {
-                const stored = localStorage.getItem("currentClass")
-                if (stored) {
-                    const parsed = JSON.parse(stored) as { code: string; expires_at: string }
-                    if (new Date(parsed.expires_at).getTime() > Date.now()) {
-                        target = `/teacher/classroom/${parsed.code}`
-                    }
-                } else if (classroomCode) {
-                    target = `/teacher/classroom/${classroomCode}`
-                }
-            } catch {
-                if (classroomCode) {
-                    target = `/teacher/classroom/${classroomCode}`
-                }
-            }
-
             router.push('/')
             setTimeout(() => {
                 useChatStore.getState().clearMessages()
@@ -150,8 +137,7 @@ export default function TemplateHomePage() {
             {showNotification && (
                 <NotificationToast message={notificationMessage} onClose={dismissNotification} />
             )}
-            <ScreenSizeWarning />
-            <header className={`${styles.template__header} page__animation-opacity p-10 mb-4 flex items-center justify-between`}>
+            <header className={`${styles.template__header} max-[650px]:p-5 page__animation-opacity p-10 mb-4 flex items-center justify-between `}>
                 <div className={`${styles.header__info} flex gap-4`}>
                     {sessionId && (
                         <span className="text-xs text-[var(--color-text-muted)] font-mono" title="ID вашей сессии">

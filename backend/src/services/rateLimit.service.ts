@@ -20,9 +20,9 @@ export class RateLimitService {
     private readonly WINDOW_MS = 60000 // блок окна, если за минуту много запросов, то блок
     private readonly BLOCK_DURATION_MS = 120000
 
-    private readonly MAX_FAILURES = 5         // 5 неудачных попыток
-    private readonly BRUTE_BLOCK_MS = 300000  // блокировка на 5 минут
-    private readonly BRUTE_WINDOW_MS = 60000  // в течение 1 минуты
+    private readonly MAX_FAILURES = 5 // 5 неудачных попыток
+    private readonly BRUTE_BLOCK_MS = 300000 // блокировка на 5 минут
+    private readonly BRUTE_WINDOW_MS = 60000 // в течение 1 минуты
 
     constructor() {
         this.store = new Map()
@@ -44,7 +44,7 @@ export class RateLimitService {
                 return {
                     allowed: false,
                     reason: `Too many failed attempts. Blocked for ${remaining} seconds.`,
-                    retryAfter: remaining
+                    retryAfter: remaining,
                 }
             }
             // разблок
@@ -90,7 +90,7 @@ export class RateLimitService {
                 count: 0,
                 firstRequestTime: now,
                 blocked: false,
-                blockedUntil: 0
+                blockedUntil: 0,
             }
             this.store.set(key, entry)
         }
@@ -101,7 +101,7 @@ export class RateLimitService {
                 return {
                     allowed: false,
                     reason: `Too many requests. Blocked for ${Math.ceil(remainingMs / 1000)} seconds. Limit: ${this.MAX_REQUESTS} requests per minute.`,
-                    retryAfter: Math.ceil(remainingMs / 1000)
+                    retryAfter: Math.ceil(remainingMs / 1000),
                 }
             } else {
                 entry.blocked = false
@@ -124,12 +124,14 @@ export class RateLimitService {
             entry.blocked = true
             entry.blockedUntil = now + this.BLOCK_DURATION_MS
 
-            logger.warn(`rateLimit - BLOCKED: ${key} - ${entry.count} requests in ${(windowElapsed / 1000).toFixed(1)}s`)
+            logger.warn(
+                `rateLimit - BLOCKED: ${key} - ${entry.count} requests in ${(windowElapsed / 1000).toFixed(1)}s`
+            )
 
             return {
                 allowed: false,
                 reason: `rate limit: ${this.MAX_REQUESTS} requests per minute. Blocked for ${this.BLOCK_DURATION_MS / 1000} seconds.`,
-                retryAfter: Math.ceil(this.BLOCK_DURATION_MS / 1000)
+                retryAfter: Math.ceil(this.BLOCK_DURATION_MS / 1000),
             }
         }
 
@@ -141,12 +143,12 @@ export class RateLimitService {
         if (!entry) return null
 
         const now = Date.now(),
-         windowElapsed = now - entry.firstRequestTime
+            windowElapsed = now - entry.firstRequestTime
 
         return {
             count: entry.count,
             windowRemaining: Math.max(0, this.WINDOW_MS - windowElapsed),
-            blocked: entry.blocked && now < entry.blockedUntil
+            blocked: entry.blocked && now < entry.blockedUntil,
         }
     }
 
@@ -165,7 +167,7 @@ export class RateLimitService {
                 cleaned++
             }
             // удаляем если окно истекло и прошло больше 30 секунд
-            else if (!entry.blocked && (now - entry.firstRequestTime) > this.WINDOW_MS + 30000) {
+            else if (!entry.blocked && now - entry.firstRequestTime > this.WINDOW_MS + 30000) {
                 this.store.delete(key)
                 cleaned++
             }
@@ -176,7 +178,7 @@ export class RateLimitService {
             if (entry.blocked && now > entry.blockedUntil + 600000) {
                 this.bruteForceStore.delete(key)
             }
-            if (!entry.blocked && (now - entry.firstFailure) > this.BRUTE_WINDOW_MS + 60000) {
+            if (!entry.blocked && now - entry.firstFailure > this.BRUTE_WINDOW_MS + 60000) {
                 this.bruteForceStore.delete(key)
             }
         }

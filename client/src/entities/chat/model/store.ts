@@ -1,19 +1,20 @@
-import { create } from "zustand";
-import { ChatMode, Message } from "../types";
+import { create } from "zustand"
+
+import { ChatMode, Message } from "../types"
 
 interface ChatStore {
-	mode: ChatMode;
-	messages: Message[];
-	isLoading: boolean;
-	setMode: (mode: ChatMode) => void;
-	setLoading: (loading: boolean) => void;
-	addMessage: (message: Message) => void;
+	mode: ChatMode
+	messages: Message[]
+	isLoading: boolean
+	setMode: (mode: ChatMode) => void
+	setLoading: (loading: boolean) => void
+	addMessage: (message: Message) => void
 	updateMessage: (
 		id: string,
 		fields: Partial<Omit<Message, "id">>,
-	) => void;
-	removeMessage: (id: string) => void;
-	clearMessages: () => void;
+	) => void
+	removeMessage: (id: string) => void
+	clearMessages: () => void
 	error: string | null
     clearError: () => void
 }
@@ -49,4 +50,4 @@ export const useChatStore = create<ChatStore>(
    		 clearError: () => set({ error: null }),
 	
 	}),
-);
+)

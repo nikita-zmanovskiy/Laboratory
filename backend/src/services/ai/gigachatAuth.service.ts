@@ -19,7 +19,7 @@ function getHttpsAgent(): https.Agent {
     ]
 
     for (const certPath of certPaths) {
-            if (fs.existsSync(certPath)) {
+        if (fs.existsSync(certPath)) {
             return new https.Agent({ ca: fs.readFileSync(certPath) })
         }
     }
@@ -36,13 +36,14 @@ export class GigaChatAuthService {
     }
 
     async getAccessToken(): Promise<string> {
-        if (this.tokenCache && Date.now() < this.tokenCache.expiresAt - 120000 ) { //можно ли использовать токен или нужен новый
+        if (this.tokenCache && Date.now() < this.tokenCache.expiresAt - 120000) {
+            //можно ли использовать токен или нужен новый
             return this.tokenCache.accessToken
         }
 
         try {
             const authKey = config.gigachat.clientSecret,
-             rquid = crypto.randomUUID()
+                rquid = crypto.randomUUID()
 
             const response = await axios.post(
                 config.gigachat.authUrl,
@@ -50,12 +51,12 @@ export class GigaChatAuthService {
                 {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
-                        'Accept': 'application/json',
-                        'RqUID': rquid,
-                        'Authorization': `Basic ${authKey}`
+                        Accept: 'application/json',
+                        RqUID: rquid,
+                        Authorization: `Basic ${authKey}`,
                     },
                     httpsAgent: this.httpsAgent,
-                    timeout: 10000
+                    timeout: 10000,
                 }
             )
             if (!response.data.access_token) {
@@ -64,10 +65,9 @@ export class GigaChatAuthService {
 
             this.tokenCache = {
                 accessToken: response.data.access_token,
-                expiresAt: response.data.expires_at
+                expiresAt: response.data.expires_at,
             }
             return this.tokenCache.accessToken
-
         } catch (error: unknown) {
             const status = axios.isAxiosError(error) ? error.response?.status : undefined
             logger.error('gigaChat auth - error', { status })
