@@ -1,26 +1,29 @@
 import type { Request, Response, NextFunction } from 'express'
 import { ClassroomRepository } from '../repositories/classroom.repository.js'
-import {isExpired} from "../utils/moscowTime.js";
-import {getWebSocketService} from "../services/websocket.service.js";
-import {RateLimitService} from "../services/rateLimit.service.js";
-import { logger } from '../utils/logger.js'
+import { isExpired } from '../utils/moscowTime.js'
+import { getWebSocketService } from '../services/websocket.service.js'
+import { RateLimitService } from '../services/rateLimit.service.js'
+import { enrichRequestContext, logger } from '../utils/logger.js'
 
 const classroomRepo = new ClassroomRepository()
 const rateLimitService = new RateLimitService()
 
-export const classroomContextMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+export const classroomContextMiddleware = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
     if (!req.path.startsWith('/api/generate') || req.path.includes('/images/')) {
         return next()
     }
 
     const headerCode = req.headers['x-classroom-code'] as string,
-     bodyCode = req.body?.classroom_code,
-     classroomCode = headerCode || bodyCode
+        bodyCode = req.body?.classroom_code,
+        classroomCode = headerCode || bodyCode
 
     if (!classroomCode) {
         return res.status(400).json({
             error: 'classroom_code is required',
-            hint: 'Provide classroom_code in header (x-classroom-code) or body'
         })
     }
     const ip = req.ip || req.socket.remoteAddress || 'unknown'
@@ -35,10 +38,8 @@ export const classroomContextMiddleware = async (req: Request, res: Response, ne
         rateLimitService.recordFailure(bruteKey)
         return res.status(400).json({
             error: 'Invalid classroom_code format',
-            hint: 'Classroom code must be 6 characters (uppercase letters and numbers)'
         })
     }
-
 
     const classroom = await classroomRepo.findByCode(classroomCode)
 
@@ -46,7 +47,6 @@ export const classroomContextMiddleware = async (req: Request, res: Response, ne
         rateLimitService.recordFailure(bruteKey)
         return res.status(404).json({
             error: 'Classroom not found',
-            hint: 'Create a new classroom first: POST /api/classrooms'
         })
     }
 
@@ -63,18 +63,21 @@ export const classroomContextMiddleware = async (req: Request, res: Response, ne
         return res.status(410).json({
             error: 'Classroom has expired',
             expired_at: classroom.expires_at,
-            hint: 'Create a new classroom for your lesson'
         })
     }
     if (!classroom.is_active) {
         return res.status(410).json({
             error: 'Classroom is no longer active',
-            hint: 'Create a new classroom: POST /api/classrooms'
         })
     }
 
     req.body.classroom_code = classroomCode
     req.body.classroom_id = classroom.id
+
+    enrichRequestContext({
+        classroomCode,
+        sessionId: req.body?.session_id,
+    })
 
     next()
 }

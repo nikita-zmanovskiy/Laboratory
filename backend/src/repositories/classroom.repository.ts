@@ -1,6 +1,5 @@
-
 import { pool } from '../db/pool.js'
-import type { Classroom } from '../types/models.js';
+import type { Classroom } from '../types/models.js'
 
 export class ClassroomRepository {
     async findByCode(code: string): Promise<Classroom | null> {
@@ -35,7 +34,8 @@ export class ClassroomRepository {
         }
     }> {
         // базовая статистика
-        const basicStats = await pool.query(`
+        const basicStats = await pool.query(
+            `
         SELECT 
             COUNT(*)::INTEGER as total_requests,
             COUNT(CASE WHEN mode = 'text' THEN 1 END)::INTEGER as text_requests,
@@ -48,18 +48,23 @@ export class ClassroomRepository {
         FROM request_logs rl
         JOIN classrooms c ON rl.classroom_id = c.id
         WHERE UPPER(c.code) = UPPER($1)
-    `, [code])
-    const classroomInfo = await pool.query(`
+    `,
+            [code]
+        )
+        const classroomInfo = await pool.query(
+            `
         SELECT expires_at FROM classrooms WHERE UPPER(code) = UPPER($1)
-    `, [code])
-    const expiresAt = classroomInfo.rows[0]?.expires_at || null
+    `,
+            [code]
+        )
+        const expiresAt = classroomInfo.rows[0]?.expires_at || null
         const s = basicStats.rows[0]
-        const errorRate = s.total_requests > 0
-            ? ((s.errors / s.total_requests) * 100).toFixed(1) + '%'
-            : '0%'
+        const errorRate =
+            s.total_requests > 0 ? ((s.errors / s.total_requests) * 100).toFixed(1) + '%' : '0%'
 
         // топ учеников по запросам
-        const topStudents = await pool.query(`
+        const topStudents = await pool.query(
+            `
         SELECT 
             session_id,
             COUNT(*)::INTEGER as requests,
@@ -70,10 +75,13 @@ export class ClassroomRepository {
         GROUP BY session_id
         ORDER BY requests DESC
         LIMIT 10
-    `, [code])
+    `,
+            [code]
+        )
 
         // график токенов по времени
-        const tokensOverTime = await pool.query(`
+        const tokensOverTime = await pool.query(
+            `
         SELECT 
             date_trunc('minute', timestamp) as minute,
             AVG(tokens_input)::INTEGER as avg_input,
@@ -83,10 +91,13 @@ export class ClassroomRepository {
         WHERE UPPER(c.code) = UPPER($1) AND tokens_input > 0
         GROUP BY minute
         ORDER BY minute
-    `, [code])
+    `,
+            [code]
+        )
 
         // запросы по минутам
-        const requestsPerMinute = await pool.query(`
+        const requestsPerMinute = await pool.query(
+            `
         SELECT 
             to_char(date_trunc('minute', timestamp), 'HH24:MI') as minute,
             COUNT(*)::INTEGER as count
@@ -95,26 +106,34 @@ export class ClassroomRepository {
         WHERE UPPER(c.code) = UPPER($1)
         GROUP BY date_trunc('minute', timestamp)
         ORDER BY date_trunc('minute', timestamp)
-    `, [code])
+    `,
+            [code]
+        )
 
         // распределение по режимам
-        const modeDist = await pool.query(`
+        const modeDist = await pool.query(
+            `
         SELECT 
             COUNT(CASE WHEN mode = 'text' THEN 1 END)::INTEGER as text_count,
             COUNT(CASE WHEN mode = 'image' THEN 1 END)::INTEGER as image_count
         FROM request_logs rl
         JOIN classrooms c ON rl.classroom_id = c.id
         WHERE UPPER(c.code) = UPPER($1)
-    `, [code])
+    `,
+            [code]
+        )
 
         // средние токены
-        const avgTokens = await pool.query(`
+        const avgTokens = await pool.query(
+            `
         SELECT 
             AVG(tokens_input + tokens_output)::INTEGER as avg_tokens
         FROM request_logs rl
         JOIN classrooms c ON rl.classroom_id = c.id
         WHERE UPPER(c.code) = UPPER($1) AND tokens_input > 0
-    `, [code])
+    `,
+            [code]
+        )
 
         return {
             total_requests: parseInt(s.total_requests),
@@ -128,39 +147,36 @@ export class ClassroomRepository {
             error_rate: errorRate,
             expires_at: expiresAt,
 
-            top_students: topStudents.rows.map(r => ({
+            top_students: topStudents.rows.map((r) => ({
                 session_id: r.session_id,
                 requests: parseInt(r.requests),
-                avg_tokens: r.avg_tokens || 0
+                avg_tokens: r.avg_tokens || 0,
             })),
 
             charts: {
-                tokens_over_time: tokensOverTime.rows.map(r => ({
+                tokens_over_time: tokensOverTime.rows.map((r) => ({
                     timestamp: r.minute,
                     input: r.avg_input,
-                    output: r.avg_output
+                    output: r.avg_output,
                 })),
-                requests_per_minute: requestsPerMinute.rows.map(r => ({
+                requests_per_minute: requestsPerMinute.rows.map((r) => ({
                     minute: r.minute,
-                    count: r.count
+                    count: r.count,
                 })),
                 mode_distribution: {
                     text: parseInt(modeDist.rows[0].text_count),
-                    image: parseInt(modeDist.rows[0].image_count)
+                    image: parseInt(modeDist.rows[0].image_count),
                 },
                 avg_tokens_per_request: avgTokens.rows[0]?.avg_tokens || 0,
                 avg_response_time: s.avg_response_time,
                 error_rate: parseFloat(errorRate),
                 total_requests: parseInt(s.total_requests),
-                active_students: parseInt(s.active_sessions)
-            }
+                active_students: parseInt(s.active_sessions),
+            },
         }
     }
     async setTeacherToken(id: string, token: string): Promise<void> {
-        await pool.query(
-            'UPDATE classrooms SET teacher_token = $1 WHERE id = $2',
-            [token, id]
-        )
+        await pool.query('UPDATE classrooms SET teacher_token = $1 WHERE id = $2', [token, id])
     }
 
     async getTeacherToken(code: string): Promise<string | null> {
@@ -179,17 +195,26 @@ export class ClassroomRepository {
         return rows[0] || null
     }
     async extend(code: string, additionalMinutes: number): Promise<Classroom | null> {
-        const { rows } = await pool.query(`
+        const { rows } = await pool.query(
+            `
             UPDATE classrooms 
             SET expires_at = expires_at + ($1 || ' minutes')::INTERVAL
             WHERE UPPER(code) = UPPER($2) AND is_active = true
             RETURNING *
-        `, [additionalMinutes, code])
+        `,
+            [additionalMinutes, code]
+        )
 
         return rows[0] || null
     }
 
-    async create(data: { id: string; code: string; title: string; expiresAt: Date | null; grade?: number }) {
+    async create(data: {
+        id: string
+        code: string
+        title: string
+        expiresAt: Date | null
+        grade?: number
+    }) {
         const { rows } = await pool.query(
             `INSERT INTO classrooms (id, code, title, expires_at, grade) VALUES ($1, $2, $3, $4, $5) RETURNING *`,
             [data.id, data.code, data.title, data.expiresAt, data.grade || 11]
@@ -198,9 +223,6 @@ export class ClassroomRepository {
     }
 
     async deactivate(id: string): Promise<void> {
-        await pool.query(
-            'UPDATE classrooms SET is_active = false WHERE id = $1',
-            [id]
-        )
+        await pool.query('UPDATE classrooms SET is_active = false WHERE id = $1', [id])
     }
 }

@@ -9,8 +9,18 @@ const isTeacherClassroomRoute = (path: string): boolean =>
     /^\/api\/classrooms\/[A-Za-z0-9]+\/(extend|deactivate|teacher-session)$/.test(path)
 
 export const csrfMiddleware = (req: Request, res: Response, next: NextFunction): void => {
-    if (req.method === 'GET') { next(); return }
-    if (req.path.startsWith('/api/csrf/') || req.path === '/health' || req.path.startsWith('/api-docs')) { next(); return }
+    if (req.method === 'GET') {
+        next()
+        return
+    }
+    if (
+        req.path.startsWith('/api/csrf/') ||
+        req.path === '/health' ||
+        req.path.startsWith('/api-docs')
+    ) {
+        next()
+        return
+    }
 
     if (isTeacherClassroomRoute(req.path)) {
         const teacherToken = getTeacherTokenFromRequest(req)
@@ -31,7 +41,7 @@ export const csrfMiddleware = (req: Request, res: Response, next: NextFunction):
     if (!bruteCheck.allowed) {
         res.status(429).json({
             error: bruteCheck.reason,
-            retry_after: bruteCheck.retryAfter
+            retry_after: bruteCheck.retryAfter,
         })
         return
     }

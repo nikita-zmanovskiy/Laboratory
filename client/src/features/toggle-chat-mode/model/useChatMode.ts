@@ -7,8 +7,8 @@ interface UseChatModeReturn {
 }
 
 export const useChatMode = (): UseChatModeReturn => {
-	const mode = useChatStore((state) => state.mode)
-	const setMode = useChatStore((state) => state.setMode)
+	const mode = useChatStore((state) => state.mode),
+	 setMode = useChatStore((state) => state.setMode)
 
 	return {
 		mode,

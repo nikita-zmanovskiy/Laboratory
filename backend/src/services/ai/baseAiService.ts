@@ -1,9 +1,9 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 import { AppError } from '../../utils/errors.js'
 import { logger } from '../../utils/logger.js'
-import * as https from "node:https";
-import * as fs from "node:fs";
-import path from "node:path";
+import * as https from 'node:https'
+import * as fs from 'node:fs'
+import path from 'node:path'
 
 export const AI_TIMEOUT_MS = 60000
 export const AI_IMAGE_TIMEOUT_MS = 120000
@@ -28,7 +28,7 @@ export class BaseAiService {
             if (fs.existsSync(certPath)) {
                 httpsAgent = new https.Agent({
                     ca: fs.readFileSync(certPath),
-                    rejectUnauthorized: true
+                    rejectUnauthorized: true,
                 })
                 logger.debug(`[${serviceName}] Loaded certificate: ${certPath}`)
                 break
@@ -37,16 +37,18 @@ export class BaseAiService {
 
         // TODO: переработать
         if (!httpsAgent) {
-            logger.warn(`[${serviceName}] Certificate not found, disabling SSL verification (dev only)`)
+            logger.warn(
+                `[${serviceName}] Certificate not found, disabling SSL verification (dev only)`
+            )
             httpsAgent = new https.Agent({
-                rejectUnauthorized: false
+                rejectUnauthorized: false,
             })
         }
 
         this.client = axios.create({
             timeout: AI_TIMEOUT_MS,
             baseURL: baseURL,
-            httpsAgent: httpsAgent
+            httpsAgent: httpsAgent,
         })
     }
     protected async withRetry<T>(
@@ -61,7 +63,7 @@ export class BaseAiService {
                 if (attempt > 0) {
                     const delay = Math.pow(2, attempt - 1) * 1000
                     logger.info(`[${serviceName}] Retry ${attempt}/${maxRetries} after ${delay}ms`)
-                    await new Promise(resolve => setTimeout(resolve, delay))
+                    await new Promise((resolve) => setTimeout(resolve, delay))
                 }
 
                 return await operation()
@@ -69,15 +71,18 @@ export class BaseAiService {
                 lastError = error
 
                 // не ретраим если ошибка клиента кроме 429 (превыш. лимит)
-                if (error instanceof AppError &&
+                if (
+                    error instanceof AppError &&
                     error.statusCode >= 400 &&
                     error.statusCode < 500 &&
-                    error.statusCode !== 429) {
+                    error.statusCode !== 429
+                ) {
                     throw error
                 }
 
                 if (attempt === maxRetries) {
-                    throw new AppError(503,
+                    throw new AppError(
+                        503,
                         `${serviceName} unavailable after ${maxRetries} retries. Please try again later.`
                     )
                 }
@@ -87,7 +92,9 @@ export class BaseAiService {
         throw lastError
     }
 
-    protected async makeRequest<TResponse = unknown>(config: AxiosRequestConfig): Promise<TResponse> {
+    protected async makeRequest<TResponse = unknown>(
+        config: AxiosRequestConfig
+    ): Promise<TResponse> {
         const startTime = Date.now()
 
         try {
@@ -96,28 +103,32 @@ export class BaseAiService {
         } catch (error: unknown) {
             const elapsed = Date.now() - startTime
 
-            if (axios.isAxiosError(error) && (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT')) {
-                throw new AppError(504,
+            if (
+                axios.isAxiosError(error) &&
+                (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT')
+            ) {
+                throw new AppError(
+                    504,
                     `${this.serviceName} request timed out after ${elapsed}ms. Please try again.`
                 )
             }
 
             if (axios.isAxiosError(error) && error.response) {
                 const status = error.response.status,
-                 message = error.response.data?.message || error.message
+                    message = error.response.data?.message || error.message
 
                 if (status === 429) {
-                    throw new AppError(429,
+                    throw new AppError(
+                        429,
                         `${this.serviceName} rate limit exceeded. Please wait before retrying.`
                     )
                 }
 
-                throw new AppError(status,
-                    `${this.serviceName} error: ${message}`
-                )
+                throw new AppError(status, `${this.serviceName} error: ${message}`)
             }
 
-            throw new AppError(503,
+            throw new AppError(
+                503,
                 `${this.serviceName} is temporarily unavailable. Please try again later.`
             )
         }

@@ -2,7 +2,8 @@
 
 import { useEffect } from "react"
 import { usePathname, useRouter } from "next/navigation"
-import { useRoleStore } from "@/features/role-select"
+
+import { useRoleStore } from "@/entities/session"
 
 export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
     const role = useRoleStore((state) => state.role)
@@ -11,7 +12,7 @@ export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
     const router = useRouter()
 
     useEffect(() => {
-        if (pathname === "/") return
+        if (!pathname || pathname === "/") return
 
         if (!role) {
             if (pathname.startsWith("/teacher/classroom/")) {

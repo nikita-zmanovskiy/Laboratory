@@ -1,7 +1,9 @@
 "use client"
 
 import { useEffect, useState } from "react"
+
 import type { LogEntry } from "../model/useWebSocketLogs"
+
 import styles from "./teacher.module.css"
 
 interface RealtimeLogItemProps {

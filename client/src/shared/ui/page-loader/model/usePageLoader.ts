@@ -1,0 +1,53 @@
+"use client"
+
+import { useEffect, useState } from "react"
+
+const MIN_LOAD_TIME_MS = 1000,
+ FADE_OUT_TIME_MS = 500
+
+export const usePageLoader = () => {
+  const [visible, setVisible] = useState(true),
+   [fadeOut, setFadeOut] = useState(false)
+
+  useEffect(() => {
+    let fadeTimerId: ReturnType<typeof setTimeout>,
+     hideTimerId: ReturnType<typeof setTimeout>,
+     isMounted = true
+
+    const startFadeOut = () => {
+      fadeTimerId = setTimeout(() => {
+        if (!isMounted) {
+          return
+        }
+
+        setFadeOut(true)
+
+        hideTimerId = setTimeout(() => {
+          if (!isMounted) {
+            return
+          }
+
+          setVisible(false)
+        }, FADE_OUT_TIME_MS)
+      }, MIN_LOAD_TIME_MS)
+    }
+
+    if (document.readyState === "complete") {
+      startFadeOut()
+    } else {
+      window.addEventListener("load", startFadeOut)
+    }
+
+    return () => {
+      isMounted = false
+      window.removeEventListener("load", startFadeOut)
+      clearTimeout(fadeTimerId)
+      clearTimeout(hideTimerId)
+    }
+  }, [])
+
+  return {
+    visible,
+    fadeOut,
+  }
+}

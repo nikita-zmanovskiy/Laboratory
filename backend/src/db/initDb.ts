@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url'
 import { logger } from '../utils/logger.js'
 
 const __filename = fileURLToPath(import.meta.url),
- __dirname = dirname(__filename)
+    __dirname = dirname(__filename)
 
 export const initDb = async () => {
     if (!config.databaseUrl?.trim()) {
@@ -15,14 +15,13 @@ export const initDb = async () => {
     }
 
     try {
-
         //TODO: переработать
         const migrations = [
             'create_classrooms.sql',
             'create_request_logs.sql',
             'add_tokens_approximate.sql',
             'add_grade.sql',
-            'add_teacher_token.sql'
+            'add_teacher_token.sql',
         ]
 
         for (const migration of migrations) {

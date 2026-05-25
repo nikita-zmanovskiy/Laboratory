@@ -1,5 +1,7 @@
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell } from "recharts"
+import { Bar, BarChart, CartesianGrid, Cell,Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+
 import type { ClassroomStats } from "@/shared/api/classroom"
+
 import styles from './teacher.module.css'
 
 interface ChartsSectionProps {
@@ -8,13 +10,13 @@ interface ChartsSectionProps {
 
 const EmptyChart = ({ label }: { label: string }) => (
     <div className="flex items-center justify-center h-[200px]">
-        <p className="text-sm text-[var(--color-text-muted)]">Нет данных для отображения</p>
+        <p className="text-sm text-[var(--color-text-muted)]">Нет данных для отображения: {label}</p>
     </div>
 )
 
 const EmptyPie = ({ label }: { label: string }) => (
     <div className="flex items-center justify-center h-[180px]">
-        <p className="text-sm text-[var(--color-text-muted)]">Нет данных для отображения</p>
+        <p className="text-sm text-[var(--color-text-muted)]">Нет данных для отображения: {label}</p>
     </div>
 )
 
@@ -25,7 +27,7 @@ export const ChartsSection = ({ stats }: ChartsSectionProps) => {
 
     return (
         <div className="space-y-6 mt-6">
-            <div className="rounded-xl border border-[var(--color-border-primary)] bg-[var(--color-bg-hover)] p-4">
+            <div className="rounded-xl border border-[var(--color-border-primary)] p-4">
                 <h3 className="mb-4 text-sm font-semibold text-[var(--color-text-primary)]">Запросы по минутам</h3>
                 {charts.requests_per_minute?.length > 0 ? (
                     <ResponsiveContainer width="100%" height={200}>
@@ -42,7 +44,7 @@ export const ChartsSection = ({ stats }: ChartsSectionProps) => {
                 )}
             </div>
 
-            <div className="rounded-xl border border-[var(--color-border-primary)] bg-[var(--color-bg-hover)] p-4">
+            <div className="rounded-xl border border-[var(--color-border-primary)] p-4">
                 <h3 className="mb-4 text-sm font-semibold text-[var(--color-text-primary)]">Токены по времени</h3>
                 {charts.tokens_over_time?.length > 0 ? (
                     <>
@@ -66,8 +68,8 @@ export const ChartsSection = ({ stats }: ChartsSectionProps) => {
                 )}
             </div>
 
-            <div className="grid grid-cols-2 gap-6">
-                <div className="rounded-xl border border-[var(--color-border-primary)] bg-[var(--color-bg-hover)] p-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="rounded-xl border border-[var(--color-border-primary)] p-4 w-full">
                     <h3 className="mb-4 text-sm font-semibold text-[var(--color-text-primary)]">Режимы запросов</h3>
                     {(charts.mode_distribution?.text > 0 || charts.mode_distribution?.image > 0) ? (
                         <>

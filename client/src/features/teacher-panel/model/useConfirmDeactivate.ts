@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react"
+import { useCallback,useState } from "react"
 
 interface UseConfirmDeactivateReturn {
     showConfirm: boolean
@@ -9,8 +9,8 @@ interface UseConfirmDeactivateReturn {
 export const useConfirmDeactivate = (): UseConfirmDeactivateReturn => {
     const [showConfirm, setShowConfirm] = useState(false)
 
-    const openConfirm = useCallback(() => setShowConfirm(true), [])
-    const closeConfirm = useCallback(() => setShowConfirm(false), [])
+    const openConfirm = useCallback(() => setShowConfirm(true), []),
+     closeConfirm = useCallback(() => setShowConfirm(false), [])
 
     return { showConfirm, openConfirm, closeConfirm }
 }

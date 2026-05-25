@@ -1,5 +1,6 @@
 import { AxiosError } from "axios"
-import { getApiErrorMessage } from "@/shared"
+
+import { getApiErrorMessage } from "@/shared/lib/apiErrors"
 
 export interface SendMessageErrorResult {
     assistantText: string
@@ -8,8 +9,8 @@ export interface SendMessageErrorResult {
 }
 
 export const mapSendMessageError = (error: unknown): SendMessageErrorResult => {
-    const message = getApiErrorMessage(error)
-    const isSecurityError = error instanceof AxiosError && error.response?.status === 403
+    const message = getApiErrorMessage(error),
+     isSecurityError = error instanceof AxiosError && error.response?.status === 403
 
     return {
         assistantText: isSecurityError

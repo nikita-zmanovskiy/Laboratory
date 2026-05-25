@@ -26,25 +26,25 @@ export const validateImageSize = (base64Image: string): ImageValidationResult =>
     if (!ALLOWED_IMAGE_TYPES.includes(mimeType)) {
         return {
             valid: false,
-            error: `Unsupported image type: ${mimeType}. Allowed: ${ALLOWED_IMAGE_TYPES.join(', ')}`
+            error: `Unsupported image type: ${mimeType}. Allowed: ${ALLOWED_IMAGE_TYPES.join(', ')}`,
         }
     }
 
     const base64Data = base64Image.split(',')[1] || '',
-     sizeBytes = Math.ceil((base64Data.length * 3) / 4)
+        sizeBytes = Math.ceil((base64Data.length * 3) / 4)
 
     if (sizeBytes > MAX_IMAGE_SIZE_BYTES) {
         const sizeMB = (sizeBytes / (1024 * 1024)).toFixed(2),
-         maxMB = (MAX_IMAGE_SIZE_BYTES / (1024 * 1024)).toFixed(0)
+            maxMB = (MAX_IMAGE_SIZE_BYTES / (1024 * 1024)).toFixed(0)
         return {
             valid: false,
-            error: `Image too large: ${sizeMB} MB. Maximum allowed: ${maxMB} MB`
+            error: `Image too large: ${sizeMB} MB. Maximum allowed: ${maxMB} MB`,
         }
     }
 
     return {
         valid: true,
         sizeBytes,
-        mimeType
+        mimeType,
     }
 }

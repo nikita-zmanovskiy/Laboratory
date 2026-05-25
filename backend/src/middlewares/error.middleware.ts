@@ -9,9 +9,9 @@ export const errorMiddleware = (
     next: NextFunction
 ) => {
     if (err instanceof AppError) {
-        logger.warn(`[${err.statusCode}] ${err.message}`)
+        logger.warn(err.message, { statusCode: err.statusCode })
     } else {
-        logger.error('[500]', err.message)
+        logger.error('unhandled error', err)
     }
 
     //не отправлен ли ответ
@@ -20,11 +20,11 @@ export const errorMiddleware = (
     }
 
     const statusCode = err instanceof AppError ? err.statusCode : 500,
-     message = err instanceof AppError ? err.message : 'Internal server error'
+        message = err instanceof AppError ? err.message : 'Internal server error'
 
     res.status(statusCode).json({
         error: message,
         session_id: req.body?.session_id || null,
-        classroom_code: req.body?.classroom_code || req.headers?.['x-classroom-code'] || null
+        classroom_code: req.body?.classroom_code || req.headers?.['x-classroom-code'] || null,
     })
 }
