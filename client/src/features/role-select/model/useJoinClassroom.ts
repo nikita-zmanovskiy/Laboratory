@@ -2,7 +2,7 @@ import { useCallback,useState } from "react"
 import { useRouter } from "next/navigation"
 import { AxiosError } from "axios"
 
-import { useRoleStore } from "@/features/role-select"
+import { useRoleStore } from "@/entities/session"
 
 import { http } from "@/shared/api"
 

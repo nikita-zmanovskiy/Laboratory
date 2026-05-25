@@ -1,6 +1,7 @@
 import { useCallback,useRef, useState } from "react"
 
-import { isValidBase64Image,toBase64 } from "@/shared"
+import { toBase64 } from "@/shared/lib/toBase64"
+import { isValidBase64Image } from "@/shared/lib/validateBase64"
 
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"],
  MAX_FILE_SIZE = 5 * 1024 * 1024

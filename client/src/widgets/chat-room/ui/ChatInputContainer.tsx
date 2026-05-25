@@ -1,7 +1,8 @@
 "use client"
 
+import { useChatInput } from "../model/useChatInput"
+
 import { ChatInputView } from "./ChatInputView"
-import { useChatInput } from "../../../features/chat-input/model/useChatInput"
 
 export interface ChatInputControlsState {
     isLoading: boolean

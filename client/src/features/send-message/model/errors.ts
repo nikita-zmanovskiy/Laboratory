@@ -1,6 +1,6 @@
 import { AxiosError } from "axios"
 
-import { getApiErrorMessage } from "@/shared"
+import { getApiErrorMessage } from "@/shared/lib/apiErrors"
 
 export interface SendMessageErrorResult {
     assistantText: string

@@ -3,7 +3,7 @@
 import { useEffect,useState } from "react"
 import { useRouter } from "next/navigation"
 
-import { useRoleStore } from "@/features/role-select"
+import { useRoleStore } from "@/entities/session"
 
 import { useCreateClassroom } from "../model/useCreateClassroom"
 

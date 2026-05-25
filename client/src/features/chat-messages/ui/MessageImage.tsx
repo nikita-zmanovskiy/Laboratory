@@ -1,7 +1,7 @@
 "use client"
 
-import Image from "next/image"
 import { useState } from "react"
+import Image from "next/image"
 import type { KeyboardEvent, MouseEvent } from "react"
 
 interface ImageWithLoaderProps {
@@ -58,6 +58,8 @@ const ImageWithLoader = ({ src, alt, className }: ImageWithLoaderProps) => {
 				<Image
 					src={src}
 					alt={alt}
+					width={300}
+					height={300}
 					onLoad={() => setLoaded(true)}
 					onError={() => setHasError(true)}
 					className={`${className} min-h-[200px] transition-opacity duration-300 ${

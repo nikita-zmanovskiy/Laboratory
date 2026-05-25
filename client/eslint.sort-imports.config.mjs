@@ -1,7 +1,7 @@
 import simpleImportSort from "eslint-plugin-simple-import-sort";
 import tsParser from "@typescript-eslint/parser";
 
-export default [
+const sortImportsConfig = [
 	{
 		ignores: [
 			".next/**",
@@ -52,3 +52,5 @@ export default [
 		},
 	},
 ];
+
+export default sortImportsConfig;

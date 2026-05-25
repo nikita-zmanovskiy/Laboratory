@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react"
 
-export const useAutoScroll = (deps: unknown[]) => {
+export const useAutoScroll = (messageCount: number, isLoading: boolean) => {
     const bottomRef = useRef<HTMLDivElement>(null)
 
     useEffect(() => {
@@ -8,7 +8,7 @@ export const useAutoScroll = (deps: unknown[]) => {
             bottomRef.current?.scrollIntoView({ behavior: "smooth" })
         }, 500)
         return () => clearTimeout(timer)
-    }, deps)
+    }, [messageCount, isLoading])
 
     return bottomRef
 }

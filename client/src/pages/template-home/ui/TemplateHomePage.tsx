@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation"
 
 import { ChatRoomWidget, useClassroomSocket } from "@/widgets/chat-room"
 
-import { useRoleStore } from "@/features/role-select"
-import { useLessonTimer } from "@/features/teacher-panel/model/useLessonTimer"
+import { useLessonTimer } from "@/features/teacher-panel"
 
 import { useChatStore } from "@/entities/chat"
+import { useRoleStore } from "@/entities/session"
 import { useSessionStore } from "@/entities/session"
 
 import { establishTeacherPreviewSession } from "@/shared/api/classroom"
@@ -88,23 +88,6 @@ export default function TemplateHomePage() {
 
     const handleExit = () => {
         if (role === "teacher") {
-            let target = "/teacher"
-            try {
-                const stored = localStorage.getItem("currentClass")
-                if (stored) {
-                    const parsed = JSON.parse(stored) as { code: string; expires_at: string }
-                    if (new Date(parsed.expires_at).getTime() > Date.now()) {
-                        target = `/teacher/classroom/${parsed.code}`
-                    }
-                } else if (classroomCode) {
-                    target = `/teacher/classroom/${classroomCode}`
-                }
-            } catch {
-                if (classroomCode) {
-                    target = `/teacher/classroom/${classroomCode}`
-                }
-            }
-
             router.push('/')
             setTimeout(() => {
                 useChatStore.getState().clearMessages()

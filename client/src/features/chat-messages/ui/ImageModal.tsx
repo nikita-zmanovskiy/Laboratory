@@ -1,7 +1,7 @@
 "use client"
 
-import Image from "next/image"
 import { useEffect, useState } from "react"
+import Image from "next/image"
 
 interface ImageModalProps {
     src: string
@@ -42,8 +42,8 @@ export const ImageModal = ({ src, onClose }: ImageModalProps) => {
             <Image
                 src={src}
                 alt="Изображение"
-                fill
-                sizes="100vw"
+                 width={700}
+                height={700}
                 onLoad={() => setLoaded(true)}
                 className={`max-h-[85vh] max-w-[90vw] rounded-lg object-contain shadow-2xl transition-all duration-500 ${
                     loaded && !closing ? "opacity-100 scale-100" : "opacity-0 scale-95"

@@ -5,10 +5,10 @@ import { useRouter } from "next/navigation"
 
 import { useClassroomSocket } from "@/widgets/chat-room"
 
-import { useRoleStore } from "@/features/role-select"
-import { useLessonTimer } from "@/features/teacher-panel/model/useLessonTimer"
+import { useLessonTimer } from "@/features/teacher-panel"
 
 import { useChatStore } from "@/entities/chat"
+import { useRoleStore } from "@/entities/session"
 import { useSessionStore } from "@/entities/session"
 
 import { establishTeacherPreviewSession } from "@/shared/api/classroom"

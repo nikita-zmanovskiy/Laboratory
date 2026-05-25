@@ -1,11 +1,10 @@
 import { useCallback, useState } from "react"
 
-import { useRoleStore } from "@/features/role-select"
-
 import { useChatStore } from "@/entities/chat"
+import { useRoleStore } from "@/entities/session"
 import { useSessionStore } from "@/entities/session"
 
-import { generateImage, generateText } from "@/shared"
+import { generateImage, generateText } from "@/shared/api/generate"
 
 import { mapSendMessageError } from "./errors"
 import { mapGenerateResponseToMessage } from "./mapper"

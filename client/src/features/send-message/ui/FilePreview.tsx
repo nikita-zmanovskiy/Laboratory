@@ -1,4 +1,5 @@
 import Image from 'next/image'
+
 import styles from './filePreview.module.css'
 
 interface FilePreviewProps {

@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef,useState } from "react"
 import { useRouter } from "next/navigation"
 
-import { useRoleStore } from "@/features/role-select"
+import { useRoleStore } from "@/entities/session"
 
 import { useLessonNotification } from "@/shared/lib/useLessonNotification"
 
