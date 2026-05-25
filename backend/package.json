@@ -4,6 +4,7 @@
   "main": "src/server.js",
   "type": "module",
   "scripts": {
+    "db:init": "tsx src/db/runMigrations.ts",
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
     "start": "NODE_ENV=production node dist/server.js",
