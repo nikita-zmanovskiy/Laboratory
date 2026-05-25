@@ -4,7 +4,7 @@ import { useChatStore } from "@/entities/chat"
 import { useRoleStore } from "@/entities/session"
 import { useSessionStore } from "@/entities/session"
 
-import { generateImage, generateText } from "@/shared/api/generate"
+import { generateImage, generateText } from "@/shared/api"
 
 import { mapSendMessageError } from "./errors"
 import { mapGenerateResponseToMessage } from "./mapper"

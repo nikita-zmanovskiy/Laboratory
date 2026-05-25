@@ -93,17 +93,17 @@ export class GigaChatService extends BaseAiService {
         if (config.aiMock) {
             return this.mockService.generate(prompt, imageBase64)
         }
-
+    
         const fileId = await this.filesService.uploadImage(imageBase64)
-
+    
         const requestData = this.requestFactory.buildImageRequest({
             prompt,
             fileId,
             systemPrompt,
             imageModel: this.imageModel,
         })
-
-        return this.sendChatCompletion(requestData)
+    
+        return this.sendChatCompletion(requestData, 120000)
     }
 
     async analyzeImage(

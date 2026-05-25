@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react"
 
-import { getWebSocketAuthToken } from "@/shared/api/ws"
+import { getWebSocketAuthToken } from "@/shared/api"
 import { closeWebSocket } from "@/shared/lib/closeWebSocket"
 import { getClassroomWebSocketUrl } from "@/shared/lib/wsUrl"
 

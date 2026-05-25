@@ -70,7 +70,17 @@ export class GigaChatAuthService {
             return this.tokenCache.accessToken
         } catch (error: unknown) {
             const status = axios.isAxiosError(error) ? error.response?.status : undefined
-            logger.error('gigaChat auth - error', { status })
+            const code = axios.isAxiosError(error) ? error.code : undefined
+        
+            logger.error('gigaChat auth - error', { status, code })
+        
+            if (
+                axios.isAxiosError(error) &&
+                (error.code === 'ECONNABORTED' || error.code === 'ETIMEDOUT')
+            ) {
+                throw new AppError(504, 'GigaChat auth request timed out')
+            }
+        
             throw new AppError(503, 'failed gigaChat API')
         }
     }

@@ -108,9 +108,9 @@ export const RoleCard = ({
             src={defaultImage}
             alt={title}
             fill
-            quality={100}
-            unoptimized
-            priority
+            quality={70}
+            sizes="(max-width: 768px) 90vw, 378px"
+            fetchPriority="high"
             className="absolute inset-0 object-contain transition-all duration-500 ease-out group-hover:scale-90 group-hover:opacity-0"
           />
 
@@ -118,9 +118,8 @@ export const RoleCard = ({
             src={hoverImage}
             alt=""
             fill
-            quality={100}
-            unoptimized
-            priority
+            sizes="(max-width: 768px) 90vw, 378px"
+            quality={70}
             className="absolute inset-0 scale-110 object-contain opacity-0 transition-all duration-500 ease-out group-hover:scale-100 group-hover:opacity-100"
           />
         </div>

@@ -1,3 +1,5 @@
+import type { AxiosRequestConfig } from "axios"
+
 import { ensureCsrfSession } from "./csrf"
 import { http } from "./http"
 
@@ -87,20 +89,23 @@ export const createClassroom = async (
 }
 
 export const getClassroomLogs = async (
-    code: string,
-    page = 1,
-    limit = 20,
-    filters?: LogFilters
+	code: string,
+	page = 1,
+	limit = 20,
+	filters?: LogFilters,
+	config?: Pick<AxiosRequestConfig, "signal">
 ): Promise<ClassroomLogsResponse> => {
-    const response = await http.get<ClassroomLogsResponse>(`/api/logs`, {
-        params: {
-            classroom_code: code,
-            page,
-            limit,
-            ...filters,
-        },
-    })
-    return response.data
+	const response = await http.get("/api/logs", {
+		...config,
+		params: {
+			classroom_code: code,
+			page,
+			limit,
+			...filters,
+		},
+	})
+
+	return response.data
 }
 
 export const getClassroomStats = async (code: string): Promise<ClassroomStatsResponse> => {

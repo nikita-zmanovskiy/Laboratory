@@ -84,8 +84,12 @@ const securityHeaders = [
 ]
 
 const nextConfig: NextConfig = {
+	output: 'standalone',
 	env: {
 		NEXT_PUBLIC_BACKEND_URL: publicBackendUrl,
+	},
+	images: {
+		qualities: [70],
 	},
 
 	reactStrictMode: true,
