@@ -24,7 +24,12 @@ cp .env.production.example .env.production
 ```
 
 
+
 запуск проекта: 
+```bash 
+docker compose --env-file .env.production build --no-cache
+```
+
 ```bash
 docker compose --env-file .env.production up --build -d
 ```
