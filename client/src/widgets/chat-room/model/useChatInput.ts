@@ -23,6 +23,7 @@ interface UseChatInputReturn {
 export const useChatInput = (): UseChatInputReturn => {
     const mode = useChatStore((state) => state.mode),
      [inputValue, setInputValue] = useState(""),
+     //есть ли подключение к интернету
      [isOnline, setIsOnline] = useState(true)
 
     const { isLoading, error: sendError, sendMessage } = useSendMessage(),

@@ -9,6 +9,7 @@ export const useAnimatedVisibility = (isVisible: boolean) => {
    [isAnimatedIn, setIsAnimatedIn] = useState(false)
 
   useEffect(() => {
+    // тип setTimeout
     let timerId: ReturnType<typeof setTimeout>
 
     if (isVisible) {

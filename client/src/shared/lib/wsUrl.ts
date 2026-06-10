@@ -1,12 +1,13 @@
 function httpBaseToWsBase(httpUrl: string): string {
-    const url = new URL(httpUrl)
-    const wsProtocol = url.protocol === "https:" ? "wss:" : "ws:"
+    const url = new URL(httpUrl),
+     wsProtocol = url.protocol === "https:" ? "wss:" : "ws:"
     return `${wsProtocol}//${url.host}`
 }
 
 function getWsBaseUrl(): string {
     const explicit = process.env.NEXT_PUBLIC_WS_URL?.trim()
     if (explicit) {
+        // удаляем последний слэш если он есть
         return explicit.replace(/\/$/, "")
     }
 

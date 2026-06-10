@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
 	type KeyboardEvent,
@@ -7,20 +7,20 @@ import {
 	useMemo,
 	useRef,
 	useState,
-} from "react";
+} from "react"
 
-const CLOSE_ANIMATION_DURATION_MS = 150;
+const CLOSE_ANIMATION_DURATION_MS = 150
 
 export interface UseCustomSelectOption<T extends string | number> {
-	label: string;
-	value: T;
+	label: string
+	value: T
 }
 
 interface UseCustomSelectParams<T extends string | number> {
-	value: T;
-	options: UseCustomSelectOption<T>[];
-	disabled: boolean;
-	onChange: (value: T) => void;
+	value: T
+	options: UseCustomSelectOption<T>[]
+	disabled: boolean
+	onChange: (value: T) => void
 }
 
 export const useCustomSelect = <T extends string | number>({
@@ -29,84 +29,84 @@ export const useCustomSelect = <T extends string | number>({
 	disabled,
 	onChange,
 }: UseCustomSelectParams<T>) => {
-	const [open, setOpen] = useState(false);
-	const [closing, setClosing] = useState(false);
-	const [activeIndex, setActiveIndex] = useState(0);
+	const [open, setOpen] = useState(false),
+	 [closing, setClosing] = useState(false),
+	 [activeIndex, setActiveIndex] = useState(0)
 
-	const rootRef = useRef<HTMLDivElement | null>(null);
-	const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+	const rootRef = useRef<HTMLDivElement | null>(null),
+	 closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
 	const selectedIndex = useMemo(
 		() => options.findIndex((option) => option.value === value),
 		[options, value],
-	);
+	)
 
-	const selected = selectedIndex >= 0 ? options[selectedIndex] : null;
+	const selected = selectedIndex >= 0 ? options[selectedIndex] : null
 
+	// используем useCallback для того чтобы не создавать новые функции при каждом рендере
 	const clearCloseTimer = useCallback(() => {
 		if (closeTimerRef.current) {
-			clearTimeout(closeTimerRef.current);
-			closeTimerRef.current = null;
+			clearTimeout(closeTimerRef.current)
+			closeTimerRef.current = null
 		}
 	}, []);
 
 	const openSelect = useCallback(() => {
 		if (disabled || options.length === 0) {
-			return;
+			return
 		}
-
-		clearCloseTimer();
-		setClosing(false);
-		setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0);
-		setOpen(true);
-	}, [clearCloseTimer, disabled, options.length, selectedIndex]);
+		clearCloseTimer()
+		setClosing(false)
+		setActiveIndex(selectedIndex >= 0 ? selectedIndex : 0)
+		setOpen(true)
+	}, [clearCloseTimer, disabled, options.length, selectedIndex])
 
 	const closeSelect = useCallback(
 		(withAnimation = true) => {
 			if (!open) {
-				return;
+				return
 			}
 
-			clearCloseTimer();
+			clearCloseTimer()
 
 			if (!withAnimation) {
-				setOpen(false);
-				setClosing(false);
-				return;
+				setOpen(false)
+				setClosing(false)
+				return
 			}
 
-			setClosing(true);
+			setClosing(true)
 
 			closeTimerRef.current = setTimeout(() => {
-				setOpen(false);
-				setClosing(false);
-				closeTimerRef.current = null;
-			}, CLOSE_ANIMATION_DURATION_MS);
+				setOpen(false)
+				setClosing(false)
+				closeTimerRef.current = null
+			}, CLOSE_ANIMATION_DURATION_MS)
 		},
 		[clearCloseTimer, open],
 	);
 
 	const toggle = useCallback(() => {
 		if (disabled) {
-			return;
+			return
 		}
 
 		if (open && !closing) {
-			closeSelect();
-			return;
+			closeSelect()
+			return
 		}
 
-		openSelect();
-	}, [closeSelect, closing, disabled, open, openSelect]);
+		openSelect()
+	}, [closeSelect, closing, disabled, open, openSelect])
 
 	const selectOption = useCallback(
 		(nextValue: T) => {
 			if (disabled) {
-				return;
+				return
 			}
 
-			onChange(nextValue);
-			closeSelect();
+			onChange(nextValue)
+			closeSelect()
 		},
 		[closeSelect, disabled, onChange],
 	);

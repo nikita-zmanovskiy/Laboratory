@@ -9,6 +9,7 @@ export const copyToClipboard = async (text: string): Promise<boolean> => {
         textarea.style.opacity = "0"
         document.body.appendChild(textarea)
         textarea.select()
+        //команда для копирования текста в буфер обмена старое
         document.execCommand("copy")
         document.body.removeChild(textarea)
         return true

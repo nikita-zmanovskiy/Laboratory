@@ -32,9 +32,9 @@ export function CustomSelect<T extends string | number = string>({
 	compact = false,
 	className = "",
 }: CustomSelectProps<T>) {
-	const selectId = useId();
-	const listboxId = `${selectId}-listbox`;
-	const labelId = `${selectId}-label`;
+	const selectId = useId(),
+	 listboxId = `${selectId}-listbox`,
+	 labelId = `${selectId}-label`
 
 	const { rootRef, open, closing, selected, toggle, selectOption } =
 		useCustomSelect<T>({

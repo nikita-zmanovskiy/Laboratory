@@ -12,7 +12,7 @@ export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
     const router = useRouter()
 
     useEffect(() => {
-        if (!pathname || pathname === "/") return
+        if (!pathname || pathname === "/" || pathname === "/offline") return
 
         if (!role) {
             if (pathname.startsWith("/teacher/classroom/")) {

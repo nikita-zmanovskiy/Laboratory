@@ -1,0 +1,29 @@
+
+
+Из корня проекта по очереди:
+backend
+npm run build
+npm run lint
+npm run format
+npm run check
+npm run fix
+
+
+Потом:
+cd ../client
+pnpm check
+pnpm typecheck
+pnpm build
+
+
+
+пересобрать докер в папке laboratory - docker compose --env-file .env.production build --no-cache
+
+потом docker compose --env-file .env.production up -d --force-recreate
+
+для тестов - npm run test:all
+
+k6 
+npm run load:health
+npm run load:csrf
+npm run load:generate

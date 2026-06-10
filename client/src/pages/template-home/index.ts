@@ -1,3 +1,1 @@
-import TemplateHomePage from "./ui/TemplateHomePage";
-
-export { TemplateHomePage };
+export { TemplateHomePage } from "./ui/TemplateHomePage"

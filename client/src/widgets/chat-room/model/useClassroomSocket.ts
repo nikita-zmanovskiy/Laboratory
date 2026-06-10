@@ -13,15 +13,33 @@ interface UseClassroomSocketReturn {
 }
 
 export const useClassroomSocket = (classroomCode: string): UseClassroomSocketReturn => {
-    const [isClosed, setIsClosed] = useState(false),
-     [closeMessage, setCloseMessage] = useState(""),
-     wsRef = useRef<WebSocket | null>(null),
-     extendCallbackRef = useRef<((newExpiresAt: string) => void) | null>(null),
-     connectingRef = useRef(false)
+    const [isClosed, setIsClosed] = useState(false)
+    const [closeMessage, setCloseMessage] = useState("")
+    const wsRef = useRef<WebSocket | null>(null)
+    const extendCallbackRef = useRef<((newExpiresAt: string) => void) | null>(null)
+    const connectingRef = useRef(false)
+    const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+    const reconnectAttemptsRef = useRef(0)
 
     const onExtend = useCallback((callback: (newExpiresAt: string) => void) => {
         extendCallbackRef.current = callback
     }, [])
+
+    const clearReconnectTimeout = useCallback(() => {
+        if (reconnectTimeoutRef.current) {
+            clearTimeout(reconnectTimeoutRef.current)
+            reconnectTimeoutRef.current = null
+        }
+    }, [])
+
+    const scheduleReconnect = useCallback(() => {
+        clearReconnectTimeout()
+        const delay = Math.min(5000 * 2 ** reconnectAttemptsRef.current, 60000)
+        reconnectTimeoutRef.current = setTimeout(() => {
+            reconnectAttemptsRef.current += 1
+            void connect()
+        }, delay)
+    }, [clearReconnectTimeout])
 
     const connect = useCallback(async () => {
         if (wsRef.current?.readyState === WebSocket.OPEN || connectingRef.current) return
@@ -29,8 +47,8 @@ export const useClassroomSocket = (classroomCode: string): UseClassroomSocketRet
         connectingRef.current = true
 
         try {
-            const { token } = await getWebSocketAuthToken(classroomCode),
-             ws = new WebSocket(getClassroomWebSocketUrl(classroomCode, token))
+            const { token } = await getWebSocketAuthToken(classroomCode)
+            const ws = new WebSocket(getClassroomWebSocketUrl(classroomCode, token))
 
             ws.onmessage = (event) => {
                 try {
@@ -51,17 +69,22 @@ export const useClassroomSocket = (classroomCode: string): UseClassroomSocketRet
             ws.onclose = (event) => {
                 wsRef.current = null
                 if (event.code !== 1000) {
-                    setTimeout(() => void connect(), 5000)
+                    scheduleReconnect()
                 }
             }
 
+            ws.onerror = () => {
+                ws?.close()
+            }
+
             wsRef.current = ws
+            reconnectAttemptsRef.current = 0 // сбрасываем счетчик при успешном подключении
         } catch {
-            setTimeout(() => void connect(), 5000)
+            scheduleReconnect()
         } finally {
             connectingRef.current = false
         }
-    }, [classroomCode])
+    }, [classroomCode, scheduleReconnect])
 
     useEffect(() => {
         void connect()
@@ -70,8 +93,9 @@ export const useClassroomSocket = (classroomCode: string): UseClassroomSocketRet
                 closeWebSocket(wsRef.current)
                 wsRef.current = null
             }
+            clearReconnectTimeout()
         }
-    }, [connect])
+    }, [connect, clearReconnectTimeout])
 
     return { isClosed, closeMessage, onExtend }
 }

@@ -1,139 +1,28 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-
-import { ChatRoomWidget, useClassroomSocket } from "@/widgets/chat-room"
-
-import { useLessonTimer } from "@/features/teacher-panel"
-
-import { useChatStore } from "@/entities/chat"
-import { useRoleStore } from "@/entities/session"
-import { useSessionStore } from "@/entities/session"
-
-import { establishTeacherPreviewSession } from "@/shared/api/classroom"
-import { useLessonNotification } from "@/shared/lib/useLessonNotification"
-import { ClassroomClosedModal } from "@/shared/ui/ClassroomClosedModal"
+import styles from './templateHomePage.module.css'
+import { ChatRoomWidget } from "@/widgets/chat-room"
 import { LessonTimer } from "@/shared/ui/lesson-timer/ui/LessonTimer"
 import { NotificationToast } from "@/shared/ui/notification-toast/ui/NotificationToast"
+import { ClassroomClosedModal } from "@/shared/ui/ClassroomClosedModal"
+import { useTemplateHomePage } from "../model/useTemplateHomePage"
 
-import styles from './templateHomePage.module.css'
+export function TemplateHomePage() {
+  const {
+    sessionId,
+    expiresAt,
+    showNotification,
+    notificationMessage,
+    dismissNotification,
+    isClosed,
+    closeMessage,
+    isExpired,
+    handleExit,
+    handleExitToHome,
+  } = useTemplateHomePage()
 
-export default function TemplateHomePage() {
-    const messages = useChatStore((state) => state.messages)
-    const isLoading = useChatStore((state) => state.isLoading)
-    const initialize = useSessionStore((state) => state.initialize)
-    const resetRole = useRoleStore((state) => state.reset)
-    const exitChat = useRoleStore((state) => state.exitChat)
-    const loadFromStorage = useRoleStore((state) => state.loadFromStorage)
-    const classroomCode = useRoleStore((state) => state.classroomCode)
-    const role = useRoleStore((state) => state.role)
-    const router = useRouter()
-    const sessionId = useSessionStore((state) => state.sessionId)
-    const [expiresAt, setExpiresAt] = useState<string | null>(null)
-    const { isClosed, closeMessage, onExtend } = useClassroomSocket(classroomCode || "")
-    const { isExpired } = useLessonTimer(expiresAt)
-    const { showNotification, notificationMessage, dismissNotification } = useLessonNotification(expiresAt)
-
-    useEffect(() => {
-        initialize()
-        loadFromStorage()
-    }, [initialize, loadFromStorage])
-
-    useEffect(() => {
-        if (role !== "teacher" || !classroomCode) return
-
-        const stored = localStorage.getItem("currentClass")
-        if (stored) {
-            try {
-                const parsed = JSON.parse(stored) as { code: string; expires_at: string }
-                if (parsed.code === classroomCode && parsed.expires_at) {
-                    setExpiresAt(parsed.expires_at)
-                }
-            } catch {
-                // ignore
-            }
-        }
-
-        establishTeacherPreviewSession(classroomCode).catch(() => {
-            // сессия учителя истекла - вернуть на панель
-        })
-    }, [role, classroomCode])
-
-    useEffect(() => {
-        const stored = localStorage.getItem("expiresAt")
-        if (stored) setExpiresAt(stored)
-    }, [])
-
-    useEffect(() => {
-        onExtend((newExpiresAt: string) => {
-            setExpiresAt(newExpiresAt)
-        })
-    }, [onExtend])
-
-    useEffect(() => {
-        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-            if (messages.length > 0 || isLoading) {
-                e.preventDefault()
-            }
-        }
-        window.addEventListener("beforeunload", handleBeforeUnload)
-        return () => window.removeEventListener("beforeunload", handleBeforeUnload)
-    }, [messages, isLoading])
-
-    const handleExitToHome = () => {
-        resetRole()
-        router.push("/")
-    }
-
-    const handleExit = () => {
-        if (role === "teacher") {
-            router.push('/')
-            setTimeout(() => {
-                useChatStore.getState().clearMessages()
-                useRoleStore.getState().setRole("teacher")
-            }, 500)
-            return
-        }
-
-        let target = "/"
-        try {
-            const stored = localStorage.getItem("currentClass")
-            if (stored) {
-                const parsed = JSON.parse(stored) as { code: string; expires_at: string }
-                if (new Date(parsed.expires_at).getTime() > Date.now()) {
-                    target = `/teacher/classroom/${parsed.code}`
-                }
-            }
-        } catch {
-            // ignore
-        }
-
-        router.push('/')
-        setTimeout(() => {
-            useChatStore.getState().clearMessages()
-            if (target.startsWith("/teacher")) {
-                const stored = localStorage.getItem("currentClass")
-                if (stored) {
-                    try {
-                        const parsed = JSON.parse(stored) as { code: string; expires_at: string }
-                        useRoleStore.getState().setRole("teacher")
-                        useRoleStore.getState().setClassroomCode(parsed.code)
-                        useRoleStore.getState().setExpiresAt(parsed.expires_at)
-                    } catch {
-                        useRoleStore.getState().setRole("teacher")
-                    }
-                } else {
-                    useRoleStore.getState().setRole("teacher")
-                }
-            } else {
-                exitChat()
-            }
-        }, 500)
-    }
-
-    return (
-        <main className="mx-auto flex h-screen w-full max-w-5xl flex-col overflow-hidden px-4 !pb-0">
+  return (
+    <main className="mx-auto flex h-screen w-full max-w-5xl flex-col overflow-hidden px-4 !pb-0">
             {showNotification && (
                 <NotificationToast message={notificationMessage} onClose={dismissNotification} />
             )}
@@ -166,5 +55,5 @@ export default function TemplateHomePage() {
                 />
             )}
         </main>
-    )
+  )
 }
