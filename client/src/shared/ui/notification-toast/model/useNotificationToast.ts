@@ -4,10 +4,15 @@ import { useEffect, useState } from "react"
 
 const EXIT_ANIMATION_DURATION_MS = 300
 
-interface UseNotificationToastParams {
+interface UseNotificationToastData {
   duration: number
+}
+
+interface UseNotificationToastHandlers {
   onClose: () => void
 }
+
+type UseNotificationToastParams = UseNotificationToastData & UseNotificationToastHandlers
 
 export const useNotificationToast = ({
   duration,

@@ -2,11 +2,16 @@
 
 import { useNotificationToast } from "../model/useNotificationToast"
 
-interface NotificationToastProps {
+interface NotificationToastData {
   message: string
   duration?: number
+}
+
+interface NotificationToastHandlers {
   onClose: () => void
 }
+
+type NotificationToastProps = NotificationToastData & NotificationToastHandlers
 
 export const NotificationToast = ({
   message,

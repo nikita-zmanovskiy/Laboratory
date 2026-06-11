@@ -1,0 +1,102 @@
+export interface CreateClassroomResponseDto {
+    id: string
+    code: string
+    title: string
+    is_active: boolean
+    expires_at: string
+}
+
+export interface JoinClassroomResponseDto {
+    expires_at?: string
+}
+
+export interface ClassroomLogDto {
+    id: number
+    timestamp: string
+    classroom_id: string | null
+    session_id: string
+    mode: string
+    prompt_hash: string | null
+    image_attached: boolean
+    tokens_input: number | null
+    tokens_output: number | null
+    tokens_is_approximate?: boolean
+    status: number
+    response_time_ms: number
+    error_message: string | null
+}
+
+export interface TokensOverTimePointDto {
+    timestamp: string
+    input: number
+    output: number
+}
+
+export interface RequestsPerMinutePointDto {
+    minute: string
+    count: number
+}
+
+export interface ModeDistributionDto {
+    text: number
+    image: number
+}
+
+export interface TopStudentDto {
+    session_id: string
+    requests: number
+    avg_tokens: number
+}
+
+export interface ClassroomStatsChartsDto {
+    tokens_over_time: TokensOverTimePointDto[]
+    requests_per_minute: RequestsPerMinutePointDto[]
+    mode_distribution: ModeDistributionDto
+    avg_tokens_per_request: number
+    avg_response_time: number
+    error_rate: number
+    total_requests: number
+    active_students: number
+}
+
+export interface ClassroomStatsDto {
+    total_requests: number
+    text_requests: number
+    image_requests: number
+    errors: number
+    avg_response_time: number
+    active_sessions: number
+    first_request: string | null
+    last_request: string | null
+    error_rate: string
+    expires_at: string | null
+    top_students: TopStudentDto[]
+    charts: ClassroomStatsChartsDto
+}
+
+export interface ClassroomLogsResponseDto {
+    logs: ClassroomLogDto[]
+    total: number
+    page: number
+    total_pages: number
+}
+
+export interface ClassroomStatsResponseDto {
+    stats: ClassroomStatsDto
+    expires_at?: string | null
+}
+
+export interface TeacherPreviewSessionResponseDto {
+    classroom_code: string
+    session_id: string
+    expires_at: string
+}
+
+export interface WebSocketAuthResponseDto {
+    token: string
+    role: "teacher" | "student"
+}
+
+export interface ExtendClassroomResponseDto {
+    new_expires_at?: string
+}

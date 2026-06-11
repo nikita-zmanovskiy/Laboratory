@@ -1,11 +1,15 @@
-interface ChatModeToggleProps {
+interface ChatModeToggleData {
     isTextMode: boolean
     isLoading: boolean
     disabled: boolean
+}
+
+interface ChatModeToggleHandlers {
     onSetText: () => void
     onSetImage: () => void
 }
 
+type ChatModeToggleProps = ChatModeToggleData & ChatModeToggleHandlers
 export const ChatModeToggle = ({
     isTextMode,
     isLoading,

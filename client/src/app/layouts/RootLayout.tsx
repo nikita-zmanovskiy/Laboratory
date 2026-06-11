@@ -5,6 +5,7 @@ import { PageLoader } from "@/shared/ui/page-loader/ui/PageLoader"
 import { ThemeToggle } from "@/shared/ui/theme/ui/ThemeToggle"
 
 import { ServiceWorkerProvider } from "../providers/ServiceWorkerProvider"
+
 import { AuthGuard } from "./AuthGuard"
 
 import "./globals.css"

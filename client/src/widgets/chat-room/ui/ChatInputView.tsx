@@ -1,12 +1,5 @@
 "use client";
 
-import type {
-  ChangeEvent,
-  FormEvent,
-  KeyboardEvent,
-  ReactNode,
-  RefObject,
-} from "react"
 
 import { FilePreview, SendButton } from "@/features/send-message"
 
@@ -15,23 +8,8 @@ import { CHAT_INPUT_MAX_LENGTH } from "@/shared/config/chat"
 import { AttachmentButton } from "./AttachmentButton"
 
 import styles from "./chatInput.module.css"
+import { ChatInputViewProps } from "../types";
 
-export interface ChatInputViewProps {
-  inputValue: string
-  isTextMode: boolean
-  isLoading: boolean
-  isImageLoading: boolean
-  isOnline: boolean
-  displayError: string | null
-  imagePreview: string | null
-  fileInputRef: RefObject<HTMLInputElement | null>
-  modeToggleSlot: ReactNode
-  onInputChange: (value: string) => void
-  onSend: (event?: FormEvent) => void
-  onKeyDown: (event: KeyboardEvent<HTMLTextAreaElement>) => void
-  onFileChange: (event: ChangeEvent<HTMLInputElement>) => void
-  onRemoveFile: () => void
-}
 
 export const ChatInputView = ({
   inputValue,

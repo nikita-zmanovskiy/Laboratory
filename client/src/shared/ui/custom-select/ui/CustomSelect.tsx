@@ -10,17 +10,21 @@ export interface CustomSelectOption<T extends string | number = string> {
 	label: string;
 	value: T;
 }
-
-interface CustomSelectProps<T extends string | number = string> {
-	value: T;
-	options: CustomSelectOption<T>[];
-	onChange: (value: T) => void;
-	disabled?: boolean;
-	label?: string;
-	placeholder?: string;
-	compact?: boolean;
-	className?: string;
+interface CustomSelectData<T extends string | number = string> {
+    value: T
+    options: CustomSelectOption<T>[]
+    disabled?: boolean
+    label?: string
+    placeholder?: string
+    compact?: boolean
+    className?: string
 }
+
+interface CustomSelectHandlers<T extends string | number = string> {
+    onChange: (value: T) => void
+}
+
+type CustomSelectProps<T extends string | number = string> = CustomSelectData<T> & CustomSelectHandlers<T>
 
 export function CustomSelect<T extends string | number = string>({
 	value,

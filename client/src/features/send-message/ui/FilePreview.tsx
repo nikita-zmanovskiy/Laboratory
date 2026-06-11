@@ -2,11 +2,16 @@ import Image from 'next/image'
 
 import styles from './filePreview.module.css'
 
-interface FilePreviewProps {
+interface FilePreviewData {
     imagePreview: string
     isLoading: boolean
+}
+
+interface FilePreviewHandlers {
     onRemove: () => void
 }
+
+type FilePreviewProps = FilePreviewData & FilePreviewHandlers
 
 export const FilePreview = ({ imagePreview, isLoading, onRemove }: FilePreviewProps) => (
     <div

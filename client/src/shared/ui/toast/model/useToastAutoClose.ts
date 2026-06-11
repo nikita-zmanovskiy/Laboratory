@@ -4,11 +4,16 @@ import { useEffect, useState } from "react"
 
 const EXIT_ANIMATION_DURATION_MS = 300
 
-interface UseToastAutoCloseParams {
+interface UseToastAutoCloseData {
   isOpen: boolean
   duration: number
+}
+
+interface UseToastAutoCloseHandlers {
   onClose: () => void
 }
+
+type UseToastAutoCloseParams = UseToastAutoCloseData & UseToastAutoCloseHandlers
 
 export const useToastAutoClose = ({
   isOpen,

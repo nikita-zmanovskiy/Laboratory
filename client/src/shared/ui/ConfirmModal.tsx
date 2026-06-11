@@ -1,14 +1,19 @@
 "use client"
 
-interface ConfirmModalProps {
+interface ConfirmModalData {
     title: string
     message: string
     confirmLabel?: string
     cancelLabel?: string
     isLoading?: boolean
+}
+
+interface ConfirmModalHandlers {
     onConfirm: () => void
     onCancel: () => void
 }
+
+type ConfirmModalProps = ConfirmModalData & ConfirmModalHandlers
 
 export const ConfirmModal = ({
     title,

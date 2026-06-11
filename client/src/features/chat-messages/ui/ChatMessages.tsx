@@ -4,18 +4,23 @@ import React from "react"
 
 import type { Message } from "@/entities/chat"
 
-import { ImageModal } from "./ImageModal"
-import { MessageList } from "./MessageList"
+import { ImageModal } from "./image-modal/ImageModal"
+import { MessageList } from "./message-list/MessageList"
 
-interface ChatMessagesProps {
+interface ChatMessagesData {
     messages: Message[]
     isLoading: boolean
     isTextMode: boolean
     activeImage: string | null
-    onImageClick: (url: string | null) => void
-    onDownload: (e: React.MouseEvent, imageUrl: string, filename: string) => void
     bottomRef: React.RefObject<HTMLDivElement | null>
 }
+
+interface ChatMessagesHandlers {
+    onImageClick: (url: string | null) => void
+    onDownload: (e: React.MouseEvent, imageUrl: string, filename: string) => void
+}
+
+type ChatMessagesProps = ChatMessagesData & ChatMessagesHandlers
 
 export const ChatMessages = React.memo(({
     messages,

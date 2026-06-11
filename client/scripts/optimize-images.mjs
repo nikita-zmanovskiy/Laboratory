@@ -8,8 +8,8 @@ const images = [
 ]
 
 for (const image of images) {
-	const input = `public/images-original/${image}`
-	const output = `public/images/${image}`
+	const input = `public/images-original/${image}`,
+	 output = `public/images/${image}`
 
 	await sharp(input)
 		.resize({

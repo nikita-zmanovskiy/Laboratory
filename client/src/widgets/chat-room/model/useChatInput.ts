@@ -3,22 +3,8 @@ import { useCallback, useEffect, useState } from "react"
 import { useFileUpload,useSendMessage } from "@/features/send-message"
 
 import { useChatStore } from "@/entities/chat"
+import { UseChatInputReturn } from "../types"
 
-interface UseChatInputReturn {
-    inputValue: string
-    isTextMode: boolean
-    isLoading: boolean
-    isImageLoading: boolean
-    isOnline: boolean
-    displayError: string | null
-    imagePreview: string | null
-    fileInputRef: React.RefObject<HTMLInputElement | null>
-    onInputChange: (value: string) => void
-    onSend: (e?: React.FormEvent) => void
-    onKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void
-    onFileChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-    onRemoveFile: () => void
-}
 
 export const useChatInput = (): UseChatInputReturn => {
     const mode = useChatStore((state) => state.mode),

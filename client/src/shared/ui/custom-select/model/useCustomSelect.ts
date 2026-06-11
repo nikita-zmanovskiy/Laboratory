@@ -16,12 +16,17 @@ export interface UseCustomSelectOption<T extends string | number> {
 	value: T
 }
 
-interface UseCustomSelectParams<T extends string | number> {
-	value: T
-	options: UseCustomSelectOption<T>[]
-	disabled: boolean
-	onChange: (value: T) => void
+interface UseCustomSelectData<T extends string | number> {
+    value: T
+    options: UseCustomSelectOption<T>[]
+    disabled: boolean
 }
+
+interface UseCustomSelectHandlers<T extends string | number> {
+    onChange: (value: T) => void
+}
+
+type UseCustomSelectParams<T extends string | number> = UseCustomSelectData<T> & UseCustomSelectHandlers<T>
 
 export const useCustomSelect = <T extends string | number>({
 	value,

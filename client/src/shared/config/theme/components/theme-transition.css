@@ -1,0 +1,25 @@
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+    transition-property:
+        background-color,
+        border-color,
+        color,
+        fill,
+        stroke,
+        box-shadow,
+        outline-color,
+        text-decoration-color;
+    transition-duration: 300ms;
+    transition-timing-function: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .theme-transition,
+    .theme-transition *,
+    .theme-transition *::before,
+    .theme-transition *::after {
+        transition: none !important;
+    }
+}

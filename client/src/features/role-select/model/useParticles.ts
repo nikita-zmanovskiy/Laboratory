@@ -19,13 +19,13 @@ const PARTICLE_COLORS = [
   "#ff5d867d",
 ]
 
-const PARTICLES_COUNT = 30
-const PARTICLES_LIFETIME_MS = 1500
-const PARTICLES_DISTANCE_PX = 300
+const PARTICLES_COUNT = 30,
+ PARTICLES_LIFETIME_MS = 1500,
+ PARTICLES_DISTANCE_PX = 300
 
 export const useParticles = () => {
-  const [particles, setParticles] = useState<Particle[]>([])
-  const timersRef = useRef<Array<ReturnType<typeof setTimeout>>>([])
+  const [particles, setParticles] = useState<Particle[]>([]),
+   timersRef = useRef<Array<ReturnType<typeof setTimeout>>>([])
 
   const spawnParticles = useCallback((x: number, y: number) => {
     const createdAt = Date.now()

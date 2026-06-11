@@ -1,10 +1,15 @@
 import { useChatStore } from "@/entities/chat"
 
-interface UseChatModeReturn {
-	mode: "text" | "image"
-	isTextMode: boolean
-	setMode: (mode: "text" | "image") => void
+interface UseChatModeData {
+    mode: "text" | "image"
+    isTextMode: boolean
 }
+
+interface UseChatModeHandlers {
+    setMode: (mode: "text" | "image") => void
+}
+
+type UseChatModeReturn = UseChatModeData & UseChatModeHandlers
 
 export const useChatMode = (): UseChatModeReturn => {
 	const mode = useChatStore((state) => state.mode),

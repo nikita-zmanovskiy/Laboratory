@@ -1,2 +1,5 @@
+export { generateImage, generateText } from "./api"
+export type { GenerateMode, GenerateRequestDto, GenerateResponseDto } from "./api/dto"
+export { mapGenerateResponseToMessage } from "./api/mappers"
 export { useChatStore } from "./model/store"
 export type { ChatMode, Message } from "./types"

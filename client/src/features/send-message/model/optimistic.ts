@@ -5,11 +5,16 @@ export interface OptimisticMessageIds {
     assistantMessageId: string
 }
 
-interface AddOptimisticMessagesParams {
-    addMessage: (message: Message) => void
+interface AddOptimisticMessagesData {
     prompt: string
     attachedImagePreview?: string | null
 }
+
+interface AddOptimisticMessagesHandlers {
+    addMessage: (message: Message) => void
+}
+
+type AddOptimisticMessagesParams = AddOptimisticMessagesData & AddOptimisticMessagesHandlers
 
 const GENERATING_TEXT = "Генерация..."
 

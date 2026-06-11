@@ -1,11 +1,14 @@
 "use client"
 
-import styles from './templateHomePage.module.css'
 import { ChatRoomWidget } from "@/widgets/chat-room"
+
+import { ClassroomClosedModal } from "@/shared/ui/ClassroomClosedModal"
 import { LessonTimer } from "@/shared/ui/lesson-timer/ui/LessonTimer"
 import { NotificationToast } from "@/shared/ui/notification-toast/ui/NotificationToast"
-import { ClassroomClosedModal } from "@/shared/ui/ClassroomClosedModal"
+
 import { useTemplateHomePage } from "../model/useTemplateHomePage"
+
+import styles from './templateHomePage.module.css'
 
 export function TemplateHomePage() {
   const {

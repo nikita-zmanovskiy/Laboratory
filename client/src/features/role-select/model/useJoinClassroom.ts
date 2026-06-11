@@ -1,26 +1,34 @@
-import { useCallback,useState } from "react"
+import { useCallback, useState } from "react"
 import { useRouter } from "next/navigation"
 import { AxiosError } from "axios"
 
+import { joinClassroom } from "@/entities/classroom"
 import { useRoleStore } from "@/entities/session"
 
-import { http } from "@/shared/api"
+import { appRoutes } from "@/shared/config/routes"
 
-interface UseJoinClassroomReturn {
+interface UseJoinClassroomData {
     code: string
-    setCode: (value: string) => void
     isLoading: boolean
     error: string | null
+}
+
+interface UseJoinClassroomHandlers {
+    setCode: (value: string) => void
     handleJoin: () => Promise<void>
 }
+
+type UseJoinClassroomReturn = UseJoinClassroomData & UseJoinClassroomHandlers
 
 export const useJoinClassroom = (): UseJoinClassroomReturn => {
     const [code, setCode] = useState(""),
      [isLoading, setIsLoading] = useState(false),
      [error, setError] = useState<string | null>(null)
 
-    const router = useRouter(),
-     setRole = useRoleStore((state) => state.setRole),
+    const router = useRouter()
+
+
+    const setRole = useRoleStore((state) => state.setRole),
      setClassroomCode = useRoleStore((state) => state.setClassroomCode),
      setExpiresAt = useRoleStore((state) => state.setExpiresAt)
 
@@ -41,8 +49,8 @@ export const useJoinClassroom = (): UseJoinClassroomReturn => {
         setError(null)
 
         try {
-            const response = await http.get(`/api/classrooms/${trimmedCode}/join?student_id=1`),
-             expires = response.data.expires_at as string | undefined
+            const joinedClassroom = await joinClassroom(trimmedCode),
+             expires = joinedClassroom.expires_at
 
             if (expires) {
                 localStorage.setItem("expiresAt", expires)
@@ -51,9 +59,10 @@ export const useJoinClassroom = (): UseJoinClassroomReturn => {
 
             setRole("student")
             setClassroomCode(trimmedCode)
-            router.push("/chat")
+            router.push(appRoutes.chat)
         } catch (err: unknown) {
             const status = err instanceof AxiosError ? err.response?.status : undefined
+
             if (status === 404) {
                 setError("Класс не найден. Проверьте код.")
             } else if (status === 410) {
@@ -61,6 +70,7 @@ export const useJoinClassroom = (): UseJoinClassroomReturn => {
             } else {
                 setError("Не удалось подключиться. Попробуйте позже.")
             }
+
             setIsLoading(false)
         }
     }, [code, router, setRole, setClassroomCode, setExpiresAt])

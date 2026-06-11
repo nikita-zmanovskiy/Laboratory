@@ -1,12 +1,12 @@
-"use client";
+"use client"
 
-import { useParams } from "next/navigation";
+import { useParams } from "next/navigation"
 
-import { TeacherPanelContainer } from "@/features/teacher-panel";
+import { TeacherPanelContainer } from "@/widgets/teacher-panel"
 
 export function ClassroomPageClient() {
-  const params = useParams();
-  const code = (params?.code ?? "") as string;
+    const params = useParams()
+    const code = (params?.code ?? "") as string
 
-  return <TeacherPanelContainer code={code} />;
+    return <TeacherPanelContainer code={code} />
 }

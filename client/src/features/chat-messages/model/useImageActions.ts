@@ -13,10 +13,11 @@ export const useImageActions = (): UseImageActionsReturn => {
 		e.preventDefault()
 		e.stopPropagation()
 		try {
-			const response = await fetch(imageUrl)
-			const blob = await response.blob()
-			const url = window.URL.createObjectURL(blob)
-			const link = document.createElement("a")
+			const response = await fetch(imageUrl),
+			 blob = await response.blob(),
+			 url = window.URL.createObjectURL(blob),
+			 link = document.createElement("a")
+			 
 			link.href = url
 			link.download = filename
 			document.body.appendChild(link)

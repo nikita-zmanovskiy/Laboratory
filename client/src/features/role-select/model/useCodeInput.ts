@@ -3,16 +3,21 @@
 import { useEffect, useRef, useState } from "react";
 import type { ChangeEvent, KeyboardEvent } from "react";
 
-const CODE_LENGTH = 6;
-const MESSAGE_ANIMATION_DELAY_MS = 200;
+const CODE_LENGTH = 6,
+ MESSAGE_ANIMATION_DELAY_MS = 200
 
-interface UseCodeInputParams {
-  code: string;
-  error: string | null;
-  isLoading: boolean;
-  onCodeChange: (value: string) => void;
-  onSubmit: () => void;
+ interface UseCodeInputData {
+  code: string
+  error: string | null
+  isLoading: boolean
 }
+
+interface UseCodeInputHandlers {
+  onCodeChange: (value: string) => void
+  onSubmit: () => void
+}
+
+type UseCodeInputParams = UseCodeInputData & UseCodeInputHandlers
 
 export const useCodeInput = ({
   code,

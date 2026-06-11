@@ -1,17 +1,10 @@
 "use client";
 
-import type { ChangeEvent, RefObject } from "react";
+import type { RefObject } from "react";
 
 import { useAnimatedVisibility } from "../model/useAnimatedVisibility";
+import { AttachmentButtonProps } from "../types";
 
-interface AttachmentButtonProps {
-	isLoading: boolean;
-	isImageLoading: boolean;
-	isOnline: boolean;
-	onFileChange: (event: ChangeEvent<HTMLInputElement>) => void;
-	fileInputRef: RefObject<HTMLInputElement | null>;
-	visible: boolean;
-}
 
 export const AttachmentButton = ({
 	isLoading,

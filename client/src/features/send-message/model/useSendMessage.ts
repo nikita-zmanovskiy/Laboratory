@@ -1,21 +1,27 @@
 import { useCallback, useState } from "react"
 
-import { useChatStore } from "@/entities/chat"
-import { useRoleStore } from "@/entities/session"
-import { useSessionStore } from "@/entities/session"
-
-import { generateImage, generateText } from "@/shared/api"
+import {
+    generateImage,
+    generateText,
+    mapGenerateResponseToMessage,
+    useChatStore,
+} from "@/entities/chat"
+import { useRoleStore, useSessionStore } from "@/entities/session"
 
 import { mapSendMessageError } from "./errors"
-import { mapGenerateResponseToMessage } from "./mapper"
 import { addOptimisticMessages } from "./optimistic"
 
-interface UseSendMessageReturn {
+interface UseSendMessageData {
     isLoading: boolean
     error: string | null
+}
+
+interface UseSendMessageHandlers {
     sendMessage: (prompt: string, imageBase64: string | null, isTextMode: boolean, attachedImagePreview?: string | null) => Promise<void>
     clearError: () => void
 }
+
+type UseSendMessageReturn = UseSendMessageData & UseSendMessageHandlers
 
 export const useSendMessage = (): UseSendMessageReturn => {
     const [isLoading, setIsLoading] = useState(false),
@@ -31,6 +37,7 @@ export const useSendMessage = (): UseSendMessageReturn => {
             if (!sessionId) return
 
             const { classroomCode, role } = useRoleStore.getState()
+
             if (!classroomCode) {
                 setError("Код класса не указан")
                 return

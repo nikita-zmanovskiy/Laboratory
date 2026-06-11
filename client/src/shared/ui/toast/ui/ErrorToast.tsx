@@ -2,11 +2,16 @@
 
 import { useToastAutoClose } from "../model/useToastAutoClose";
 
-interface ErrorToastProps {
-  message: string | null;
-  duration?: number;
-  onClose: () => void;
+interface ErrorToastData {
+  message: string | null
+  duration?: number
 }
+
+interface ErrorToastHandlers {
+  onClose: () => void
+}
+
+type ErrorToastProps = ErrorToastData & ErrorToastHandlers
 
 export const ErrorToast = ({
   message,

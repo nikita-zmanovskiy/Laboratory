@@ -1,0 +1,37 @@
+@layer base {
+    * {
+        @apply border-border outline-ring/50;
+    }
+
+    body {
+        @apply bg-background text-foreground;
+    }
+
+    textarea {
+        field-sizing: content;
+    }
+
+    * {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+        background-color: hsl(var(--background));
+        outline: none !important;
+        box-shadow: none !important;
+        border-color: hsl(var(--input)) !important;
+        -webkit-appearance: none;
+        appearance: none;
+    }
+
+    input:-webkit-autofill,
+    textarea:-webkit-autofill,
+    select:-webkit-autofill {
+        -webkit-box-shadow: 0 0 0px 1000px hsl(var(--background)) inset !important;
+        box-shadow: 0 0 0px 1000px hsl(var(--background)) inset !important;
+        -webkit-text-fill-color: hsl(var(--foreground)) !important;
+        caret-color: hsl(var(--foreground));
+    }
+}

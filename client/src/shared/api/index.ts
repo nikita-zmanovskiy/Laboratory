@@ -13,6 +13,7 @@ export {
 	extendClassroom,
 	getClassroomLogs,
 	getClassroomStats,
+	joinClassroom,
 } from "./classroom"
 export {
 	clearCachedToken,

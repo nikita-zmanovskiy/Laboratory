@@ -6,14 +6,19 @@ import { useCodeInput } from "../model/useCodeInput"
 
 import styles from "./Modal.module.css"
 
-interface CodeInputProps {
+interface CodeInputData {
   code: string
   isLoading: boolean
   error: string | null
+}
+
+interface CodeInputHandlers {
   onCodeChange: (value: string) => void
   onSubmit: () => void
   onBack: () => void
 }
+
+type CodeInputProps = CodeInputData & CodeInputHandlers
 
 export const CodeInput = ({
   code,

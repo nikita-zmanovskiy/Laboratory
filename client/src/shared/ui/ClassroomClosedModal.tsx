@@ -1,9 +1,14 @@
 "use client"
 
-interface ClassroomClosedModalProps {
+interface ClassroomClosedModalData {
     message: string
+}
+
+interface ClassroomClosedModalHandlers {
     onExit: () => void
 }
+
+type ClassroomClosedModalProps = ClassroomClosedModalData & ClassroomClosedModalHandlers
 
 export const ClassroomClosedModal = ({ message, onExit }: ClassroomClosedModalProps) => (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[var(--color-bg-primary)]/70 p-4 backdrop-blur-sm">

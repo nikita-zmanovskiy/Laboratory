@@ -1,29 +1,15 @@
 import { create } from "zustand"
 
-import { ChatMode, Message } from "../types"
+import { ChatStore } from "../types"
 
-interface ChatStore {
-	mode: ChatMode
-	messages: Message[]
-	isLoading: boolean
-	setMode: (mode: ChatMode) => void
-	setLoading: (loading: boolean) => void
-	addMessage: (message: Message) => void
-	updateMessage: (
-		id: string,
-		fields: Partial<Omit<Message, "id">>,
-	) => void
-	removeMessage: (id: string) => void
-	clearMessages: () => void
-	error: string | null
-    clearError: () => void
-}
+
 
 export const useChatStore = create<ChatStore>(
 	(set) => ({
 		mode: "text",
 		messages: [],
 		isLoading: false,
+		error: null,
 		setMode: (mode) => set({ mode }),
 		setLoading: (isLoading) =>
 			set({ isLoading }),
@@ -46,8 +32,6 @@ export const useChatStore = create<ChatStore>(
 				),
 			})),
 		clearMessages: () => set({ messages: [] }),
-		error: null,
-   		 clearError: () => set({ error: null }),
-	
+		clearError: () => set({ error: null }),
 	}),
 )

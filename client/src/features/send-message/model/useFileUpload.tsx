@@ -6,17 +6,22 @@ import { isValidBase64Image } from "@/shared/lib/validateBase64"
 const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"],
  MAX_FILE_SIZE = 5 * 1024 * 1024
 
-interface UseFileUploadReturn {
+ interface UseFileUploadData {
     imageFile: File | null
     imagePreview: string | null
     isImageLoading: boolean
     error: string | null
     fileInputRef: React.RefObject<HTMLInputElement | null>
+}
+
+interface UseFileUploadHandlers {
     handleFileChange: (e: React.ChangeEvent<HTMLInputElement>) => Promise<void>
     handleRemoveFile: () => void
     convertToBase64: () => Promise<string | null>
     clearFile: () => void
 }
+
+type UseFileUploadReturn = UseFileUploadData & UseFileUploadHandlers
 
 export const useFileUpload = (isLoading: boolean): UseFileUploadReturn => {
     const [imageFile, setImageFile] = useState<File | null>(null),

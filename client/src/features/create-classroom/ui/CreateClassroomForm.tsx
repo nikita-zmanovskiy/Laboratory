@@ -4,22 +4,27 @@ import { CustomSelect } from '@/shared/ui/custom-select/ui/CustomSelect'
 
 import styles from './createClassroom.module.css'
 
-interface CreateClassroomFormProps {
+interface CreateClassroomFormData {
     title: string
     grade: number
     duration: number
     isLoading: boolean
     error: string | null
     durationOptions: { label: string; value: number }[]
+    currentClass: { code: string; title: string; expires_at: string } | null
+    loadingMessage?: string
+}
+
+interface CreateClassroomFormHandlers {
     onTitleChange: (value: string) => void
     onGradeChange: (value: number) => void
     onDurationChange: (value: number) => void
     onSubmit: () => void
     onBack: () => void
     onOpenCurrentClass: () => void
-    currentClass: { code: string; title: string; expires_at: string } | null
-    loadingMessage?: string
 }
+
+type CreateClassroomFormProps = CreateClassroomFormData & CreateClassroomFormHandlers
 
 const gradeOptions = [5, 6, 7, 8, 9, 10, 11]
 

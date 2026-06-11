@@ -3,56 +3,52 @@
 import { useEffect } from "react"
 import { usePathname, useRouter } from "next/navigation"
 
+import { getCurrentClassFromStorage } from "@/entities/classroom"
 import { useRoleStore } from "@/entities/session"
 
+import {
+    appRoutes,
+    isPublicRoute,
+    isTeacherClassroomRoute,
+    isTeacherRoute,
+} from "@/shared/config/routes"
+
+const hasActiveTeacherClass = () => {
+    const currentClass = getCurrentClassFromStorage()
+    return Boolean(currentClass)
+}
+
 export const AuthGuard = ({ children }: { children: React.ReactNode }) => {
-    const role = useRoleStore((state) => state.role)
-    const classroomCode = useRoleStore((state) => state.classroomCode)
-    const pathname = usePathname()
-    const router = useRouter()
+    const role = useRoleStore((state) => state.role),
+     classroomCode = useRoleStore((state) => state.classroomCode),
+     pathname = usePathname(),
+     router = useRouter()
 
     useEffect(() => {
-        if (!pathname || pathname === "/" || pathname === "/offline") return
+        if (isPublicRoute(pathname)) {
+            return
+        }
 
         if (!role) {
-            if (pathname.startsWith("/teacher/classroom/")) {
-                try {
-                    const stored = localStorage.getItem("currentClass")
-                    if (stored) {
-                        const parsed = JSON.parse(stored)
-                        if (new Date(parsed.expires_at).getTime() > Date.now()) {
-                            return
-                        }
-                    }
-                } catch {
-                    // ignore
-                }
+            if (isTeacherClassroomRoute(pathname) && hasActiveTeacherClass()) {
+                return
             }
-            router.push("/")
+
+            router.push(appRoutes.home)
             return
         }
 
-        if (pathname === "/chat" && role !== "student") {
-            if (role === "teacher") {
-                try {
-                    const stored = localStorage.getItem("currentClass")
-                    if (stored) {
-                        const parsed = JSON.parse(stored)
-                        if (new Date(parsed.expires_at).getTime() > Date.now()) {
-                            return
-                        }
-                    }
-                } catch {
-                    // ignore
-                }
+        if (pathname === appRoutes.chat && role !== "student") {
+            if (role === "teacher" && hasActiveTeacherClass()) {
+                return
             }
-            router.push("/")
+
+            router.push(appRoutes.home)
             return
         }
 
-        if (pathname.startsWith("/teacher") && role !== "teacher") {
-            router.push("/")
-            return
+        if (isTeacherRoute(pathname) && role !== "teacher") {
+            router.push(appRoutes.home)
         }
     }, [role, classroomCode, pathname, router])
 
