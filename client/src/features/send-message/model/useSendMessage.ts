@@ -23,6 +23,21 @@ interface UseSendMessageHandlers {
 
 type UseSendMessageReturn = UseSendMessageData & UseSendMessageHandlers
 
+/**
+ * Хук для отправки сообщений в чат
+ *
+ * Добавляет оптимистичные сообщения пользователя и ассистента перед запросом
+ * В зависимости от isTextMode вызывает generateText или generateImage из entities/chat
+ * Для teacher-preview сессии подменяет sessionId на teacher-preview-{classroomCode}
+ * При ошибке обновляет сообщение ассистента текстом ошибки
+ * При критической ошибке удаляет оба оптимистичных сообщения и устанавливает error
+ *
+ * @returns isLoading - флаг отправки сообщения
+ * @returns error - текст ошибки или null
+ * @returns sendMessage - функция отправки сообщения
+ * @returns clearError - функция сброса ошибки
+ */
+
 export const useSendMessage = (): UseSendMessageReturn => {
     const [isLoading, setIsLoading] = useState(false),
      [error, setError] = useState<string | null>(null)

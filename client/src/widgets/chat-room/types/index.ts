@@ -5,7 +5,6 @@ export type {
     UseChatInputReturn,
     UseClassroomSocketReturn,
 } from "./models"
-
 export type {
     AttachmentButtonProps,
     ChatInputContainerProps,

@@ -1,0 +1,2 @@
+export const CODE_LENGTH = 6,
+ MESSAGE_ANIMATION_DELAY_MS = 200

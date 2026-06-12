@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 
+import { LESSON_WARNINGS } from "../config/lesson"
+
 interface UseLessonNotificationData {
     showNotification: boolean
     notificationMessage: string
@@ -13,7 +15,25 @@ type UseLessonNotificationReturn = UseLessonNotificationData & UseLessonNotifica
 
 type LessonWarningId = "5m" | "1m"
 
-interface LessonWarning {
+
+
+/**
+ * Хук для показа уведомлений о скором окончании урока
+ *
+ * Отслеживает оставшееся время до expiresAt
+ * Показывает предупреждение когда осталось меньше 5 минут
+ * И ещё одно когда осталось меньше 1 минуты
+ * Каждое предупреждение показывается один раз за сессию урока
+ * При смене expiresAt сбрасывает историю показанных предупреждений
+ * Проверка времени происходит каждые CHECK_INTERVAL_MS мс
+ *
+ * @param expiresAt - дата окончания урока в ISO формате или null
+ * @returns showNotification - флаг показа уведомления
+ * @returns notificationMessage - текст уведомления
+ * @returns dismissNotification - функция скрытия уведомления
+ */
+
+export interface LessonWarning {
 	id: LessonWarningId
 	thresholdMs: number
 	message: string
@@ -21,18 +41,6 @@ interface LessonWarning {
 
 const CHECK_INTERVAL_MS = 10_000;
 
-const LESSON_WARNINGS: LessonWarning[] = [
-	{
-		id: "1m",
-		thresholdMs: 60_000,
-		message: "Осталась меньше 1 минуты до конца урока!",
-	},
-	{
-		id: "5m",
-		thresholdMs: 5 * 60_000,
-		message: "Осталось меньше 5 минут до конца урока!",
-	},
-]
 export const useLessonNotification = (
 	expiresAt: string | null,
 ): UseLessonNotificationReturn => {

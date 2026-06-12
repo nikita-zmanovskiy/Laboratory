@@ -7,7 +7,6 @@ export type {
     TeacherPreviewSession,
     WebSocketAuthToken,
 } from "./models"
-
 export type {
     ClassroomLogsResult,
     ClassroomStatsResult,

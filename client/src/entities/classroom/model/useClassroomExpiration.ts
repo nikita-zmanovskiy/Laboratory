@@ -3,6 +3,16 @@ import { useEffect, useState } from "react"
 interface UseClassroomExpirationReturn {
     isExpired: boolean
 }
+/**
+ * Хук для отслеживания истечения срока действия класса
+ *
+ * Сравнивает expiresAt с текущим временем каждую секунду
+ * Если expiresAt отсутствует - сбрасывает флаг в false
+ * При размонтировании очищает интервал проверки
+ *
+ * @param expiresAt - дата истечения в ISO формате или null
+ * @returns isExpired - true если срок действия истёк
+ */
 
 export const useClassroomExpiration = (
     expiresAt: string | null

@@ -15,6 +15,20 @@ interface UseToastAutoCloseHandlers {
 
 type UseToastAutoCloseParams = UseToastAutoCloseData & UseToastAutoCloseHandlers
 
+
+/**
+ * Хук для автоматического закрытия тоста с анимацией выхода
+ *
+ * Сначала запускает таймер на duration мс, по истечении которого
+ * устанавливает isLeaving = true (начало анимации выхода)
+ * Ещё через EXIT_ANIMATION_DURATION_MS вызывает onClose - фактическое удаление из DOM
+ *
+ * @param isOpen - открыт ли тост
+ * @param duration - длительность показа до начала анимации выхода (мс)
+ * @param onClose - колбэк, вызываемый после завершения анимации выхода
+ * @returns isLeaving - флаг анимации выхода, startLeaving - принудительный запуск анимации
+ */
+
 export const useToastAutoClose = ({
   isOpen,
   duration,

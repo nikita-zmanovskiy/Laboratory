@@ -1,0 +1,4 @@
+export const GENERATING_TEXT = "Генерация...",
+ APPEAR_DELAY_MS = 50,
+ TEXT_CHANGE_DELAY_MS = 400,
+ TEXT_OPACITY_DELAY_MS = 50

@@ -1,3 +1,15 @@
+/**
+ * Инициализирует или получает существующий идентификатор сессии чата
+ *
+ * Пытается прочитать chat_session_id из localStorage
+ * Если не найден - генерирует новый через crypto.randomUUID
+ * с fallback на ручную генерацию UUID v4 для старых браузеров
+ * Сохраняет сгенерированный id в localStorage
+ * На сервере (typeof window === "undefined") возвращает пустую строку
+ *
+ * @returns строка с идентификатором сессии или пустая строка на сервере
+ */
+
 export const initSession = (): string => {
 	if (typeof window === "undefined") return ""
 

@@ -1,7 +1,9 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import Image from "next/image"
+
+import { useOverlayAnimation } from "@/shared/lib/useOverlayAnimation"
 
 interface ImageModalData {
     src: string
@@ -15,23 +17,14 @@ type ImageModalProps = ImageModalData & ImageModalHandlers
 
 export const ImageModal = ({ src, onClose }: ImageModalProps) => {
     const [loaded, setLoaded] = useState(false),
-     [visible, setVisible] = useState(false),
-     [closing, setClosing] = useState(false)
+     { isShown, runClose } = useOverlayAnimation()
 
-    useEffect(() => {
-        setTimeout(() => setVisible(true), 10)
-        return () => setVisible(false)
-    }, [])
-
-    const handleClose = () => {
-        setClosing(true)
-        setTimeout(onClose, 300)
-    }
+    const handleClose = () => runClose(onClose)
 
     return (
         <div
-            className={`fixed mb-0 inset-0 z-50 flex cursor-zoom-out items-center justify-center bg-black/80 p-4 backdrop-blur-sm transition-all duration-300 ${
-                visible && !closing ? "opacity-100" : "opacity-0"
+            className={`modal-overlay fixed inset-0 z-50 mb-0 flex cursor-zoom-out items-center justify-center bg-black/80 p-4 backdrop-blur-sm ${
+                isShown ? "modal-overlay--visible" : "modal-overlay--hidden"
             }`}
             onClick={handleClose}
         >
@@ -43,15 +36,15 @@ export const ImageModal = ({ src, onClose }: ImageModalProps) => {
                     </div>
                 </div>
             )}
-         
+
             <Image
                 src={src}
                 alt="Изображение"
-                 width={700}
+                width={700}
                 height={700}
                 onLoad={() => setLoaded(true)}
                 className={`max-h-[85vh] max-w-[90vw] rounded-lg object-contain shadow-2xl transition-all duration-500 ${
-                    loaded && !closing ? "opacity-100 scale-100" : "opacity-0 scale-95"
+                    loaded && isShown ? "scale-100 opacity-100" : "scale-95 opacity-0"
                 }`}
                 unoptimized
             />

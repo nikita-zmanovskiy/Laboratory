@@ -2,6 +2,18 @@
 
 import { useEffect, useState } from "react"
 
+/**
+ * Хук для автоматического закрытия уведомления с анимацией выхода
+ *
+ * Запускает таймер на duration мс, по истечении которого
+ * устанавливает isLeaving = true (начало анимации выхода)
+ * Ещё через EXIT_ANIMATION_DURATION_MS вызывает onClose - удаление из DOM
+ *
+ * @param duration - длительность показа до начала анимации выхода (мс)
+ * @param onClose - колбэк, вызываемый после завершения анимации выхода
+ * @returns isLeaving - флаг анимации выхода
+ */
+
 const EXIT_ANIMATION_DURATION_MS = 300
 
 interface UseNotificationToastData {

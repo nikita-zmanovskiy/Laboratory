@@ -16,6 +16,26 @@ interface AddOptimisticMessagesHandlers {
 
 type AddOptimisticMessagesParams = AddOptimisticMessagesData & AddOptimisticMessagesHandlers
 
+/**
+ * Создаёт уникальные идентификаторы для оптимистичных сообщений
+ *
+ * Генерирует id на основе текущего timestamp
+ *
+ * @returns объект с userMessageId и assistantMessageId
+ */
+
+/**
+ * Добавляет оптимистичные сообщения пользователя и ассистента в чат
+ *
+ * Сообщение пользователя содержит текст запроса и прикреплённое изображение при наличии
+ * Сообщение ассистента содержит текст GENERATING_TEXT как заглушку на время запроса
+ *
+ * @param addMessage - функция добавления сообщения в стор
+ * @param prompt - текст запроса пользователя
+ * @param attachedImagePreview - URL прикреплённого изображения (опционально)
+ * @returns идентификаторы созданных сообщений
+ */
+
 const GENERATING_TEXT = "Генерация..."
 
 export const createOptimisticMessageIds = (): OptimisticMessageIds => {

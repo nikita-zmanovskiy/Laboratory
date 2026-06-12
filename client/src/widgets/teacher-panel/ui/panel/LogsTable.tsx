@@ -1,6 +1,7 @@
 
-import styles from "../teacher.module.css"
 import { LogsTableProps } from "../../types"
+
+import styles from "../teacher.module.css"
 
 const LOG_TABLE_HEADERS = [
     "Время",

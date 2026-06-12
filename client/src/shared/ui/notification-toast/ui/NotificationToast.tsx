@@ -1,5 +1,7 @@
 "use client"
 
+import { useEffect, useState } from "react"
+
 import { useNotificationToast } from "../model/useNotificationToast"
 
 interface NotificationToastData {
@@ -18,17 +20,26 @@ export const NotificationToast = ({
   duration = 5000,
   onClose,
 }: NotificationToastProps) => {
-  const { isLeaving } = useNotificationToast({
+  const [entered, setEntered] = useState(false),
+   { isLeaving } = useNotificationToast({
     duration,
     onClose,
   })
 
+  useEffect(() => {
+    const timerId = setTimeout(() => setEntered(true), 10)
+
+    return () => clearTimeout(timerId)
+  }, [])
+
+  const isVisible = entered && !isLeaving
+
   return (
     <div
       className={`fixed top-4 left-4 z-50 transition-all duration-300 ${
-        isLeaving
-          ? "translate-x-[-100%] opacity-0"
-          : "translate-x-0 opacity-100"
+        isVisible
+          ? "translate-x-0 opacity-100"
+          : "translate-x-[-100%] opacity-0"
       }`}
       role="status"
       aria-live="polite"

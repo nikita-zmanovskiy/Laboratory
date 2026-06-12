@@ -1,5 +1,8 @@
 
 import { NotificationToast } from "@/shared/ui/notification-toast/ui/NotificationToast"
+
+import { TeacherPanelProps } from "../types"
+
 import { LogFiltersBar } from "./panel/LogFiltersBar"
 import { LogsTable } from "./panel/LogsTable"
 import { RealtimeLogsPanel } from "./panel/RealtimeLogsPanel"
@@ -9,7 +12,6 @@ import { TeacherPanelModals } from "./panel/TeacherPanelModals"
 import { ChartsSection } from "./ChartsSection"
 
 import styles from "./teacher.module.css"
-import { TeacherPanelProps } from "../types"
 
 
 export const TeacherPanel = ({

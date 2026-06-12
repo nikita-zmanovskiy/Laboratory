@@ -19,6 +19,33 @@ import { useLessonNotification } from "@/shared/lib/useLessonNotification"
 
 import { useBeforeUnloadWarning } from "./useBeforeUnloadWarning"
 
+
+/**
+ * Центральный хук домашней страницы объединяющий всю логику шаблона
+ *
+ * Инициализирует сессию и загружает роль из localStorage при монтировании
+ * Восстанавливает expiresAt из localStorage и currentClassStorage
+ * Для учителя устанавливает preview сессию через establishTeacherPreviewSession
+ * Подписывается на продление урока через WebSocket (onExtend)
+ * Управляет уведомлениями о скором окончании урока
+ * Показывает предупреждение beforeunload при наличии сообщений или загрузке
+ * Предоставляет handleExit с логикой выхода зависящей от роли:
+ * - учитель: остаётся teacher и переходит на home
+ * - студент с активным классом учителя: восстанавливает роль teacher и переходит в класс
+ * - студент без активного класса: сбрасывает роль и переходит на home
+ *
+ * @returns sessionId - идентификатор текущей сессии
+ * @returns expiresAt - дата истечения урока в ISO формате
+ * @returns showNotification - флаг показа уведомления об окончании
+ * @returns notificationMessage - текст уведомления
+ * @returns dismissNotification - функция скрытия уведомления
+ * @returns isClosed - флаг закрытия класса через WebSocket
+ * @returns isExpired - флаг истечения времени урока
+ * @returns closeMessage - сообщение о причине закрытия класса
+ * @returns handleExit - функция выхода с логикой зависящей от роли
+ * @returns handleExitToHome - функция полного сброса и перехода на home
+ */
+
 export const useTemplateHomePage = () => {
     const router = useRouter()
 

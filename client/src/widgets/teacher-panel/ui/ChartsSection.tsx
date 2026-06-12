@@ -1,7 +1,8 @@
 import { Bar, BarChart, CartesianGrid, Cell,Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
 
-import styles from './teacher.module.css'
 import { ChartsSectionProps } from "../types"
+
+import styles from './teacher.module.css'
 
 
 const EmptyChart = ({ label }: { label: string }) => (

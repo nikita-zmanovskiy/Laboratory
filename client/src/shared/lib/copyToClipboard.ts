@@ -1,3 +1,13 @@
+/**
+ * Копирует текст в буфер обмена
+ *
+ * Сначала пробует современный navigator.clipboard.writeText
+ * При неудаче использует fallback через textarea и document.execCommand("copy")
+ *
+ * @param text - строка для копирования
+ * @returns true если копирование успешно
+ */
+
 export const copyToClipboard = async (text: string): Promise<boolean> => {
     try {
         await navigator.clipboard.writeText(text)

@@ -1,4 +1,5 @@
 import { AxiosError } from "axios"
+
 import { HTTP_ERROR_MAP } from "../config/apiErrors"
 
 
@@ -7,6 +8,17 @@ interface ApiErrorResponse {
 	error?: string
 	message?: string
 }
+
+/**
+ * Извлекает понятное сообщение об ошибке из Axios ошибки
+ *
+ * Обрабатывает сетевые ошибки (нет интернета), таймауты,
+ * ошибки безопасности (SAFETY_VIOLATION) и HTTP статусы из HTTP_ERROR_MAP
+ * Для неизвестных ошибок возвращает fallback сообщение
+ *
+ * @param error - ошибка из catch блока (ожидается AxiosError)
+ * @returns строка с сообщением об ошибке на русском языке
+ */
 
 export const getApiErrorMessage = (
 	error: unknown,

@@ -22,6 +22,73 @@ import type {
     WebSocketAuthResponseDto,
 } from "./dto"
 
+/**
+ * Преобразует DTO созданного класса в доменную модель Classroom
+ *
+ * @param dto - ответ сервера с данными созданного класса
+ * @returns объект Classroom
+ */
+
+/**
+ * Преобразует DTO присоединения к классу в доменную модель JoinedClassroom
+ *
+ * @param dto - ответ сервера с expires_at
+ * @returns объект JoinedClassroom
+ */
+
+/**
+ * Преобразует DTO записи лога в доменную модель ClassroomLog
+ *
+ * @param dto - объект лога от сервера
+ * @returns объект ClassroomLog
+ */
+
+/**
+ * Преобразует DTO статистики в доменную модель ClassroomStats
+ *
+ * Рекурсивно маппит вложенные массивы top_students и charts
+ *
+ * @param dto - объект статистики от сервера
+ * @returns объект ClassroomStats
+ */
+
+/**
+ * Преобразует DTO ответа с логами в доменную модель ClassroomLogsResult
+ *
+ * Маппит каждый лог через mapClassroomLogDtoToModel
+ *
+ * @param dto - ответ сервера с массивом логов и пагинацией
+ * @returns объект ClassroomLogsResult
+ */
+
+/**
+ * Преобразует DTO ответа со статистикой в доменную модель ClassroomStatsResult
+ *
+ * @param dto - ответ сервера со статистикой
+ * @returns объект ClassroomStatsResult
+ */
+
+/**
+ * Преобразует DTO превью-сессии учителя в доменную модель TeacherPreviewSession
+ *
+ * @param dto - ответ сервера с данными сессии
+ * @returns объект TeacherPreviewSession
+ */
+
+/**
+ * Преобразует DTO WebSocket авторизации в доменную модель WebSocketAuthToken
+ *
+ * @param dto - ответ сервера с токеном и ролью
+ * @returns объект WebSocketAuthToken
+ */
+
+/**
+ * Преобразует DTO продления класса в доменную модель ExtendClassroomResult
+ *
+ * @param dto - ответ сервера с новой датой истечения
+ * @returns объект ExtendClassroomResult
+ */
+
 export const mapClassroomDtoToModel = (dto: CreateClassroomResponseDto): Classroom => ({
     id: dto.id,
     code: dto.code,

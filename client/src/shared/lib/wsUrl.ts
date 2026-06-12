@@ -1,3 +1,31 @@
+/**
+ * Преобразует HTTP URL в WebSocket URL заменой протокола
+ * http: -> ws:, https: -> wss:
+ *
+ * @param httpUrl - HTTP URL строка
+ * @returns WebSocket URL строка с тем же хостом и ws/wss протоколом
+ */
+
+/**
+ * Получает базовый WebSocket URL
+ *
+ * Приоритет: явная переменная NEXT_PUBLIC_WS_URL
+ * Если её нет - преобразует NEXT_PUBLIC_BACKEND_URL из http в ws
+ * Если и её нет - использует window.location на клиенте или localhost:3000 на сервере
+ *
+ * @returns базовый WebSocket URL без пути и параметров
+ */
+
+/**
+ * Формирует полный WebSocket URL для подключения к классу
+ *
+ * Добавляет к базовому URL путь /ws и параметры classroom и token
+ *
+ * @param classroomCode - код класса
+ * @param token - токен авторизации WebSocket
+ * @returns полный WebSocket URL с параметрами
+ */
+
 function httpBaseToWsBase(httpUrl: string): string {
     const url = new URL(httpUrl),
      wsProtocol = url.protocol === "https:" ? "wss:" : "ws:"

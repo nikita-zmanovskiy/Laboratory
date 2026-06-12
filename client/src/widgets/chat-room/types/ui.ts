@@ -1,5 +1,6 @@
 
 import type { ChangeEvent, FormEvent, KeyboardEvent, ReactNode, RefObject } from "react"
+
 import type { ChatInputControlsState } from "./models"
 
 export interface ChatInputViewProps {

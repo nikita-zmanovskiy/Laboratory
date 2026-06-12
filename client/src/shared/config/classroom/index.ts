@@ -9,3 +9,5 @@ export const DURATION_OPTIONS = [
 ] as const
 
 export type DurationOption = (typeof DURATION_OPTIONS)[number]
+
+export const gradeOptions = [5, 6, 7, 8, 9, 10, 11]

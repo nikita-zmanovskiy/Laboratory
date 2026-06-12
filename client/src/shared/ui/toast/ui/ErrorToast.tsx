@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import { useToastAutoClose } from "../model/useToastAutoClose";
 
 interface ErrorToastData {
@@ -18,20 +20,34 @@ export const ErrorToast = ({
   duration = 10000,
   onClose,
 }: ErrorToastProps) => {
-  const { isLeaving } = useToastAutoClose({
+  const [entered, setEntered] = useState(false),
+   { isLeaving } = useToastAutoClose({
     isOpen: Boolean(message),
     duration,
     onClose,
   });
 
+  useEffect(() => {
+    if (!message) {
+      setEntered(false)
+      return
+    }
+
+    const timerId = setTimeout(() => setEntered(true), 10)
+
+    return () => clearTimeout(timerId)
+  }, [message])
+
   if (!message) {
     return null;
   }
 
+  const isVisible = entered && !isLeaving
+
   return (
     <div
       className={`fixed top-4 left-1/2 z-50 -translate-x-1/2 transition-all duration-300 ${
-        isLeaving ? "translate-y-[-100%] opacity-0" : "translate-y-0 opacity-100"
+        isVisible ? "translate-y-0 opacity-100" : "translate-y-[-100%] opacity-0"
       }`}
       role="alert"
       aria-live="assertive"

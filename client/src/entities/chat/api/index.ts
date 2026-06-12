@@ -4,6 +4,47 @@ import { apiRoutes } from "@/shared/config/apiRoutes"
 
 import type { GenerateMode, GenerateRequestDto, GenerateResponseDto } from "./dto"
 
+
+/**
+ * Создаёт тело запроса для генерации
+ *
+ * Добавляет image в тело только если передан imageBase64
+ *
+ * @param mode - режим генерации (text или image)
+ * @param prompt - текст запроса
+ * @param sessionId - идентификатор сессии
+ * @param imageBase64 - base64 строка изображения (опционально)
+ * @returns объект GenerateRequestDto
+ */
+
+/**
+ * Отправляет запрос на генерацию текста
+ *
+ * По умолчанию инициализирует CSRF сессию перед запросом
+ * Пропускает инициализацию если skipEnsureSession = true
+ *
+ * @param prompt - текст запроса
+ * @param sessionId - идентификатор сессии
+ * @param classroomCode - код класса (передаётся в заголовке x-classroom-code)
+ * @param imageBase64 - base64 изображения для vision запросов (опционально)
+ * @param skipEnsureSession - пропустить инициализацию CSRF сессии
+ * @returns ответ сервера с данными генерации
+ */
+
+/**
+ * Отправляет запрос на генерацию изображения
+ *
+ * По умолчанию инициализирует CSRF сессию перед запросом
+ * Пропускает инициализацию если skipEnsureSession = true
+ *
+ * @param prompt - текст запроса
+ * @param imageBase64 - base64 изображения для img2img запросов
+ * @param sessionId - идентификатор сессии
+ * @param classroomCode - код класса (передаётся в заголовке x-classroom-code)
+ * @param skipEnsureSession - пропустить инициализацию CSRF сессии
+ * @returns ответ сервера с данными генерации
+ */
+
 const createGenerateRequest = (
     mode: GenerateMode,
     prompt: string,

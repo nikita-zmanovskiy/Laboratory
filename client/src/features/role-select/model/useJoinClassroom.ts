@@ -20,6 +20,22 @@ interface UseJoinClassroomHandlers {
 
 type UseJoinClassroomReturn = UseJoinClassroomData & UseJoinClassroomHandlers
 
+/**
+ * Хук для присоединения к классу по коду
+ *
+ * Валидирует код (ровно 6 символов, только заглавные буквы и цифры)
+ * Вызывает joinClassroom из entities/classroom для проверки кода на сервере
+ * При успехе сохраняет expiresAt в localStorage, устанавливает роль student
+ * и перенаправляет в чат
+ * Обрабатывает ошибки: 404 (класс не найден), 410 (класс завершён), остальные
+ *
+ * @returns code - текущее значение кода
+ * @returns setCode - функция установки кода
+ * @returns isLoading - флаг выполнения запроса
+ * @returns error - текст ошибки или null
+ * @returns handleJoin - функция отправки кода и присоединения к классу
+ */
+
 export const useJoinClassroom = (): UseJoinClassroomReturn => {
     const [code, setCode] = useState(""),
      [isLoading, setIsLoading] = useState(false),

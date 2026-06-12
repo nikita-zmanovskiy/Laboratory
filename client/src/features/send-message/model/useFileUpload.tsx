@@ -23,6 +23,27 @@ interface UseFileUploadHandlers {
 
 type UseFileUploadReturn = UseFileUploadData & UseFileUploadHandlers
 
+/**
+ * Хук для загрузки и валидации файлов изображений
+ *
+ * Принимает файл через input, проверяет тип (JPG/PNG/WEBP) и размер (макс 5 МБ)
+ * Создаёт preview через URL.createObjectURL
+ * Предоставляет convertToBase64 для преобразования файла в base64 строку
+ * с проверкой валидности через isValidBase64Image
+ * Блокирует удаление файла во время загрузки через isLoading
+ *
+ * @param isLoading - флаг блокировки удаления файла (во время отправки сообщения)
+ * @returns imageFile - выбранный файл или null
+ * @returns imagePreview - URL для предпросмотра или null
+ * @returns isImageLoading - флаг процесса конвертации в base64
+ * @returns error - текст ошибки валидации или null
+ * @returns fileInputRef - реф на input элемент
+ * @returns handleFileChange - обработчик выбора файла
+ * @returns handleRemoveFile - удаление выбранного файла и очистка preview
+ * @returns convertToBase64 - конвертация файла в base64 строку
+ * @returns clearFile - полная очистка файла без проверки isLoading
+ */
+
 export const useFileUpload = (isLoading: boolean): UseFileUploadReturn => {
     const [imageFile, setImageFile] = useState<File | null>(null),
      [imagePreview, setImagePreview] = useState<string | null>(null),

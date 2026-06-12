@@ -8,6 +8,26 @@ import { useRoleStore } from "@/entities/session"
 
 import { useParticles } from "./useParticles"
 
+
+/**
+ * Центральный хук страницы выбора роли
+ *
+ * Управляет анимациями карточек ролей и переходами между состояниями
+ * При клике на роль студента запускает анимацию и через CARD_ANIMATION_DURATION_MS
+ * показывает поле ввода кода класса
+ * При клике на роль учителя запускает анимацию, устанавливает роль и переходит на /teacher
+ * Спавнит частицы в точке клика через useParticles
+ * При размонтировании очищает все таймеры частиц и переходов
+ *
+ * @returns showStudentInput - флаг показа поля ввода кода класса
+ * @returns animatingStudent - флаг анимации карточки студента
+ * @returns animatingTeacher - флаг анимации карточки учителя
+ * @returns particles - массив частиц для рендеринга
+ * @returns handleBackToRoles - возврат к выбору роли
+ * @returns handleStudentClick - обработчик клика по роли студента
+ * @returns handleTeacherClick - обработчик клика по роли учителя
+ */
+
 const CARD_ANIMATION_DURATION_MS = 500
 
 const getButtonCenter = (event: MouseEvent<HTMLElement>) => {

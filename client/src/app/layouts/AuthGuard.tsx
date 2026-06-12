@@ -13,6 +13,16 @@ import {
     isTeacherRoute,
 } from "@/shared/config/routes"
 
+/**
+ * Компонент защищающий маршруты от неавторизованного доступа
+ *
+ * Публичные маршруты (home) доступны всем
+ * Для защищённых маршрутов без роли: разрешает teacher/classroom/{code}
+ * только если есть активный класс учителя в localStorage, иначе редирект на home
+ * Чат доступен только студентам, либо учителям с активным классом
+ * Маршруты /teacher доступны только с ролью teacher
+ */
+
 const hasActiveTeacherClass = () => {
     const currentClass = getCurrentClassFromStorage()
     return Boolean(currentClass)

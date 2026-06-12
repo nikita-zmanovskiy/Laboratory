@@ -4,6 +4,19 @@ import { useCallback, useEffect, useRef, useState } from "react"
 
 type Theme = "dark" | "light"
 
+/**
+ * Хук для управления темой приложения (dark/light)
+ *
+ * При монтировании читает сохранённую тему из localStorage
+ * При переключении добавляет/убирает класс light на documentElement,
+ * сохраняет выбор в localStorage и запускает плавную анимацию перехода
+ * Анимация отключается при prefers-reduced-motion: reduce
+ *
+ * @returns theme - текущая тема (dark или light)
+ * @returns mounted - флаг завершения гидратации (false на сервере, true после монтирования)
+ * @returns toggleTheme - функция переключения темы
+ */
+
 const THEME_STORAGE_KEY = "theme",
  THEME_TRANSITION_CLASS = "theme-transition",
  THEME_TRANSITION_DURATION_MS = 300

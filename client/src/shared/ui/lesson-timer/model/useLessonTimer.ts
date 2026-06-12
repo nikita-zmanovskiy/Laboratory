@@ -4,6 +4,20 @@ import { useEffect, useState } from "react"
 
 import { formatLessonTime } from "./formatLessonTime"
 
+
+/**
+ * Хук для отображения оставшегося времени урока
+ *
+ * Вычисляет разницу между expiresAt и текущим временем
+ * Обновляет счётчик каждую секунду
+ * Возвращает отформатированное время, флаг завершения и флаг скорого окончания
+ *
+ * @param expiresAt - дата и время окончания урока в формате ISO строки
+ * @returns timeLeft - отформатированная строка оставшегося времени или "Урок завершен"
+ * @returns isFinished - флаг завершения урока (время вышло)
+ * @returns isEnding - флаг скорого окончания (меньше ENDING_THRESHOLD_MS мс)
+ */
+
 const ENDING_THRESHOLD_MS = 5 * 60 * 1000
 
 export const useLessonTimer = (expiresAt: string) => {

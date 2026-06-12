@@ -5,8 +5,8 @@ import { AxiosError } from "axios"
 import { createClassroom, setCurrentClassToStorage } from "@/entities/classroom"
 import { useRoleStore, useSessionStore } from "@/entities/session"
 
-import { appRoutes } from "@/shared/config/routes"
 import { DURATION_OPTIONS } from "@/shared/config/classroom"
+import { appRoutes } from "@/shared/config/routes"
 
 
 
@@ -28,17 +28,38 @@ interface UseCreateClassroomHandlers {
 
 type UseCreateClassroomReturn = UseCreateClassroomData & UseCreateClassroomHandlers
 
-export const useCreateClassroom = (): UseCreateClassroomReturn => {
-    const [title, setTitle] = useState("")
-    const [grade, setGrade] = useState(7)
-    const [duration, setDuration] = useState(45)
-    const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState<string | null>(null)
+/**
+ * Хук для создания класса учителем
+ *
+ * Валидирует наличие названия и sessionId
+ * Вызывает createClassroom из entities/classroom
+ * При успехе сохраняет expiresAt в localStorage и currentClassStorage,
+ * устанавливает роль teacher и перенаправляет на страницу класса
+ * При ошибке извлекает сообщение из ответа сервера или показывает fallback
+ *
+ * @returns title - название класса
+ * @returns setTitle - функция установки названия
+ * @returns grade - номер класса
+ * @returns setGrade - функция установки номера класса
+ * @returns duration - длительность урока в минутах
+ * @returns setDuration - функция установки длительности
+ * @returns isLoading - флаг выполнения запроса
+ * @returns error - текст ошибки или null
+ * @returns durationOptions - массив опций длительности урока
+ * @returns handleCreate - функция создания класса
+ */
 
-    const sessionId = useSessionStore((state) => state.sessionId)
-    const setRole = useRoleStore((state) => state.setRole)
-    const setClassroomCode = useRoleStore((state) => state.setClassroomCode)
-    const setExpiresAt = useRoleStore((state) => state.setExpiresAt)
+export const useCreateClassroom = (): UseCreateClassroomReturn => {
+    const [title, setTitle] = useState(""),
+     [grade, setGrade] = useState(7),
+     [duration, setDuration] = useState(45),
+     [isLoading, setIsLoading] = useState(false),
+     [error, setError] = useState<string | null>(null)
+
+    const sessionId = useSessionStore((state) => state.sessionId),
+     setRole = useRoleStore((state) => state.setRole),
+     setClassroomCode = useRoleStore((state) => state.setClassroomCode),
+     setExpiresAt = useRoleStore((state) => state.setExpiresAt)
     const router = useRouter()
 
     const handleCreate = useCallback(async () => {

@@ -9,6 +9,31 @@ import {
 	useState,
 } from "react"
 
+/**
+ * Хук для управления кастомным селектом с клавиатурной навигацией и анимацией
+ *
+ * Поддерживает открытие/закрытие по клику и клавишам Enter/Space
+ * Навигацию по опциям через ArrowDown/ArrowUp/Home/End
+ * Выбор опции через Enter/Space/клик
+ * Закрытие по Escape/Tab/клику вне селекта
+ * Анимацию закрытия с задержкой CLOSE_ANIMATION_DURATION_MS
+ * Блокировку взаимодействия при disabled
+ *
+ * @param value - текущее выбранное значение
+ * @param options - массив опций с label и value
+ * @param disabled - флаг блокировки селекта
+ * @param onChange - колбэк при выборе опции
+ * @returns rootRef - реф для контейнера селекта
+ * @returns open - флаг открытия списка
+ * @returns closing - флаг анимации закрытия
+ * @returns selected - текущая выбранная опция
+ * @returns activeIndex - индекс активной опции при навигации с клавиатуры
+ * @returns toggle - переключение открытия/закрытия
+ * @returns selectOption - выбор опции по значению
+ * @returns setActiveIndex - установка активного индекса
+ * @returns handleTriggerKeyDown - обработчик клавиатуры для триггера
+ */
+
 const CLOSE_ANIMATION_DURATION_MS = 150
 
 export interface UseCustomSelectOption<T extends string | number> {
@@ -18,7 +43,7 @@ export interface UseCustomSelectOption<T extends string | number> {
 
 interface UseCustomSelectData<T extends string | number> {
     value: T
-    options: UseCustomSelectOption<T>[]
+    options: readonly UseCustomSelectOption<T>[]
     disabled: boolean
 }
 

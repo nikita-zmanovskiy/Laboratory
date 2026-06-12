@@ -1,5 +1,7 @@
 import { useEffect,useState } from 'react'
 
+import { gradeOptions } from '@/shared/config/classroom'
+import type { CustomSelectOption } from '@/shared/ui/custom-select/ui/CustomSelect'
 import { CustomSelect } from '@/shared/ui/custom-select/ui/CustomSelect'
 
 import styles from './createClassroom.module.css'
@@ -10,7 +12,7 @@ interface CreateClassroomFormData {
     duration: number
     isLoading: boolean
     error: string | null
-    durationOptions: { label: string; value: number }[]
+    durationOptions: readonly CustomSelectOption<number>[]
     currentClass: { code: string; title: string; expires_at: string } | null
     loadingMessage?: string
 }
@@ -26,7 +28,7 @@ interface CreateClassroomFormHandlers {
 
 type CreateClassroomFormProps = CreateClassroomFormData & CreateClassroomFormHandlers
 
-const gradeOptions = [5, 6, 7, 8, 9, 10, 11]
+
 
 export const CreateClassroomForm = ({
     title,
@@ -57,8 +59,9 @@ export const CreateClassroomForm = ({
 
     return (
         <main className={`${styles.createClassroom__wrapper} page__animation-opacity flex h-screen items-center justify-center relative`}>
+    
             {isLoading && (
-                <div className="absolute inset-0 z-20 flex items-center justify-center bg-[var(--color-bg-primary)]/80">
+                <div className=" absolute inset-0 z-20 flex items-center justify-center bg-[var(--color-bg-primary)]/80 page__animation-opacity">
                     <div className="flex flex-col items-center gap-3">
                         <span className="h-10 w-10 animate-spin rounded-full border-2 border-white/20 border-t-white" />
                         <p className="text-sm text-white/80">{loadingMessage}</p>
@@ -70,7 +73,7 @@ export const CreateClassroomForm = ({
                 <button
                     onClick={onOpenCurrentClass}
                     disabled={isLoading}
-                    className={`${styles.createClassroom__button} rounded-xl page__animation max-w-[200px] cursor-pointer bg-[var(--color-accent)]/20 border border-[var(--color-accent)]/20 px-4 py-2 text-sm text-[var(--color-accent)] hover:bg-[var(--color-accent)]/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
+                    className={`${styles.createClassroom__button} animate-fadeIn rounded-xl page__animation max-w-[200px] cursor-pointer bg-[var(--color-accent)]/20 border border-[var(--color-accent)]/20 px-4 py-2 text-sm text-[var(--color-accent)] hover:bg-[var(--color-accent)]/30 transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
                 >
                     Текущий урок: {currentClass.title}
                 </button>

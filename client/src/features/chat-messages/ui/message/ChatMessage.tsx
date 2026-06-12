@@ -4,10 +4,11 @@ import type { MouseEvent } from "react"
 
 import type { Message } from "@/entities/chat"
 
-import { MessageImage } from "./MessageImage"
-import { MessageText } from "./MessageText"
-import { TokenUsage } from "./TokenUsage"
-import { useChatMessage } from "./useChatMessage"
+import { useChatMessage } from "../../model/useChatMessage"
+
+import { MessageImage } from "./parts/MessageImage"
+import { MessageText } from "./parts/MessageText"
+import { TokenUsage } from "./parts/TokenUsage"
 
 interface ChatMessageData {
   message: Message

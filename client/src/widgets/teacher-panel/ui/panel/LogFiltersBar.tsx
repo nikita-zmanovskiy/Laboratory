@@ -1,4 +1,5 @@
 import { CustomSelect } from "@/shared/ui/custom-select/ui/CustomSelect"
+
 import { LogFiltersBarProps } from "../../types"
 
 const MODE_FILTER_OPTIONS = [

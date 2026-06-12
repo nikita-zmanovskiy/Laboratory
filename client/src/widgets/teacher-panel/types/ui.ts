@@ -1,4 +1,5 @@
 import type { ClassroomLog, ClassroomStats } from "@/entities/classroom/types"
+
 import type { LogEntry } from "./models"
 
 export interface TeacherPanelProps {

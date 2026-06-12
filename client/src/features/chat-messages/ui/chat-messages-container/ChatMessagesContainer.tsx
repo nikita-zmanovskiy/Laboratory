@@ -2,10 +2,9 @@
 
 import { Message } from "@/entities/chat"
 
-import { useAutoScroll } from "../model/useAutoScroll"
-import { useImageActions } from "../model/useImageActions"
-
-import { ChatMessages } from "./ChatMessages"
+import { useAutoScroll } from "../../model/useAutoScroll"
+import { useImageActions } from "../../model/useImageActions"
+import { ChatMessages } from "../chat-messages"
 
 export interface ChatMessagesContainerProps {
     messages: Message[]

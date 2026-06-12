@@ -6,6 +6,7 @@ import { getWebSocketAuthToken } from "@/entities/classroom"
 
 import { WSTransport } from "@/shared/lib/transport/wsTransport"
 import { getClassroomWebSocketUrl } from "@/shared/lib/wsUrl"
+
 import { ClassroomSocketMessage, UseClassroomSocketReturn } from "../types"
 
 

@@ -1,8 +1,8 @@
 
 import { LessonTimer } from "@/shared/ui/lesson-timer/ui/LessonTimer"
 
-import { CopyCodeContainer } from "../copy-button/CopyCodeContainer"
 import { TeacherPanelHeaderProps } from "../../types"
+import { CopyCodeContainer } from "../copy-button/CopyCodeContainer"
 
 const EXTEND_WINDOW_MS = 12 * 60 * 60 * 1000
 

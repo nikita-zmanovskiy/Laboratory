@@ -1,6 +1,6 @@
 import type { Message } from "@/entities/chat"
 
-import { ChatMessage } from "../message/ChatMessage"
+import { ChatMessage } from "../../message"
 
 interface MessageListData {
     messages: Message[]
@@ -32,7 +32,7 @@ export const MessageList = ({
             />
         ))}
         {isLoading && (
-            <div className="mr-auto flex max-w-[75%] animate-pulse flex-col items-start gap-1.5">
+            <div className="animate-fadeIn mr-auto flex max-w-[75%] animate-pulse flex-col items-start gap-1.5">
                 <div className="min-w-[200px] rounded-2xl rounded-tl-none border border-[var(--color-border-primary)] bg-[var(--color-bg-hover)] px-4 py-3 shadow-sm">
                     {isTextMode ? (
                         <div className="space-y-2 py-1">

@@ -12,6 +12,24 @@ interface SessionStoreActions {
 
 type SessionStore = SessionStoreState & SessionStoreActions
 
+/**
+ * Хранилище идентификатора сессии
+ *
+ * SessionId генерируется через initSession при вызове initialize
+ * Используется для идентификации пользователя в API запросах
+ */
+
+/**
+ * Хранилище роли пользователя и данных текущего класса
+ *
+ * При создании читает начальное состояние из localStorage
+ * Все сеттеры синхронизируют состояние с localStorage
+ * exitChat удаляет данные класса но сохраняет роль
+ * reset полностью очищает все данные включая currentClass
+ * logout удаляет только роль
+ * loadFromStorage восстанавливает состояние из localStorage
+ */
+
 export const useSessionStore =
 	create<SessionStore>((set) => ({
 		sessionId: null,

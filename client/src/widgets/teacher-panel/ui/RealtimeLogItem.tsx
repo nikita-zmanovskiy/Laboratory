@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react"
 
+import { RealtimeLogItemProps } from "../types"
 
 import styles from "./teacher.module.css"
-import { RealtimeLogItemProps } from "../types"
 
 
 

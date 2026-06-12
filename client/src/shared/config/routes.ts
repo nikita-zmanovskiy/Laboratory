@@ -1,3 +1,31 @@
+/**
+ * Конфигурация маршрутов приложения
+ *
+ * Статические маршруты: home, chat, teacher, teacherClassroomRoot
+ * Динамические маршруты: teacherClassroom(code) - страница конкретного класса учителя
+ */
+
+/**
+ * Проверяет является ли путь публичным (не требует авторизации)
+ *
+ * @param pathname - текущий путь или null
+ * @returns true если путь null или соответствует home
+ */
+
+/**
+ * Проверяет является ли путь страницей конкретного класса учителя
+ *
+ * @param pathname - текущий путь или null
+ * @returns true если путь начинается с /teacher/classroom/
+ */
+
+/**
+ * Проверяет является ли путь любой страницей учителя
+ *
+ * @param pathname - текущий путь или null
+ * @returns true если путь начинается с /teacher
+ */
+
 export const appRoutes = {
     home: "/",
     chat: "/chat",
