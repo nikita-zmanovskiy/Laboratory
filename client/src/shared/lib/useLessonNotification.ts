@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 
 import { LESSON_WARNINGS } from "../config/lesson"
+import { CHECK_INTERVAL_MS } from "../config/notification"
 
 interface UseLessonNotificationData {
     showNotification: boolean
@@ -39,7 +40,7 @@ export interface LessonWarning {
 	message: string
 }
 
-const CHECK_INTERVAL_MS = 10_000;
+
 
 export const useLessonNotification = (
 	expiresAt: string | null,

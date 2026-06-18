@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react"
 
-const EXIT_ANIMATION_DURATION_MS = 300
+import { EXIT_ANIMATION_DURATION_MS } from "../../../config/chat"
+
+
 
 interface UseToastAutoCloseData {
   isOpen: boolean

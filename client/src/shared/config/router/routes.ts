@@ -26,12 +26,16 @@
  * @returns true если путь начинается с /teacher
  */
 
+
+const teacherClassroomRoot = "/teacher/classroom" as const
+
 export const appRoutes = {
     home: "/",
     chat: "/chat",
     teacher: "/teacher",
-    teacherClassroomRoot: "/teacher/classroom",
-    teacherClassroom: (code: string) => `/teacher/classroom/${code}`,
+    teacherClassroomRoot,
+    teacherClassroom: (code: string): `${typeof teacherClassroomRoot}/${string}` =>
+        `${teacherClassroomRoot}/${code}`,
 } as const
 
 export const isPublicRoute = (pathname: string | null) => {
@@ -43,5 +47,8 @@ export const isTeacherClassroomRoute = (pathname: string | null) => {
 }
 
 export const isTeacherRoute = (pathname: string | null) => {
-    return Boolean(pathname?.startsWith(appRoutes.teacher))
+    return Boolean(
+        pathname === appRoutes.teacher ||
+        pathname?.startsWith(`${appRoutes.teacher}/`)
+    )
 }

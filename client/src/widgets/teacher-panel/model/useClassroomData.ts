@@ -26,29 +26,29 @@ const isCanceledRequest = (error: unknown): boolean => {
 }
 
 export const useClassroomData = (code: string): UseClassroomDataReturn => {
-	const [logs, setLogs] = useState<ClassroomLog[]>([])
-	const [stats, setStats] = useState<ClassroomStats | null>(null)
-	const [expiresAt, setExpiresAt] = useState<string | null>(null)
-	const [logsPage, setLogsPage] = useState(1)
-	const [logsTotal, setLogsTotal] = useState(0)
-	const [logsTotalPages, setLogsTotalPages] = useState(0)
-	const [isInitialLoading, setIsInitialLoading] = useState(true)
-	const [isRefreshing, setIsRefreshing] = useState(false)
-	const [error, setError] = useState<string | null>(null)
+	const [logs, setLogs] = useState<ClassroomLog[]>([]),
+	 [stats, setStats] = useState<ClassroomStats | null>(null),
+	 [expiresAt, setExpiresAt] = useState<string | null>(null),
+	 [logsPage, setLogsPage] = useState(1),
+	 [logsTotal, setLogsTotal] = useState(0),
+	 [logsTotalPages, setLogsTotalPages] = useState(0),
+	 [isInitialLoading, setIsInitialLoading] = useState(true),
+	 [isRefreshing, setIsRefreshing] = useState(false),
+	 [error, setError] = useState<string | null>(null)
 
-	const hasLoadedOnceRef = useRef(false)
-	const logsAbortControllerRef = useRef<AbortController | null>(null)
-	const logsRequestIdRef = useRef(0)
-	const statsRequestIdRef = useRef(0)
-	const lastLogsFiltersRef = useRef<LogFilters | undefined>(undefined)
-	const lastLogsPageRef = useRef(1)
+	const hasLoadedOnceRef = useRef(false),
+	 logsAbortControllerRef = useRef<AbortController | null>(null),
+	 logsRequestIdRef = useRef(0),
+	 statsRequestIdRef = useRef(0),
+	 lastLogsFiltersRef = useRef<LogFilters | undefined>(undefined),
+	 lastLogsPageRef = useRef(1)
 
 	const loadLogs = useCallback(
 		(page: number, filters?: LogFilters) => {
 			logsAbortControllerRef.current?.abort()
 
-			const controller = new AbortController()
-			const requestId = logsRequestIdRef.current + 1
+			const controller = new AbortController(),
+			 requestId = logsRequestIdRef.current + 1
 
 			logsAbortControllerRef.current = controller
 			logsRequestIdRef.current = requestId

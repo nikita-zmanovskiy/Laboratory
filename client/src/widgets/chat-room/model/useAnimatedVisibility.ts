@@ -1,8 +1,8 @@
 "use client"
 import { useEffect, useState } from "react"
 
-const ENTER_ANIMATION_DELAY_MS = 10,
- EXIT_ANIMATION_DURATION_MS = 300
+import { ENTER_ANIMATION_DELAY_MS, EXIT_ANIMATION_DURATION_MS } from "@/shared/config/chat"
+
 
 export const useAnimatedVisibility = (isVisible: boolean) => {
   const [shouldRender, setShouldRender] = useState(isVisible),

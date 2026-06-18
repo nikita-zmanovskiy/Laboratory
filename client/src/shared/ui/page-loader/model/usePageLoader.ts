@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 
+import { FADE_OUT_TIME_MS, MIN_LOAD_TIME_MS } from "../../../config/theme"
+
 /**
  * Хук для управления экраном загрузки страницы
  *
@@ -14,8 +16,6 @@ import { useEffect, useState } from "react"
  * @returns fadeOut - флаг запуска анимации затухания
  */
 
-const MIN_LOAD_TIME_MS = 1000,
- FADE_OUT_TIME_MS = 500
 
 export const usePageLoader = () => {
   const [visible, setVisible] = useState(true),

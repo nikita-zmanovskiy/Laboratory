@@ -9,10 +9,11 @@ import { LogEntry, RealtimeLogMessage, UseWebSocketLogsReturn } from "../types"
 
 
 export const useWebSocketLogs = (classroomCode: string): UseWebSocketLogsReturn => {
-    const [realtimeLogs, setRealtimeLogs] = useState<LogEntry[]>([])
-    const [isConnected, setIsConnected] = useState(false)
-    const transportRef = useRef<WSTransport<RealtimeLogMessage> | null>(null)
-    const callbackRef = useRef<(() => void) | null>(null)
+    const [realtimeLogs, setRealtimeLogs] = useState<LogEntry[]>([]),
+     [isConnected, setIsConnected] = useState(false)
+
+     const transportRef = useRef<WSTransport<RealtimeLogMessage> | null>(null),
+     callbackRef = useRef<(() => void) | null>(null)
 
     const onNewLog = useCallback((callback: () => void) => {
         callbackRef.current = callback

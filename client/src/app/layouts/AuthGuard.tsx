@@ -11,7 +11,7 @@ import {
     isPublicRoute,
     isTeacherClassroomRoute,
     isTeacherRoute,
-} from "@/shared/config/routes"
+} from "@/shared/config/router/routes"
 
 /**
  * Компонент защищающий маршруты от неавторизованного доступа

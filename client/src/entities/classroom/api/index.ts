@@ -2,7 +2,7 @@ import type { AxiosRequestConfig } from "axios"
 
 import { ensureCsrfSession } from "@/shared/api/csrf"
 import { http } from "@/shared/api/http"
-import { apiRoutes } from "@/shared/config/apiRoutes"
+import { apiRoutes } from "@/shared/config/router/apiRoutes"
 
 import type {
     Classroom,

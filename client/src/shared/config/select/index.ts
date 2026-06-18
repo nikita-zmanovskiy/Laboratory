@@ -1,0 +1,1 @@
+export const CLOSE_ANIMATION_DURATION_MS = 150

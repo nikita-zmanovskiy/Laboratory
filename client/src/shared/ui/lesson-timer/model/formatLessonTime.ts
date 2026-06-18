@@ -1,5 +1,5 @@
-const MINUTE_MS = 60_000,
- HOUR_MS = 60 * MINUTE_MS
+import { HOUR_MS, MINUTE_MS } from "../../../config/lesson"
+
 
 export const formatLessonTime = (diffMs: number) => {
   const hours = Math.floor(diffMs / HOUR_MS),

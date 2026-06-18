@@ -12,3 +12,8 @@ export const LESSON_WARNINGS: LessonWarning[] = [
 		message: "Осталось меньше 5 минут до конца урока!",
 	},
 ]
+
+export const MINUTE_MS = 60_000,
+ HOUR_MS = 60 * MINUTE_MS
+
+export const ENDING_THRESHOLD_MS = 5 * 60 * 1000

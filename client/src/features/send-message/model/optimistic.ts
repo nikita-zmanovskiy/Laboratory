@@ -28,7 +28,7 @@ type AddOptimisticMessagesParams = AddOptimisticMessagesData & AddOptimisticMess
  * Добавляет оптимистичные сообщения пользователя и ассистента в чат
  *
  * Сообщение пользователя содержит текст запроса и прикреплённое изображение при наличии
- * Сообщение ассистента содержит текст GENERATING_TEXT как заглушку на время запроса
+ * Сообщение ассистента содержит текст 'Генерация...' как заглушку на время запроса
  *
  * @param addMessage - функция добавления сообщения в стор
  * @param prompt - текст запроса пользователя
@@ -36,7 +36,6 @@ type AddOptimisticMessagesParams = AddOptimisticMessagesData & AddOptimisticMess
  * @returns идентификаторы созданных сообщений
  */
 
-const GENERATING_TEXT = "Генерация..."
 
 export const createOptimisticMessageIds = (): OptimisticMessageIds => {
     const timestamp = Date.now()
@@ -64,7 +63,7 @@ export const addOptimisticMessages = ({
     addMessage({
         id: ids.assistantMessageId,
         role: "assistant",
-        text: GENERATING_TEXT,
+        text: "Генерация...",
     })
 
     return ids

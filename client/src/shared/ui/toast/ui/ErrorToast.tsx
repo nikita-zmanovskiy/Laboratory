@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 
+import { ERROR_TOAST } from "../../../config/teacherPanel";
 import { useToastAutoClose } from "../model/useToastAutoClose";
 
 interface ErrorToastData {
@@ -17,7 +18,7 @@ type ErrorToastProps = ErrorToastData & ErrorToastHandlers
 
 export const ErrorToast = ({
   message,
-  duration = 10000,
+  duration = ERROR_TOAST,
   onClose,
 }: ErrorToastProps) => {
   const [entered, setEntered] = useState(false),

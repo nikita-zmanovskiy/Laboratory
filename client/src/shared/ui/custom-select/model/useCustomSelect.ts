@@ -9,6 +9,8 @@ import {
 	useState,
 } from "react"
 
+import { CLOSE_ANIMATION_DURATION_MS } from "../../../config/select"
+
 /**
  * Хук для управления кастомным селектом с клавиатурной навигацией и анимацией
  *
@@ -34,7 +36,7 @@ import {
  * @returns handleTriggerKeyDown - обработчик клавиатуры для триггера
  */
 
-const CLOSE_ANIMATION_DURATION_MS = 150
+
 
 export interface UseCustomSelectOption<T extends string | number> {
 	label: string

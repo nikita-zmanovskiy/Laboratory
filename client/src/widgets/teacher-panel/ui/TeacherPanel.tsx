@@ -1,5 +1,4 @@
-
-import { NotificationToast } from "@/shared/ui/notification-toast/ui/NotificationToast"
+import { NotificationToast } from "@/shared/ui/notification-toast"
 
 import { TeacherPanelProps } from "../types"
 
@@ -13,123 +12,116 @@ import { ChartsSection } from "./ChartsSection"
 
 import styles from "./teacher.module.css"
 
+export const TeacherPanel = (props: TeacherPanelProps) => {
+    const {
+        code,
+        stats,
+        actionError,
+        realtimeLogs,
+        isWsConnected,
+        filteredLogs,
+        expiresAt,
+        showNotification,
+        notificationMessage,
+        dismissNotification,
+        showConfirm,
+        isDeactivating,
+        isExtending,
+        isExpired,
+        onExtend,
+        onOpenConfirm,
+        onBack,
+        onConfirmDeactivate,
+        onCloseConfirm,
+        onExitToHome,
+    } = props
 
-export const TeacherPanel = ({
-    code,
-    stats,
-    logsPage,
-    logsTotal,
-    logsTotalPages,
-    isInitialLoading,
-    isRefreshing,
-    actionError,
-    isExtending,
-    isDeactivating,
-    onLoadLogs,
-    onRefreshFiltered,
-    hasActiveFilters,
-    onExtend,
-    onBack,
-    realtimeLogs,
-    isWsConnected,
-    searchQuery,
-    onSearchChange,
-    modeFilter,
-    onModeFilterChange,
-    statusFilter,
-    onStatusFilterChange,
-    filteredLogs,
-    imageFilter,
-    onImageFilterChange,
-    sortOrder,
-    onSortOrderChange,
-    isExporting,
-    onExport,
-    expiresAt,
-    onOpenConfirm,
-    onCloseConfirm,
-    onConfirmDeactivate,
-    showConfirm,
-    isExpired,
-    onExitToHome,
-    notificationMessage,
-    dismissNotification,
-    showNotification,
-    onResetFilters,
-}: TeacherPanelProps) => (
-    <main className={`w-full min-h-screen page__animation-opacity block overflow-x-hidden ${styles.teacher__wrapper}`}>
-        <div className="mx-auto max-w-6xl px-4 py-6">
-            {showNotification && (
-                <NotificationToast
-                    message={notificationMessage}
-                    onClose={dismissNotification}
+    const headerProps = {
+        code,
+        stats,
+        expiresAt,
+        isExtending,
+        isDeactivating,
+        onExtend,
+        onOpenConfirm,
+        onBack,
+    } satisfies React.ComponentProps<typeof TeacherPanelHeader>
+
+    const filtersBarProps = {
+        searchQuery: props.searchQuery,
+        onSearchChange: props.onSearchChange,
+        modeFilter: props.modeFilter,
+        onModeFilterChange: props.onModeFilterChange,
+        statusFilter: props.statusFilter,
+        onStatusFilterChange: props.onStatusFilterChange,
+        imageFilter: props.imageFilter,
+        onImageFilterChange: props.onImageFilterChange,
+        sortOrder: props.sortOrder,
+        onSortOrderChange: props.onSortOrderChange,
+        hasActiveFilters: props.hasActiveFilters,
+        isRefreshing: props.isRefreshing,
+        isInitialLoading: props.isInitialLoading,
+        filteredLogsCount: filteredLogs.length,
+        logsTotal: props.logsTotal,
+        onRefreshFiltered: props.onRefreshFiltered,
+        onResetFilters: props.onResetFilters,
+    } satisfies React.ComponentProps<typeof LogFiltersBar>
+
+    const logsTableProps = {
+        filteredLogs,
+        logsPage: props.logsPage,
+        logsTotal: props.logsTotal,
+        logsTotalPages: props.logsTotalPages,
+        isInitialLoading: props.isInitialLoading,
+        isRefreshing: props.isRefreshing,
+        isExporting: props.isExporting,
+        onExport: props.onExport,
+        onLoadLogs: props.onLoadLogs,
+    } satisfies React.ComponentProps<typeof LogsTable>
+
+    const modalsProps = {
+        showConfirm,
+        isDeactivating,
+        isExpired,
+        onConfirmDeactivate,
+        onCloseConfirm,
+        onExitToHome,
+    } satisfies React.ComponentProps<typeof TeacherPanelModals>
+
+    return (
+        <main className={`w-full min-h-screen page__animation-opacity block overflow-x-hidden ${styles.teacher__wrapper}`}>
+            <div className="mx-auto max-w-6xl px-4 py-6">
+                {showNotification && (
+                    <NotificationToast
+                        message={notificationMessage}
+                        onClose={dismissNotification}
+                    />
+                )}
+
+                <TeacherPanelHeader {...headerProps} />
+
+                {actionError && (
+                    <p className="mb-4 text-sm text-[var(--color-text-error)]">
+                        {actionError}
+                    </p>
+                )}
+
+                <StatsCards stats={stats} />
+
+                <RealtimeLogsPanel
+                    realtimeLogs={realtimeLogs}
+                    isWsConnected={isWsConnected}
                 />
-            )}
 
-            <TeacherPanelHeader
-                code={code}
-                stats={stats}
-                expiresAt={expiresAt}
-                isExtending={isExtending}
-                isDeactivating={isDeactivating}
-                onExtend={onExtend}
-                onOpenConfirm={onOpenConfirm}
-                onBack={onBack}
-            />
+                <div className="rounded-xl border border-[var(--color-border-primary)] w-full">
+                    <LogFiltersBar {...filtersBarProps} />
+                    <LogsTable {...logsTableProps} />
+                </div>
 
-            {actionError && (
-                <p className="mb-4 text-sm text-[var(--color-text-error)]">{actionError}</p>
-            )}
+                <ChartsSection stats={stats} />
 
-            <StatsCards stats={stats} />
-            <RealtimeLogsPanel
-                realtimeLogs={realtimeLogs}
-                isWsConnected={isWsConnected}
-            />
-
-            <div className="rounded-xl border border-[var(--color-border-primary)] w-full">
-                <LogFiltersBar
-                    searchQuery={searchQuery}
-                    onSearchChange={onSearchChange}
-                    modeFilter={modeFilter}
-                    onModeFilterChange={onModeFilterChange}
-                    statusFilter={statusFilter}
-                    onStatusFilterChange={onStatusFilterChange}
-                    imageFilter={imageFilter}
-                    onImageFilterChange={onImageFilterChange}
-                    sortOrder={sortOrder}
-                    onSortOrderChange={onSortOrderChange}
-                    hasActiveFilters={hasActiveFilters}
-                    isRefreshing={isRefreshing}
-                    isInitialLoading={isInitialLoading}
-                    filteredLogsCount={filteredLogs.length}
-                    logsTotal={logsTotal}
-                    onRefreshFiltered={onRefreshFiltered}
-                    onResetFilters={onResetFilters}
-                />
-                <LogsTable
-                    filteredLogs={filteredLogs}
-                    logsPage={logsPage}
-                    logsTotal={logsTotal}
-                    logsTotalPages={logsTotalPages}
-                    isInitialLoading={isInitialLoading}
-                    isRefreshing={isRefreshing}
-                    isExporting={isExporting}
-                    onExport={onExport}
-                    onLoadLogs={onLoadLogs}
-                />
+                <TeacherPanelModals {...modalsProps} />
             </div>
-
-            <ChartsSection stats={stats} />
-
-            <TeacherPanelModals
-                showConfirm={showConfirm}
-                isDeactivating={isDeactivating}
-                isExpired={isExpired}
-                onConfirmDeactivate={onConfirmDeactivate}
-                onCloseConfirm={onCloseConfirm}
-                onExitToHome={onExitToHome}
-            />
-        </div>
-    </main>
-)
+        </main>
+    )
+}

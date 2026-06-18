@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useState } from "react"
 
+import { ENTER_DELAY_MS, OVERLAY_EXIT_DURATION_MS } from "../config/overlay"
+
 /**
  * Хук для анимации появления и закрытия оверлея
  *
@@ -15,9 +17,7 @@ import { useCallback, useEffect, useState } from "react"
  * @returns runClose - функция запуска анимации закрытия с колбэком по завершении
  */
 
-const ENTER_DELAY_MS = 10
 
-export const OVERLAY_EXIT_DURATION_MS = 300
 
 export const useOverlayAnimation = () => {
     const [visible, setVisible] = useState(false),

@@ -1,19 +1,11 @@
 
+import { LOG_TABLE_HEADERS } from "@/shared/config/teacherPanel"
+
 import { LogsTableProps } from "../../types"
 
 import styles from "../teacher.module.css"
 
-const LOG_TABLE_HEADERS = [
-    "Время",
-    "Сессия",
-    "Режим",
-    "Хеш промта",
-    "Прикрепленное фото",
-    "Токены",
-    "Статус",
-    "Время ответа",
-    "Ошибка",
-] as const
+
 
 const formatPromptHash = (hash: string | null) => {
     if (!hash) {

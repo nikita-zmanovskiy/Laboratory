@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from "react"
 
+import { THEME_STORAGE_KEY, THEME_TRANSITION_CLASS, THEME_TRANSITION_DURATION_MS } from "../../../config/theme"
+
 type Theme = "dark" | "light"
 
 /**
@@ -17,9 +19,6 @@ type Theme = "dark" | "light"
  * @returns toggleTheme - функция переключения темы
  */
 
-const THEME_STORAGE_KEY = "theme",
- THEME_TRANSITION_CLASS = "theme-transition",
- THEME_TRANSITION_DURATION_MS = 300
 
 const isTheme = (value: string | null): value is Theme => {
 	return value === "light" || value === "dark"

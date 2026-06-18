@@ -14,7 +14,7 @@ import {
 } from "@/entities/classroom"
 import { useRoleStore, useSessionStore } from "@/entities/session"
 
-import { appRoutes } from "@/shared/config/routes"
+import { appRoutes } from "@/shared/config/router/routes"
 import { useLessonNotification } from "@/shared/lib/useLessonNotification"
 
 import { useBeforeUnloadWarning } from "./useBeforeUnloadWarning"
@@ -144,12 +144,12 @@ export const useTemplateHomePage = () => {
     }
 
     const handleExit = () => {
-        clearMessages()
+        
 
         if (role === "teacher") {
             setRole("teacher")
             router.push(appRoutes.home)
-
+            clearMessages()
             return
         }
 
@@ -164,6 +164,7 @@ export const useTemplateHomePage = () => {
 
         exitChat()
         router.push(appRoutes.home)
+        clearMessages()
     }
 
     return {

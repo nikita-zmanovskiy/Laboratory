@@ -1,4 +1,4 @@
-import { apiRoutes } from "../config/apiRoutes"
+import { apiRoutes } from "../config/router/apiRoutes"
 
 import { http } from "./http"
 

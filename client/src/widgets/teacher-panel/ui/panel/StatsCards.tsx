@@ -7,7 +7,7 @@ export const StatsCards = ({ stats }: StatsCardsProps) => {
         return null
     }
 
-    const items = [
+    const itemsStats = [
         { label: "Текстовых запросов", value: stats.text_requests },
         { label: "Изображений", value: stats.image_requests },
         { label: "Среднее время ответа", value: `${stats.avg_response_time ?? 0}ms` },
@@ -16,7 +16,7 @@ export const StatsCards = ({ stats }: StatsCardsProps) => {
 
     return (
         <div className="mb-6 grid grid-cols-4 gap-4 max-[690px]:flex max-[690px]:flex-col">
-            {items.map((item) => (
+            {itemsStats.map((item) => (
                 <div
                     key={item.label}
                     className="rounded-xl border border-[var(--color-border-primary)] p-4"

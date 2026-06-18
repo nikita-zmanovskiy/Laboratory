@@ -1,0 +1,1 @@
+export const CARD_ANIMATION_DURATION_MS = 500

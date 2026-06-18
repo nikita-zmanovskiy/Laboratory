@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 
+import { ENDING_THRESHOLD_MS } from "../../../config/lesson"
+
 import { formatLessonTime } from "./formatLessonTime"
 
 
@@ -18,7 +20,7 @@ import { formatLessonTime } from "./formatLessonTime"
  * @returns isEnding - флаг скорого окончания (меньше ENDING_THRESHOLD_MS мс)
  */
 
-const ENDING_THRESHOLD_MS = 5 * 60 * 1000
+
 
 export const useLessonTimer = (expiresAt: string) => {
   const [diffMs, setDiffMs] = useState(0)

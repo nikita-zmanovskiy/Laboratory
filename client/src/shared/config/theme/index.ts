@@ -1,0 +1,9 @@
+
+export const THEME_STORAGE_KEY = "theme",
+ THEME_TRANSITION_CLASS = "theme-transition",
+ THEME_TRANSITION_DURATION_MS = 300
+
+export const MIN_LOAD_TIME_MS = 1000,
+ FADE_OUT_TIME_MS = 500
+
+ 

@@ -6,6 +6,8 @@ import type { MouseEvent } from "react"
 
 import { useRoleStore } from "@/entities/session"
 
+import { CARD_ANIMATION_DURATION_MS } from "@/shared/config/card"
+
 import { useParticles } from "./useParticles"
 
 
@@ -28,7 +30,7 @@ import { useParticles } from "./useParticles"
  * @returns handleTeacherClick - обработчик клика по роли учителя
  */
 
-const CARD_ANIMATION_DURATION_MS = 500
+
 
 const getButtonCenter = (event: MouseEvent<HTMLElement>) => {
   const button = (event.target as HTMLElement).closest("button"),

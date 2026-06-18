@@ -5,7 +5,7 @@ import { AxiosError } from "axios"
 import { joinClassroom } from "@/entities/classroom"
 import { useRoleStore } from "@/entities/session"
 
-import { appRoutes } from "@/shared/config/routes"
+import { appRoutes } from "@/shared/config/router/routes"
 
 interface UseJoinClassroomData {
     code: string

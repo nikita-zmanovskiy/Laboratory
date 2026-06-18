@@ -1,6 +1,8 @@
+import { STORAGE_KEY } from "@/shared/config/storage"
+
 import type { CurrentClassroom } from "../types"
 
-const STORAGE_KEY = "currentClass"
+
 
 /**
  * Проверяет активен ли класс на основе даты истечения

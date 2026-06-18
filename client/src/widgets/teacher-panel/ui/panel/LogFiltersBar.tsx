@@ -1,31 +1,7 @@
+import { IMAGE_FILTER_OPTIONS, MODE_FILTER_OPTIONS, SORT_OPTIONS, STATUS_FILTER_OPTIONS } from "@/shared/config/teacherPanel"
 import { CustomSelect } from "@/shared/ui/custom-select/ui/CustomSelect"
 
 import { LogFiltersBarProps } from "../../types"
-
-const MODE_FILTER_OPTIONS = [
-    { value: "all", label: "Все режимы" },
-    { value: "text", label: "Текст" },
-    { value: "image", label: "Изображение" },
-] as const
-
-const STATUS_FILTER_OPTIONS = [
-    { value: "all", label: "Все статусы" },
-    { value: "success", label: "Успешно" },
-    { value: "error", label: "Ошибки" },
-] as const
-
-const IMAGE_FILTER_OPTIONS = [
-    { value: "all", label: "Все запросы" },
-    { value: "with_image", label: "С изображением пользователя" },
-    { value: "no_image", label: "Без изображения пользователя" },
-] as const
-
-const SORT_OPTIONS = [
-    { value: "newest", label: "Сначала новые" },
-    { value: "oldest", label: "Сначала старые" },
-] as const
-
-
 
 export const LogFiltersBar = ({
     searchQuery,

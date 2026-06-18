@@ -1,10 +1,11 @@
 
+import { EXTEND_WINDOW_MS } from "@/shared/config/teacherPanel"
 import { LessonTimer } from "@/shared/ui/lesson-timer/ui/LessonTimer"
 
 import { TeacherPanelHeaderProps } from "../../types"
 import { CopyCodeContainer } from "../copy-button/CopyCodeContainer"
 
-const EXTEND_WINDOW_MS = 12 * 60 * 60 * 1000
+
 
 
 export const TeacherPanelHeader = ({
@@ -17,9 +18,9 @@ export const TeacherPanelHeader = ({
     onOpenConfirm,
     onBack,
 }: TeacherPanelHeaderProps) => {
-    const expiresTime = expiresAt ? new Date(expiresAt).getTime() : 0
-    const canExtend = Boolean(expiresAt && expiresTime - Date.now() < EXTEND_WINDOW_MS)
-    const canDeactivate = Boolean(expiresAt && expiresTime > Date.now())
+    const expiresTime = expiresAt ? new Date(expiresAt).getTime() : 0,
+     canExtend = Boolean(expiresAt && expiresTime - Date.now() < EXTEND_WINDOW_MS),
+     canDeactivate = Boolean(expiresAt && expiresTime > Date.now())
 
     return (
         <div className="mb-6 flex items-center justify-between max-[690px]:flex-col max-[690px]:gap-3">

@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation"
 import { updateCurrentClassExpiresAt, useClassroomExpiration } from "@/entities/classroom"
 import { useRoleStore } from "@/entities/session"
 
-import { appRoutes } from "@/shared/config/routes"
+import { appRoutes } from "@/shared/config/router/routes"
 import { useLessonNotification } from "@/shared/lib/useLessonNotification"
 
 import { buildLogFilters, hasActiveLogFilters } from "../model/logFilters"

@@ -6,7 +6,7 @@ import { createClassroom, setCurrentClassToStorage } from "@/entities/classroom"
 import { useRoleStore, useSessionStore } from "@/entities/session"
 
 import { DURATION_OPTIONS } from "@/shared/config/classroom"
-import { appRoutes } from "@/shared/config/routes"
+import { appRoutes } from "@/shared/config/router/routes"
 
 
 

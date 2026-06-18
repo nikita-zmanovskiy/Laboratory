@@ -12,10 +12,10 @@ import { ClassroomSocketMessage, UseClassroomSocketReturn } from "../types"
 
 
 export const useClassroomSocket = (classroomCode: string): UseClassroomSocketReturn => {
-    const [isClosed, setIsClosed] = useState(false)
-    const [closeMessage, setCloseMessage] = useState("")
-    const transportRef = useRef<WSTransport<ClassroomSocketMessage> | null>(null)
-    const extendCallbackRef = useRef<((newExpiresAt: string) => void) | null>(null)
+    const [isClosed, setIsClosed] = useState(false),
+     [closeMessage, setCloseMessage] = useState(""),
+     transportRef = useRef<WSTransport<ClassroomSocketMessage> | null>(null),
+     extendCallbackRef = useRef<((newExpiresAt: string) => void) | null>(null)
 
     const onExtend = useCallback((callback: (newExpiresAt: string) => void) => {
         extendCallbackRef.current = callback

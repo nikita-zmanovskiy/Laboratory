@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react"
 
+import { EXIT_ANIMATION_DURATION_MS } from "../../../config/chat"
+
 /**
  * Хук для автоматического закрытия уведомления с анимацией выхода
  *
@@ -14,7 +16,6 @@ import { useEffect, useState } from "react"
  * @returns isLeaving - флаг анимации выхода
  */
 
-const EXIT_ANIMATION_DURATION_MS = 300
 
 interface UseNotificationToastData {
   duration: number
