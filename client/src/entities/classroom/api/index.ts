@@ -123,6 +123,7 @@ export const createClassroom = async (
         expires_in_minutes: durationMinutes,
     })
 
+	// Review 26.06.2026 - супер, именно так и должен использоваться маппинг данных 👍
     return mapClassroomDtoToModel(response.data)
 }
 
@@ -137,6 +138,7 @@ export const joinClassroom = async (
     return mapJoinedClassroomDtoToModel(response.data)
 }
 
+// Review 26.06.2026 - тут лучше поправить наименований функции, что бы избежать коллизий.
 export const getClassroomLogs = async (
     code: string,
     page = 1,

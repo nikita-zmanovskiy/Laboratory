@@ -24,6 +24,8 @@ type UseImageActionsReturn = UseImageActionsReturnData & UseImageActionsReturnHa
  * @returns handleDownload - функция скачивания изображения по URL
  */
 
+
+// Review 26.06.2026 - функцию можно положить в shared. Ее можно переиспользовать в любом месте приложения.
 export const useImageActions = (): UseImageActionsReturn => {
 	const [activeImage, setActiveImage] = useState<string | null>(null)
 
@@ -35,7 +37,7 @@ export const useImageActions = (): UseImageActionsReturn => {
 			 blob = await response.blob(),
 			 url = window.URL.createObjectURL(blob),
 			 link = document.createElement("a")
-			 
+
 			link.href = url
 			link.download = filename
 			document.body.appendChild(link)

@@ -7,6 +7,7 @@ export interface ChatStoreState {
     error: string | null
 }
 
+// Review 26.06.2026 - хорошее решение 👍
 export interface ChatStoreActions {
     setMode: (mode: ChatMode) => void
     setLoading: (loading: boolean) => void

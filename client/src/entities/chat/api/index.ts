@@ -45,6 +45,7 @@ import type { GenerateMode, GenerateRequestDto, GenerateResponseDto } from "./dt
  * @returns ответ сервера с данными генерации
  */
 
+// Review 26.06.2026 - если функция вспомогательная, то ее лучше положить в lib
 const createGenerateRequest = (
     mode: GenerateMode,
     prompt: string,
@@ -60,6 +61,14 @@ const createGenerateRequest = (
     return body
 }
 
+// Review 26.06.2026 - Хорошее решение 👍
+// Небольшие улучшения:
+// наименования функций в слое api должны быть более "транспортным" - лучше использовать префиксы в соответствии с типом запроса: send*, put*, patch*, delete*. вместо get* - лучше  использовать, fetch.
+// fetch - работа с асинхроннностью + запрос на сервер, load (обычно используется для того, что бы "загрузить" данные от api до model (стора)), get - работа с локальными данными в синхронном режиме.
+
+// get: Например getUserById - в этом случае у нас уже есть список всех пользователей в системе и мы локально проходим по нему.
+// load: loadUserById - тут понимаем, что функция находится в сторе и ожидаем что она положит данные в стор либо возвращает их как промис (может быть какая-то бизнес-логика)
+// fetch: fetchUserById - тут понимаем, что функция обращается к серверу напрямую, никакой бизнес-логики в ней нет
 export const generateText = async (
     prompt: string,
     sessionId: string,
@@ -82,6 +91,8 @@ export const generateText = async (
     return response.data
 }
 
+// Review 26.06.2026 - параметры для запроса (request), можно так же вынести отдельным файлом в entities/chat/api/request.ts.
+// Уменьшит кол-во, повысится читаемость кода.
 export const generateImage = async (
     prompt: string,
     imageBase64: string | null,

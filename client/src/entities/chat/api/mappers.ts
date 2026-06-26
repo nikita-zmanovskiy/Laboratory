@@ -7,6 +7,7 @@ import type { GenerateResponseDto } from "./dto"
 const EMPTY_IMAGE_RESPONSE_TEXT =
     "Изображение не было получено от сервера. Попробуйте переформулировать запрос: например, начните с «Нарисуй новое изображение на основе прикрепленного изображения...»."
 
+// Review 26.06.2026 - Хорошее решение 👍
 export const mapGenerateResponseToMessage = (
     response: GenerateResponseDto,
     isTextMode: boolean
