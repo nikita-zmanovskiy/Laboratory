@@ -42,9 +42,12 @@ COPY --from=builder --chown=nodejs:nodejs /app/prisma.config.ts ./prisma.config.
 COPY --from=builder --chown=nodejs:nodejs /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder --chown=nodejs:nodejs /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder --chown=nodejs:nodejs /app/russian_trusted_root_ca.cer ./russian_trusted_root_ca.cer
+COPY --chown=nodejs:nodejs docker-entrypoint.sh ./docker-entrypoint.sh
+
+RUN chmod +x ./docker-entrypoint.sh
 
 USER nodejs
 
 EXPOSE 3000
 
-CMD ["node", "dist/src/main.js"]
+ENTRYPOINT ["./docker-entrypoint.sh"]

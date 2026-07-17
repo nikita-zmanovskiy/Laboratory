@@ -34,7 +34,7 @@ services:
 
   backend:
     build:
-      context: ./backend
+      context: ./backend-nest
       dockerfile: Dockerfile
     container_name: laboratory-backend
     restart: unless-stopped

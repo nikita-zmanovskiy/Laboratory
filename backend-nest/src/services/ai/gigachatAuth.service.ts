@@ -42,6 +42,8 @@ export class GigaChatAuthService {
         }
 
         try {
+       
+            // const authKey = config.gigachat.clientSecret.replace(/^["']|["']$/g, ''),
             const authKey = config.gigachat.clientSecret,
                 rquid = crypto.randomUUID()
 

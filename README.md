@@ -4,18 +4,16 @@ Laboratory это учебное web-приложение для работы с
 
 Преподаватель создаёт комнату, ученики подключаются по коду и отправляют запросы к AI. Backend сохраняет историю, проверяет доступы и рассылает обновления через WebSocket.
 
-## Добавлен новый бекенд на nest + prisma
+## Backend: NestJS + Prisma
 
-Инструкция по запуску в docker будет позже
-
-TODO: сделать инструкцию запуска в докер для нового сервера 
+Корневой `compose.yml` собирает **backend-nest** (старый Express `backend` остаeтся в репозитории как reference).
 
 ## Что внутри
 
 Проект состоит из четырёх частей:
 
 - client: интерфейс на Next.js
-- backend: API, WebSocket и работа с базой
+- backend-nest: API, WebSocket и Prisma
 - postgres: хранение классов, логов и истории
 - redis: Pub/Sub для WebSocket
 
@@ -29,27 +27,32 @@ TODO: сделать инструкцию запуска в докер для н
 cp .env.production.example .env.production
 ```
 
-
-
-запуск проекта: 
-```bash 
-docker compose --env-file .env.production build --no-cache
-```
+Пересобрать и поднять:
 
 ```bash
-docker compose --env-file .env.production up --build -d
+docker compose --env-file .env.production build --no-cache
+docker compose --env-file .env.production up -d --force-recreate
 ```
 
-проект доступен по адресу http://localhost
+Проект: http://localhost  
+Health: http://localhost/health  
+Swagger: контейнер backend, порт 3000 внутри сети
 
-остановить проект и удалить: docker compose --env-file .env.production down -v
+Проверка:
+
+```bash
+docker compose --env-file .env.production ps
+docker compose --env-file .env.production logs -f backend
+curl http://localhost/health
+```
+
+Остановить: `docker compose --env-file .env.production down`  
+С удалением БД: `docker compose --env-file .env.production down -v`
 
 
-## Чтобы запустить локально (без докера) /backend
+## Чтобы запустить локально (без докера) /backend-nest
 
-для запуска npm i
-
-npm run dev
+для запуска: `cd backend-nest && npm i && npm run dev`
 
 нужно скачать PostgreSQL 15+ (если нет)
 

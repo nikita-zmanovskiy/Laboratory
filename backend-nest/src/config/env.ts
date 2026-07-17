@@ -51,8 +51,10 @@ export const config = {
     },
 
     gigachat: {
-        clientId: process.env.GIGACHAT_CLIENT_ID || '',
-        clientSecret: process.env.GIGACHAT_CLIENT_SECRET || '',
+        clientId: (process.env.GIGACHAT_CLIENT_ID || '').trim(),
+        clientSecret: (process.env.GIGACHAT_CLIENT_SECRET || '')
+            .trim()
+            .replace(/^["']|["']$/g, ''),
         authUrl:
             process.env.GIGACHAT_AUTH_URL || 'https://ngw.devices.sberbank.ru:9443/api/v2/oauth',
         apiUrl: process.env.GIGACHAT_API_URL || 'https://gigachat.devices.sberbank.ru/api/v1',
