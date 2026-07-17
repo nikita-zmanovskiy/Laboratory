@@ -1,6 +1,6 @@
 "use client"
 
-import { useJoinClassroom } from "../model/useJoinClassroom"
+import { useJoinClassroom } from "../hooks/useJoinClassroom"
 
 import { CodeInput } from "./CodeInput"
 

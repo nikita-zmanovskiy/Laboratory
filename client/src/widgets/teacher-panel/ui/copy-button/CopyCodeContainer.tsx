@@ -1,6 +1,6 @@
 "use client"
 
-import { useCopyCode } from "../../model/useCopyCode"
+import { useCopyCode } from "../../hooks/useCopyCode"
 
 import { CopyCodeButton } from "./CopyCodeButton"
 

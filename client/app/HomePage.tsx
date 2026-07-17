@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 
-import { RoleSelectPage } from "@/features/role-select"
+import { RoleSelectPage } from "@/features/select-role"
 
 import { useChatStore } from "@/entities/chat"
 

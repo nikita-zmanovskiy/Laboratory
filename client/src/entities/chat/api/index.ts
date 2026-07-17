@@ -2,7 +2,8 @@ import { ensureCsrfSession } from "@/shared/api/csrf"
 import { http } from "@/shared/api/http"
 import { apiRoutes } from "@/shared/config/router/apiRoutes"
 
-import type { GenerateMode, GenerateRequestDto, GenerateResponseDto } from "./dto"
+import type { GenerateResponseDto } from "./dto"
+import { createGenerateRequest } from "../lib"
 
 
 /**
@@ -45,21 +46,8 @@ import type { GenerateMode, GenerateRequestDto, GenerateResponseDto } from "./dt
  * @returns ответ сервера с данными генерации
  */
 
-// Review 26.06.2026 - если функция вспомогательная, то ее лучше положить в lib
-const createGenerateRequest = (
-    mode: GenerateMode,
-    prompt: string,
-    sessionId: string,
-    imageBase64?: string | null
-): GenerateRequestDto => {
-    const body: GenerateRequestDto = { mode, prompt, session_id: sessionId }
+// Review 26.06.2026 - если функция вспомогательная, то ее лучше положить в lib - done
 
-    if (imageBase64) {
-        body.image = imageBase64
-    }
-
-    return body
-}
 
 // Review 26.06.2026 - Хорошее решение 👍
 // Небольшие улучшения:
@@ -68,8 +56,8 @@ const createGenerateRequest = (
 
 // get: Например getUserById - в этом случае у нас уже есть список всех пользователей в системе и мы локально проходим по нему.
 // load: loadUserById - тут понимаем, что функция находится в сторе и ожидаем что она положит данные в стор либо возвращает их как промис (может быть какая-то бизнес-логика)
-// fetch: fetchUserById - тут понимаем, что функция обращается к серверу напрямую, никакой бизнес-логики в ней нет
-export const generateText = async (
+// fetch: fetchUserById - тут понимаем, что функция обращается к серверу напрямую, никакой бизнес-логики в ней нет - done
+export const sendGenerateText = async (
     prompt: string,
     sessionId: string,
     classroomCode: string,
@@ -91,26 +79,6 @@ export const generateText = async (
     return response.data
 }
 
-// Review 26.06.2026 - параметры для запроса (request), можно так же вынести отдельным файлом в entities/chat/api/request.ts.
+
+// Review 26.06.2026 - параметры для запроса (request), можно так же вынести отдельным файлом в entities/chat/api/request.ts. - done
 // Уменьшит кол-во, повысится читаемость кода.
-export const generateImage = async (
-    prompt: string,
-    imageBase64: string | null,
-    sessionId: string,
-    classroomCode: string,
-    skipEnsureSession = false
-): Promise<GenerateResponseDto> => {
-    if (!skipEnsureSession) {
-        await ensureCsrfSession(sessionId)
-    }
-
-    const body = createGenerateRequest("image", prompt, sessionId, imageBase64)
-
-    const response = await http.post<GenerateResponseDto>(apiRoutes.generate, body, {
-        headers: {
-            "x-classroom-code": classroomCode,
-        },
-    })
-
-    return response.data
-}

@@ -14,7 +14,7 @@ import { ChatStore } from "../types"
 // Тут лушче называть функции максимально приблежненно к бизнес-логике. sendMessage, removeMessage (delete = в api слое), changeMessage и т.д.
 // addMessage - ОК 👍, updateMessage - лучше сделать как changeMessage. В остальном все гуд 👍
 
-// Так же все, если устанавливаем значение в самом сторе, то функция должна быть названа set* (setMode, setLoading, setMessages, setError). - тут все ОК 👍
+// Так же все, если устанавливаем значение в самом сторе, то функция должна быть названа set* (setMode, setLoading, setMessages, setError). - тут все ОК 👍 - done
 export const useChatStore = create<ChatStore>(
 	(set) => ({
 		mode: "text",
@@ -28,7 +28,7 @@ export const useChatStore = create<ChatStore>(
 			set((state) => ({
 				messages: [...state.messages.slice(-99), message]
 			})),
-		updateMessage: (id, fields) =>
+		changeMessage: (id, fields) =>
 			set((state) => ({
 				messages: state.messages.map((msg) =>
 					msg.id === id

@@ -1,1 +1,1 @@
-export { TeacherPanelContainer } from "./ui/TeacherPanelContainer"
+export { TeacherPanelContainer } from "./ui"

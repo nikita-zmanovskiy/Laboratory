@@ -4,7 +4,7 @@ import type { MouseEvent } from "react"
 
 import type { Message } from "@/entities/chat"
 
-import { useChatMessage } from "../../model/useChatMessage"
+import { useChatMessage } from "../../hooks/useChatMessage"
 
 import { MessageImage } from "./parts/MessageImage"
 import { MessageText } from "./parts/MessageText"

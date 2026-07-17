@@ -1,9 +1,9 @@
 import { useCallback, useState } from "react"
 
 import {
-    generateImage,
-    generateText,
     mapGenerateResponseToMessage,
+    sendGenerateImage,
+    sendGenerateText,
     useChatStore,
 } from "@/entities/chat"
 import { useRoleStore, useSessionStore } from "@/entities/session"
@@ -27,7 +27,7 @@ type UseSendMessageReturn = UseSendMessageData & UseSendMessageHandlers
  * Хук для отправки сообщений в чат
  *
  * Добавляет оптимистичные сообщения пользователя и ассистента перед запросом
- * В зависимости от isTextMode вызывает generateText или generateImage из entities/chat
+ * В зависимости от isTextMode вызывает sendGenerateText или sendGenerateImage из entities/chat
  * Для teacher-preview сессии подменяет sessionId на teacher-preview-{classroomCode}
  * При ошибке обновляет сообщение ассистента текстом ошибки
  * При критической ошибке удаляет оба оптимистичных сообщения и устанавливает error
@@ -42,7 +42,7 @@ export const useSendMessage = (): UseSendMessageReturn => {
     const [isLoading, setIsLoading] = useState(false),
      [error, setError] = useState<string | null>(null)
 
-    const { addMessage, updateMessage, removeMessage, setLoading } = useChatStore(),
+    const { addMessage, changeMessage, removeMessage, setLoading } = useChatStore(),
      sessionId = useSessionStore((state) => state.sessionId)
 
     const clearError = useCallback(() => setError(null), [])
@@ -75,14 +75,14 @@ export const useSendMessage = (): UseSendMessageReturn => {
                     : sessionId
 
                 const response = isTextMode
-                    ? await generateText(
+                    ? await sendGenerateText(
                         prompt,
                         effectiveSessionId,
                         classroomCode,
                         imageBase64,
                         isTeacherPreview
                     )
-                    : await generateImage(
+                    : await sendGenerateImage(
                         prompt,
                         imageBase64,
                         effectiveSessionId,
@@ -90,14 +90,14 @@ export const useSendMessage = (): UseSendMessageReturn => {
                         isTeacherPreview
                     )
 
-                updateMessage(
+                changeMessage(
                     assistantMessageId,
                     mapGenerateResponseToMessage(response, isTextMode)
                 )
             } catch (err) {
                 const errorResult = mapSendMessageError(err)
 
-                updateMessage(assistantMessageId, {
+                changeMessage(assistantMessageId, {
                     text: errorResult.assistantText,
                 })
 
@@ -111,7 +111,7 @@ export const useSendMessage = (): UseSendMessageReturn => {
                 setLoading(false)
             }
         },
-        [sessionId, addMessage, updateMessage, removeMessage, setLoading]
+        [sessionId, addMessage, changeMessage, removeMessage, setLoading]
     )
 
     return { isLoading, error, sendMessage, clearError }

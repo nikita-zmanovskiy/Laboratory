@@ -1,2 +1,1 @@
-export { useClassroomSocket } from "./model/useClassroomSocket"
-export { ChatRoomWidget } from "./ui/ChatRoomWidget"
+export { ChatRoomWidget } from "./ui"

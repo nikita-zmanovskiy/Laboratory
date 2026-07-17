@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 import {
 	type ClassroomLog,
 	type ClassroomStats,
-	getClassroomLogs,
+	fetchClassroomLogs,
 	getClassroomStats,
 	type LogFilters,
 } from "@/entities/classroom"
@@ -63,7 +63,7 @@ export const useClassroomData = (code: string): UseClassroomDataReturn => {
 
 			setError(null)
 
-			void getClassroomLogs(code, page, 10, filters, {
+			void fetchClassroomLogs(code, page, 10, filters, {
 				signal: controller.signal,
 			})
 				.then((data) => {

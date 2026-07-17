@@ -1,6 +1,6 @@
 "use client"
 
-import { useNotFoundRedirect } from "../model/useNotFoundRedirect"
+import { useNotFoundRedirect } from "../hooks/useNotFoundRedirect"
 
 export const NotFoundPage = () => {
   useNotFoundRedirect(0)

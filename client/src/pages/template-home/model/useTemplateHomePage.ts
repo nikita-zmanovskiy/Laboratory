@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 
-import { useClassroomSocket } from "@/widgets/chat-room"
+import { useClassroomSocket } from "@/widgets/chat-room/hooks/useClassroomSocket"
 
 import { useChatStore } from "@/entities/chat"
 import {

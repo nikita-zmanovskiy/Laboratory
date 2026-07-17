@@ -4,7 +4,7 @@ export {
     establishTeacherPreviewSession,
     exportLogsCsv,
     extendClassroom,
-    getClassroomLogs,
+    fetchClassroomLogs,
     getClassroomStats,
     getWebSocketAuthToken,
     joinClassroom,

@@ -138,8 +138,8 @@ export const joinClassroom = async (
     return mapJoinedClassroomDtoToModel(response.data)
 }
 
-// Review 26.06.2026 - тут лучше поправить наименований функции, что бы избежать коллизий.
-export const getClassroomLogs = async (
+// Review 26.06.2026 - тут лучше поправить наименований функции, что бы избежать коллизий. - done
+export const fetchClassroomLogs = async (
     code: string,
     page = 1,
     limit = 20,

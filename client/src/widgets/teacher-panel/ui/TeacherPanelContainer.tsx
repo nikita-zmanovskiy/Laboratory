@@ -9,11 +9,11 @@ import { useRoleStore } from "@/entities/session"
 import { appRoutes } from "@/shared/config/router/routes"
 import { useLessonNotification } from "@/shared/lib/useLessonNotification"
 
-import { buildLogFilters, hasActiveLogFilters } from "../model/logFilters"
-import { useClassroomActions } from "../model/useClassroomActions"
-import { useClassroomData } from "../model/useClassroomData"
-import { useConfirmDeactivate } from "../model/useConfirmDeactivate"
-import { useWebSocketLogs } from "../model/useWebSocketLogs"
+import { buildLogFilters, hasActiveLogFilters } from "../hooks/logFilters"
+import { useClassroomActions } from "../hooks/useClassroomActions"
+import { useClassroomData } from "../hooks/useClassroomData"
+import { useConfirmDeactivate } from "../hooks/useConfirmDeactivate"
+import { useWebSocketLogs } from "../hooks/useWebSocketLogs"
 
 import { TeacherPanel } from "./TeacherPanel"
 

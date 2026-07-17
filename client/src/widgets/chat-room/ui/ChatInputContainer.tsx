@@ -1,6 +1,6 @@
 "use client"
 
-import { useChatInput } from "../model/useChatInput"
+import { useChatInput } from "../hooks/useChatInput"
 import { ChatInputContainerProps } from "../types"
 
 import { ChatInputView } from "./ChatInputView"

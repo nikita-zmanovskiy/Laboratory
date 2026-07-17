@@ -2,7 +2,7 @@
 
 import { useId } from "react"
 
-import { useCodeInput } from "../model/useCodeInput"
+import { useCodeInput } from "../hooks/useCodeInput"
 
 import styles from "./Modal.module.css"
 

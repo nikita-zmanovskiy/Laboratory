@@ -2,7 +2,7 @@
 
 import type { RefObject } from "react";
 
-import { useAnimatedVisibility } from "../model/useAnimatedVisibility";
+import { useAnimatedVisibility } from "../hooks/useAnimatedVisibility";
 import { AttachmentButtonProps } from "../types";
 
 

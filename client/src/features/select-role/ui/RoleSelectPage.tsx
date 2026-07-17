@@ -4,7 +4,7 @@ import type { CSSProperties } from "react"
 
 import { ScreenSizeWarning } from "@/shared/ui/ScreenSizeWarningModal"
 
-import { useRoleSelectPage } from "../model/useRoleSelectPage"
+import { useRoleSelectPage } from "../hooks/useRoleSelectPage"
 
 import { CodeInputContainer } from "./CodeInputContainer"
 import { RoleCard } from "./RoleCard"

@@ -25,7 +25,7 @@ type UseImageActionsReturn = UseImageActionsReturnData & UseImageActionsReturnHa
  */
 
 
-// Review 26.06.2026 - функцию можно положить в shared. Ее можно переиспользовать в любом месте приложения.
+// Review 26.06.2026 - функцию можно положить в shared. Ее можно переиспользовать в любом месте приложения.- done
 export const useImageActions = (): UseImageActionsReturn => {
 	const [activeImage, setActiveImage] = useState<string | null>(null)
 
