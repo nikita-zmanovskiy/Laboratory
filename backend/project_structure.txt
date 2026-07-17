@@ -1,0 +1,410 @@
+Структура проекта:
+├── cert
+│   ├── cert.cer
+│   └── localhost.pfx
+├── compose.dev.yml
+├── dist
+│   ├── app.d.ts
+│   ├── app.js
+│   ├── app.js.map
+│   ├── config
+│   │   ├── constants.d.ts
+│   │   ├── constants.js
+│   │   ├── constants.js.map
+│   │   ├── cors.d.ts
+│   │   ├── cors.js
+│   │   ├── cors.js.map
+│   │   ├── env.d.ts
+│   │   ├── env.js
+│   │   ├── env.js.map
+│   │   ├── swagger.d.ts
+│   │   ├── swagger.js
+│   │   └── swagger.js.map
+│   ├── controllers
+│   │   ├── classroom.controller.d.ts
+│   │   ├── classroom.controller.js
+│   │   ├── classroom.controller.js.map
+│   │   ├── csrf.controller.d.ts
+│   │   ├── csrf.controller.js
+│   │   ├── csrf.controller.js.map
+│   │   ├── generate.controller.d.ts
+│   │   ├── generate.controller.js
+│   │   ├── generate.controller.js.map
+│   │   ├── logs.controller.d.ts
+│   │   ├── logs.controller.js
+│   │   ├── logs.controller.js.map
+│   │   ├── stats.controller.d.ts
+│   │   ├── stats.controller.js
+│   │   ├── stats.controller.js.map
+│   │   ├── ws.controller.d.ts
+│   │   ├── ws.controller.js
+│   │   └── ws.controller.js.map
+│   ├── db
+│   │   ├── initDb.d.ts
+│   │   ├── initDb.js
+│   │   ├── initDb.js.map
+│   │   ├── pool.d.ts
+│   │   ├── pool.js
+│   │   ├── pool.js.map
+│   │   ├── runMigrations.d.ts
+│   │   ├── runMigrations.js
+│   │   └── runMigrations.js.map
+│   ├── dto
+│   │   ├── generate.dto.d.ts
+│   │   ├── generate.dto.js
+│   │   └── generate.dto.js.map
+│   ├── factories
+│   │   ├── generate.factory.d.ts
+│   │   ├── generate.factory.js
+│   │   └── generate.factory.js.map
+│   ├── middlewares
+│   │   ├── classroomContext.middleware.d.ts
+│   │   ├── classroomContext.middleware.js
+│   │   ├── classroomContext.middleware.js.map
+│   │   ├── csrf.middleware.d.ts
+│   │   ├── csrf.middleware.js
+│   │   ├── csrf.middleware.js.map
+│   │   ├── error.middleware.d.ts
+│   │   ├── error.middleware.js
+│   │   ├── error.middleware.js.map
+│   │   ├── rateLimit.middleware.d.ts
+│   │   ├── rateLimit.middleware.js
+│   │   ├── rateLimit.middleware.js.map
+│   │   ├── requestContext.middleware.d.ts
+│   │   ├── requestContext.middleware.js
+│   │   ├── requestContext.middleware.js.map
+│   │   ├── validateRequest.middleware.d.ts
+│   │   ├── validateRequest.middleware.js
+│   │   └── validateRequest.middleware.js.map
+│   ├── presenters
+│   │   ├── generate.presenter.d.ts
+│   │   ├── generate.presenter.js
+│   │   └── generate.presenter.js.map
+│   ├── repositories
+│   │   ├── classroom.repository.d.ts
+│   │   ├── classroom.repository.js
+│   │   ├── classroom.repository.js.map
+│   │   ├── log.repository.d.ts
+│   │   ├── log.repository.js
+│   │   └── log.repository.js.map
+│   ├── routes
+│   │   ├── classroom.routes.d.ts
+│   │   ├── classroom.routes.js
+│   │   ├── classroom.routes.js.map
+│   │   ├── csrf.routes.d.ts
+│   │   ├── csrf.routes.js
+│   │   ├── csrf.routes.js.map
+│   │   ├── generate.routes.d.ts
+│   │   ├── generate.routes.js
+│   │   ├── generate.routes.js.map
+│   │   ├── health.routes.d.ts
+│   │   ├── health.routes.js
+│   │   ├── health.routes.js.map
+│   │   ├── logs.routes.d.ts
+│   │   ├── logs.routes.js
+│   │   ├── logs.routes.js.map
+│   │   ├── stats.routes.d.ts
+│   │   ├── stats.routes.js
+│   │   ├── stats.routes.js.map
+│   │   ├── ws.routes.d.ts
+│   │   ├── ws.routes.js
+│   │   └── ws.routes.js.map
+│   ├── schemas
+│   │   ├── classroom.schema.d.ts
+│   │   ├── classroom.schema.js
+│   │   ├── classroom.schema.js.map
+│   │   ├── generate.schema.d.ts
+│   │   ├── generate.schema.js
+│   │   └── generate.schema.js.map
+│   ├── server.d.ts
+│   ├── server.js
+│   ├── server.js.map
+│   ├── services
+│   │   ├── ai
+│   │   │   ├── baseAiService.d.ts
+│   │   │   ├── baseAiService.js
+│   │   │   ├── baseAiService.js.map
+│   │   │   ├── gigachat
+│   │   │   │   ├── gigachat.types.d.ts
+│   │   │   │   ├── gigachat.types.js
+│   │   │   │   ├── gigachat.types.js.map
+│   │   │   │   ├── gigachatMock.service.d.ts
+│   │   │   │   ├── gigachatMock.service.js
+│   │   │   │   ├── gigachatMock.service.js.map
+│   │   │   │   ├── gigachatPromptMode.d.ts
+│   │   │   │   ├── gigachatPromptMode.js
+│   │   │   │   ├── gigachatPromptMode.js.map
+│   │   │   │   ├── gigachatRequestFactory.d.ts
+│   │   │   │   ├── gigachatRequestFactory.js
+│   │   │   │   ├── gigachatRequestFactory.js.map
+│   │   │   │   ├── gigachatResponseParser.d.ts
+│   │   │   │   ├── gigachatResponseParser.js
+│   │   │   │   └── gigachatResponseParser.js.map
+│   │   │   ├── gigachat.service.d.ts
+│   │   │   ├── gigachat.service.js
+│   │   │   ├── gigachat.service.js.map
+│   │   │   ├── gigachatAuth.service.d.ts
+│   │   │   ├── gigachatAuth.service.js
+│   │   │   ├── gigachatAuth.service.js.map
+│   │   │   ├── gigachatFiles.service.d.ts
+│   │   │   ├── gigachatFiles.service.js
+│   │   │   ├── gigachatFiles.service.js.map
+│   │   │   ├── gigachatPromptMode.d.ts
+│   │   │   ├── gigachatPromptMode.js
+│   │   │   ├── gigachatPromptMode.js.map
+│   │   │   ├── kandinsky.service.d.ts
+│   │   │   ├── kandinsky.service.js
+│   │   │   ├── kandinsky.service.js.map
+│   │   │   ├── requestQueue.service.d.ts
+│   │   │   ├── requestQueue.service.js
+│   │   │   └── requestQueue.service.js.map
+│   │   ├── classroom.service.d.ts
+│   │   ├── classroom.service.js
+│   │   ├── classroom.service.js.map
+│   │   ├── csrf.service.d.ts
+│   │   ├── csrf.service.js
+│   │   ├── csrf.service.js.map
+│   │   ├── generate.service.d.ts
+│   │   ├── generate.service.js
+│   │   ├── generate.service.js.map
+│   │   ├── log.service.d.ts
+│   │   ├── log.service.js
+│   │   ├── log.service.js.map
+│   │   ├── rateLimit.service.d.ts
+│   │   ├── rateLimit.service.js
+│   │   ├── rateLimit.service.js.map
+│   │   ├── redisWsPubSub.service.d.ts
+│   │   ├── redisWsPubSub.service.js
+│   │   ├── redisWsPubSub.service.js.map
+│   │   ├── websocket.service.d.ts
+│   │   ├── websocket.service.js
+│   │   └── websocket.service.js.map
+│   ├── types
+│   │   ├── ai.d.ts
+│   │   ├── ai.js
+│   │   ├── ai.js.map
+│   │   ├── models.d.ts
+│   │   ├── models.js
+│   │   ├── models.js.map
+│   │   ├── wsBroadcast.d.ts
+│   │   ├── wsBroadcast.js
+│   │   └── wsBroadcast.js.map
+│   ├── use-cases
+│   │   └── generate
+│   │       ├── auditLog.service.d.ts
+│   │       ├── auditLog.service.js
+│   │       ├── auditLog.service.js.map
+│   │       ├── classroomPolicy.d.ts
+│   │       ├── classroomPolicy.js
+│   │       ├── classroomPolicy.js.map
+│   │       ├── generate.use-case.d.ts
+│   │       ├── generate.use-case.js
+│   │       ├── generate.use-case.js.map
+│   │       ├── promptBuilder.d.ts
+│   │       ├── promptBuilder.js
+│   │       ├── promptBuilder.js.map
+│   │       ├── tokenUsage.service.d.ts
+│   │       ├── tokenUsage.service.js
+│   │       └── tokenUsage.service.js.map
+│   ├── utils
+│   │   ├── authCookie.d.ts
+│   │   ├── authCookie.js
+│   │   ├── authCookie.js.map
+│   │   ├── crypto.d.ts
+│   │   ├── crypto.js
+│   │   ├── crypto.js.map
+│   │   ├── errors.d.ts
+│   │   ├── errors.js
+│   │   ├── errors.js.map
+│   │   ├── imageValidator.d.ts
+│   │   ├── imageValidator.js
+│   │   ├── imageValidator.js.map
+│   │   ├── logger.d.ts
+│   │   ├── logger.js
+│   │   ├── logger.js.map
+│   │   ├── moscowTime.d.ts
+│   │   ├── moscowTime.js
+│   │   ├── moscowTime.js.map
+│   │   ├── teacherAuth.d.ts
+│   │   ├── teacherAuth.js
+│   │   ├── teacherAuth.js.map
+│   │   ├── tokenEstimate.d.ts
+│   │   ├── tokenEstimate.js
+│   │   ├── tokenEstimate.js.map
+│   │   ├── wsAuth.d.ts
+│   │   ├── wsAuth.js
+│   │   └── wsAuth.js.map
+│   └── __tests__
+│       ├── api
+│       │   ├── classroom.test.d.ts
+│       │   ├── classroom.test.js
+│       │   ├── classroom.test.js.map
+│       │   ├── csrf.test.d.ts
+│       │   ├── csrf.test.js
+│       │   ├── csrf.test.js.map
+│       │   ├── generate.test.d.ts
+│       │   ├── generate.test.js
+│       │   ├── generate.test.js.map
+│       │   ├── health.test.d.ts
+│       │   ├── health.test.js
+│       │   └── health.test.js.map
+│       ├── isolation
+│       │   ├── isolation.test.d.ts
+│       │   ├── isolation.test.js
+│       │   └── isolation.test.js.map
+│       ├── resilience
+│       │   ├── resilience.test.d.ts
+│       │   ├── resilience.test.js
+│       │   └── resilience.test.js.map
+│       ├── security
+│       │   ├── security.test.d.ts
+│       │   ├── security.test.js
+│       │   └── security.test.js.map
+│       └── utils
+│           ├── crypto.test.d.ts
+│           ├── crypto.test.js
+│           ├── crypto.test.js.map
+│           ├── imageValidator.test.d.ts
+│           ├── imageValidator.test.js
+│           ├── imageValidator.test.js.map
+│           ├── moscowTime.test.d.ts
+│           ├── moscowTime.test.js
+│           ├── moscowTime.test.js.map
+│           ├── tokenEstimate.test.d.ts
+│           ├── tokenEstimate.test.js
+│           └── tokenEstimate.test.js.map
+├── docker-entrypoint.sh
+├── Dockerfile
+├── Dockerfile.nginx
+├── docs
+│   └── DOCKER.md
+├── eslint.config.js
+├── index.js
+├── nginx.conf
+├── package-lock.json
+├── package.json
+├── README.MD
+├── russian_trusted_root_ca.cer
+├── src
+│   ├── app.ts
+│   ├── config
+│   │   ├── constants.ts
+│   │   ├── cors.ts
+│   │   ├── env.ts
+│   │   └── swagger.ts
+│   ├── controllers
+│   │   ├── classroom.controller.ts
+│   │   ├── csrf.controller.ts
+│   │   ├── generate.controller.ts
+│   │   ├── logs.controller.ts
+│   │   ├── stats.controller.ts
+│   │   └── ws.controller.ts
+│   ├── db
+│   │   ├── initDb.ts
+│   │   ├── migrations
+│   │   │   ├── add_grade.sql
+│   │   │   ├── add_teacher_token.sql
+│   │   │   ├── add_tokens_approximate.sql
+│   │   │   ├── create_classrooms.sql
+│   │   │   └── create_request_logs.sql
+│   │   ├── pool.ts
+│   │   └── runMigrations.ts
+│   ├── dto
+│   │   └── generate.dto.ts
+│   ├── factories
+│   │   └── generate.factory.ts
+│   ├── middlewares
+│   │   ├── classroomContext.middleware.ts
+│   │   ├── csrf.middleware.ts
+│   │   ├── error.middleware.ts
+│   │   ├── rateLimit.middleware.ts
+│   │   ├── requestContext.middleware.ts
+│   │   └── validateRequest.middleware.ts
+│   ├── presenters
+│   │   └── generate.presenter.ts
+│   ├── repositories
+│   │   ├── classroom.repository.ts
+│   │   └── log.repository.ts
+│   ├── routes
+│   │   ├── classroom.routes.ts
+│   │   ├── csrf.routes.ts
+│   │   ├── generate.routes.ts
+│   │   ├── health.routes.ts
+│   │   ├── logs.routes.ts
+│   │   ├── stats.routes.ts
+│   │   └── ws.routes.ts
+│   ├── schemas
+│   │   ├── classroom.schema.ts
+│   │   └── generate.schema.ts
+│   ├── server.ts
+│   ├── services
+│   │   ├── ai
+│   │   │   ├── baseAiService.ts
+│   │   │   ├── gigachat
+│   │   │   │   ├── gigachat.types.ts
+│   │   │   │   ├── gigachatMock.service.ts
+│   │   │   │   ├── gigachatRequestFactory.ts
+│   │   │   │   └── gigachatResponseParser.ts
+│   │   │   ├── gigachat.service.ts
+│   │   │   ├── gigachatAuth.service.ts
+│   │   │   ├── gigachatFiles.service.ts
+│   │   │   ├── gigachatPromptMode.ts
+│   │   │   └── requestQueue.service.ts
+│   │   ├── classroom.service.ts
+│   │   ├── csrf.service.ts
+│   │   ├── log.service.ts
+│   │   ├── rateLimit.service.ts
+│   │   ├── redisWsPubSub.service.ts
+│   │   └── websocket.service.ts
+│   ├── types
+│   │   ├── ai.ts
+│   │   ├── models.ts
+│   │   └── wsBroadcast.ts
+│   ├── use-cases
+│   │   └── generate
+│   │       ├── auditLog.service.ts
+│   │       ├── classroomPolicy.ts
+│   │       ├── generate.use-case.ts
+│   │       ├── promptBuilder.ts
+│   │       └── tokenUsage.service.ts
+│   ├── utils
+│   │   ├── authCookie.ts
+│   │   ├── crypto.ts
+│   │   ├── errors.ts
+│   │   ├── imageValidator.ts
+│   │   ├── logger.ts
+│   │   ├── moscowTime.ts
+│   │   ├── teacherAuth.ts
+│   │   ├── tokenEstimate.ts
+│   │   └── wsAuth.ts
+│   └── __tests__
+│       ├── api
+│       │   ├── classroom.test.ts
+│       │   ├── csrf.test.ts
+│       │   ├── generate.test.ts
+│       │   └── health.test.ts
+│       ├── e2e
+│       │   └── smoke.test.ts
+│       ├── helpers
+│       │   └── auth.ts
+│       ├── isolation
+│       │   └── isolation.test.ts
+│       ├── resilience
+│       │   ├── ai-external-failures.test.ts
+│       │   └── resilience.test.ts
+│       ├── security
+│       │   ├── generate.security.test.ts
+│       │   └── security.test.ts
+│       └── utils
+│           ├── crypto.test.ts
+│           ├── imageValidator.test.ts
+│           ├── moscowTime.test.ts
+│           └── tokenEstimate.test.ts
+├── tests
+│   └── load
+│       ├── config.js
+│       ├── csrf-test.js
+│       ├── generate-test.js
+│       └── health-test.js
+├── tsconfig.json
+└── vitest.config.ts

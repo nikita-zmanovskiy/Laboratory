@@ -1,0 +1,11 @@
+node_modules
+dist
+.git
+.env
+.env.local
+.env.production
+.env.docker
+coverage
+*.md
+src/__tests__
+tests

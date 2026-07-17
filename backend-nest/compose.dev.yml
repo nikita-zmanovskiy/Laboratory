@@ -1,0 +1,83 @@
+# Полный стек: PostgreSQL + Redis + Backend (NestJS) + Nginx
+# Запуск: docker compose --env-file .env.docker -f compose.dev.yml up --build -d
+# См. docs/DOCKER.md
+
+services:
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: ai_lab_user
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: ai_lab
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ai_lab_user -d ai_lab"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build: .
+    env_file:
+      - .env.docker
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      DATABASE_URL: postgresql://ai_lab_user:admin@db:5432/ai_lab
+      PGSSL: "false"
+      REDIS_URL: redis://redis:6379
+      REDIS_WS_CHANNEL: lab:ws:broadcast
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_started
+    restart: unless-stopped
+
+  # Опционально: фронт в Docker (профиль full)
+  # docker compose --profile full --env-file .env.docker up --build -d
+  client:
+    profiles: ["full"]
+    build:
+      context: ../client
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_BACKEND_URL: http://localhost
+    ports:
+      - "3001:3000"
+    environment:
+      BACKEND_URL: http://nginx:80
+      NEXT_PUBLIC_BACKEND_URL: http://localhost
+      NEXT_PUBLIC_WS_URL: ws://localhost/ws
+    depends_on:
+      - nginx
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

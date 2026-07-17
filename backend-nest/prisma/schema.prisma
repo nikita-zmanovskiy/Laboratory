@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Classroom {
+  id           String    @id @db.Uuid
+  code         String    @unique @db.VarChar(32)
+  title        String?
+  grade        Int?      @default(11)
+  isActive     Boolean   @default(true) @map("is_active")
+  teacherToken String?   @map("teacher_token") @db.VarChar(64)
+  expiresAt    DateTime? @map("expires_at") @db.Timestamptz(6)
+  createdAt    DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  requestLogs RequestLog[]
+
+  @@map("classrooms")
+}
+
+model RequestLog {
+  id                  Int       @id @default(autoincrement())
+  timestamp           DateTime  @default(now()) @db.Timestamptz(6)
+  classroomId         String?   @map("classroom_id") @db.Uuid
+  sessionId           String    @map("session_id") @db.VarChar(255)
+  mode                String    @db.VarChar(50)
+  promptHash          String?   @map("prompt_hash") @db.VarChar(64)
+  imageAttached       Boolean   @default(false) @map("image_attached")
+  tokensInput         Int?      @map("tokens_input")
+  tokensOutput        Int?      @map("tokens_output")
+  tokensIsApproximate Boolean?  @default(true) @map("tokens_is_approximate")
+  status              Int
+  responseTimeMs      Int       @map("response_time_ms")
+  errorMessage        String?   @map("error_message")
+
+  classroom Classroom? @relation(fields: [classroomId], references: [id])
+
+  @@index([classroomId])
+  @@index([sessionId])
+  @@index([timestamp])
+  @@map("request_logs")
+}

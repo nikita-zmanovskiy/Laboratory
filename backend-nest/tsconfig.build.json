@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "exclude": [
+    "node_modules",
+    "dist",
+    "test",
+    "**/*spec.ts",
+    "src/__tests__/**",
+    "src/routes/**",
+    "src/app.ts",
+    "src/server.ts",
+    "src/db/**",
+    "src/factories/**",
+    "src/middlewares/**",
+    "src/config/swagger.ts"
+  ]
+}
