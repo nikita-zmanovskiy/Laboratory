@@ -2,7 +2,7 @@
 
 import React from "react"
 
-import type { Message } from "@/entities/chat"
+import type { Message } from "../../../types/message"
 
 import { ImageModal } from "./image-modal/ImageModal"
 import { MessageList } from "./message-list/MessageList"

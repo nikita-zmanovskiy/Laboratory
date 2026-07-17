@@ -2,10 +2,10 @@
 
 import { useEffect, useMemo, useState } from "react"
 
-import type { Message } from "@/entities/chat"
-
 import { APPEAR_DELAY_MS, GENERATING_TEXT, TEXT_CHANGE_DELAY_MS, TEXT_OPACITY_DELAY_MS } from "@/shared/config/message"
 import { normalizeImageSrc } from "@/shared/lib/imageUrl"
+
+import type { Message } from "../../types/message"
 
 /**
  * Хук для управления отображением одного сообщения чата

@@ -2,8 +2,7 @@
 
 import type { MouseEvent } from "react"
 
-import type { Message } from "@/entities/chat"
-
+import type { Message } from "../../../types/message"
 import { useChatMessage } from "../../hooks/useChatMessage"
 
 import { MessageImage } from "./parts/MessageImage"

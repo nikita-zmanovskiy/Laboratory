@@ -1,8 +1,10 @@
 import { ensureCsrfSession } from "@/shared/api/csrf"
 import { http } from "@/shared/api/http"
-import { GenerateResponseDto } from "./dto"
-import { createGenerateRequest } from "../lib"
 import { apiRoutes } from "@/shared/config/router/apiRoutes"
+
+import { createGenerateRequest } from "../lib"
+
+import { GenerateResponseDto } from "./dto"
 
 export const sendGenerateImage = async (
     prompt: string,

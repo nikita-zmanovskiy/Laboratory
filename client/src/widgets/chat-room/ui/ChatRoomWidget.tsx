@@ -1,8 +1,8 @@
 "use client"
 
-import { ChatMessagesContainer } from "@/entities/chat"
 import { ChatModeToggleContainer } from "@/features/toggle-chat-mode"
 
+import { ChatMessagesContainer } from "@/entities/chat"
 import { useChatStore } from "@/entities/chat"
 
 import { EmptyChatState } from "@/shared/ui/EmptyChatState"

@@ -1,5 +1,4 @@
-import type { Message } from "@/entities/chat"
-
+import type { Message } from "../../../../types/message"
 import { ChatMessage } from "../../message"
 
 interface MessageListData {

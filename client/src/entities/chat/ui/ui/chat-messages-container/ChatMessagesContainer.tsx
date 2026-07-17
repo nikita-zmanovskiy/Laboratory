@@ -1,9 +1,9 @@
 "use client"
 
-import { Message } from "@/entities/chat"
+import { useImageActions } from "@/shared/hooks/useImageActions"
 
+import type { Message } from "../../../types/message"
 import { useAutoScroll } from "../../hooks/useAutoScroll"
-import { useImageActions } from "../../../../../shared/hooks/useImageActions"
 import { ChatMessages } from "../chat-messages"
 
 export interface ChatMessagesContainerProps {

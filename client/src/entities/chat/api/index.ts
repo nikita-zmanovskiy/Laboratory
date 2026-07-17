@@ -2,8 +2,9 @@ import { ensureCsrfSession } from "@/shared/api/csrf"
 import { http } from "@/shared/api/http"
 import { apiRoutes } from "@/shared/config/router/apiRoutes"
 
-import type { GenerateResponseDto } from "./dto"
 import { createGenerateRequest } from "../lib"
+
+import type { GenerateResponseDto } from "./dto"
 
 
 /**
